@@ -1,0 +1,59 @@
+运行脚本/var/www/html/tronPipelineScript/createDirPath/parser.py
+
+1、当添加项目确定以后运行脚本：
+    "Project" "项目名" "command_id"
+    例如 ：
+    python parser.py "Project" "HHZ" "command_id"
+
+2、当添加场号确定以后运行脚本:
+    "Seq" "项目名" "场号" "command_id"
+    例如 ：
+    python parser.py "Seq" "HHZ" "01" "command_id"
+
+3、当添加镜头确定以后运行脚本：
+    "Shot" "项目名" "场号" "镜头号" "command_id"
+    例如 ：
+    python parser.py "Shot" "HHZ" "01" "001" "command_id"
+
+4、当镜头下的任务分配给制作人的时候开始制作的时候：
+    "ShotTask" "项目名" "场号" "镜头号" "环节" "制作人" "文件名" "command_id"
+    例如 ：
+    python parser.py "ShotTask" "HHZ" "01" "001" "rig" "liangcy" "hhz01001_rig_liangcy_miaoshu_master" "command_id"
+
+5、当资产下的任务分配给制作人的时候开始制作的时候：
+    "AssetTask" "项目名" "环节" "制作人" "文件名" "command_id"
+    例如 ：
+    python parser.py "AssetTask" "HHZ" "rig" "liangcy" "hhz_rig_liangcy_miaoshu_v0101" "command_id"
+
+6、当上传dailies的时候：
+    "Dailies1"是上传单个文件
+    "Dailies2" 是上传序列
+    "Dailies1" "文件夹路径" "IP|文件夹路径|文件夹名|命令ID"
+    例如：
+    python parser.py "Dailies1" "/FUY/001/001/stuff/cmp/" "192.168.1.85|FUY/001/001/stuff/cmp/img|filename|command_id"
+                     "Dailies2" "/FUY/001/001/stuff/cmp/" "192.168.1.85|FUY/001/001/stuff/cmp/mov|filename|command_id"
+
+7、当上传references的时候：
+    "Reference" "项目" "镜头或资产" "IP|文件夹路径|命令ID"
+    例如：
+    "Reference" "HHZ" "shots" "192.168.1.85|x:/HHZ/References/01/001/hhz01001_prd_liangcy_HFG_v0103|373"
+                      "assets"
+
+8、打开文件夹
+    "Folder" "IP|路径"
+    例如：
+    #"Folder" "192.168.1.85|/DHG/Dailies/20161214"
+
+9、渲染
+    'Render' 'IP|文件路径|Render1|command_id'
+    例如：
+    #'Render' '192.168.100.44|/FUY/999/003/Stuff/lgt/publish/fuy999003_lgt_wangcf_yuanBao_master|Render2|command_id'
+
+10、剪辑线
+    #'clip1' '127.0.0.1|uploads/Projects/xml_files/25/2aac549dbd0a1e7494d6447f85a88c95673c27.xml|uploads/Projects/FUY/001/|1|3'
+    #转码 'clip1' 'IP|xml_path|path|项目id|场id|command_id'
+    #回插 'clip2' 'IP|video_path|img_path|time|rate|id|command_id'
+    #打包 'clip3' 'IP|FUY/001|xml_path|command_id'
+
+11. 分发
+# 'Pack' 'json路径' 'command_id'
