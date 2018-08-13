@@ -1,0 +1,3 @@
+Status=Precomp, MatchMoving, Layout, Previs, Animation Preview, Animation 25%, Animation 50%, Animation 75%, Animation Final, Effects Preview, 50% Comp, 75% Comp, Final Comp, Approved
+LUT=sRGB, Cineon Log, Rec709
+MaskRatio=2.35 : 1, 1.85 : 1, 1.66 : 1, 16 : 9, 4 : 3, square
