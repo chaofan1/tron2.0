@@ -17,7 +17,7 @@ class BackInsert(object):
     def insert(self,input_mov, input_img,tim,rate,sql_id,width,height):
         # 将截图设置为视频大小
         img = Image.open(input_img)
-        size = (height,width)
+        size = (width,height)
         out = img.resize(size, Image.ANTIALIAS)
         out.save(input_img)
         # 为回插的视频重命名
