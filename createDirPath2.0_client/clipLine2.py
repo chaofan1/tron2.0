@@ -6,6 +6,7 @@ import subprocess
 import pymysql
 from shutil import copy
 from clipLine import to_php
+import re
 
 
 class BackInsert(object):
@@ -17,7 +18,7 @@ class BackInsert(object):
         mov_name_new = mov_name[0] + '_postil.' + mov_name[1]
         mov_path = os.path.dirname(input_mov)
         output_mov = os.path.join(mov_path,mov_name_new)
-        frame = str(int(tim * rate)-1)
+        frame = str(int(float(tim) * float(rate))-1)
         ffmpeg = 'ffmpeg'
         command = "%s -i %s -i %s -y -g 2 -keyint_min 2 -filter_complex " % (ffmpeg,input_mov, input_img) + \
                   repr("[0:v][1:v]overlay=enable='between(n,%s,%s)'")%(frame,frame) + " -acodec copy %s" % output_mov
@@ -30,17 +31,18 @@ class BackInsert(object):
             user_name = 'root'
             passwd = 'Root123'
             db_name = 'new_tron'
+            output_mov = re.search(r'.*(uploads.*)', output_mov).group(1)
             conn = pymysql.connect(ip,user_name, passwd, db_name, charset='utf8', use_unicode=True)
         except:
             print('connect fail')
         else:
             cursor = conn.cursor()
-            insert_sql = "UPDATE oa_approvals SET path=%s where id = %s"%(output_mov,sql_id)
+            insert_sql = "UPDATE oa_approvals SET file='%s' where id = %s"%(output_mov,sql_id)
             try:
                 cursor.execute(insert_sql)
                 conn.commit()
-            except:
-                conn.roolback()
+            except Exception as e:
+                print(e)
             else:
                 cursor.close()
                 conn.close()
