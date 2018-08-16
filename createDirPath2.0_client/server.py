@@ -2,7 +2,7 @@
 #-*- coding: utf-8 -*-
 
 #转码 'clip1' 'IP|xml_path|path|项目id|场id|xml_id|command_id|clip1' 7
-#回插 'clip2' 'IP|video_path|img_path|time|rate|id|command_id|clip2' 8
+#回插 'clip2' 'IP|video_path|img_path|time|rate|width|height|id|command_id|clip2' 8
 #打包 'clip3'  'IP|FUY/001|xml_path|command_id|clip3'  5
 
 import os, shutil, socket, httpUrl, platform
@@ -181,8 +181,8 @@ def handle(conn,localIP):
 			print('end')
 
 		elif data.endswith('clip2'):
-			video_path,img_path,tim,rate,data_id,command_id,UpTask = data_split
-			BackInsert().insert(video_path,img_path,tim,rate,data_id)
+			video_path,img_path,tim,rate,width,height,data_id,command_id,UpTask = data_split
+			BackInsert().insert(video_path,img_path,tim,rate,data_id,width,height)
 			# httpUrl.render_callback(command_id)
 
 		elif data.endswith('clip3'):   # 打包
@@ -199,7 +199,7 @@ def handle(conn,localIP):
 
 
 		# 转码 'clip1' 'IP|xml_path|path|项目id|场id|command_id|clip1' 7
-		# 回插 'clip2' 'IP|video_path|img_path|time|rate|id|command_id|clip2' 8
+		# 回插 'clip2' 'IP|video_path|img_path|time|rate|width|height|id|command_id|clip2' 8
 		# 打包 'clip3'  'IP|FUY/001|xml_path|command_id|clip3'  5
 
 	conn.close()

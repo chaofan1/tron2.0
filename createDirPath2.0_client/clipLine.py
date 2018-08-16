@@ -39,9 +39,17 @@ def write_sql(info,shot_video_path,shot_image,shot_number):
         shot_video_path = re.search(r'.*(uploads.*)', shot_video_path).group(1)
         shot_image = re.search(r'.*(uploads.*)', shot_image).group(1)
 
-        insert_sql = "insert ignore into oa_shot(project_id,field_id,shot_image,shot_number,shot_name,shot_video_path,clip_frame_length,frame_range,change_speed_info,material_number,create_time,time_start,duration,material_frame_length) " \
-                     "VALUES(%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)"
-        cursor.execute(insert_sql, (project_id,field_id,shot_image,shot_number,shot_number,shot_video_path,clip_frame_length,frame_range,change_speed_info,material_number,create_time,time_start,duration,material_frame_length))
+        width = info.get('width')  # char
+        height = info.get('height')
+
+        insert_sql = "insert ignore into oa_shot(project_id,field_id,shot_image,shot_number,shot_name," \
+                     "shot_video_path,clip_frame_length,frame_range,change_speed_info,material_number," \
+                     "create_time,time_start,duration,material_frame_length,width,height) " \
+                     "VALUES(%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)"
+        cursor.execute(insert_sql, (project_id,field_id,shot_image,shot_number,shot_number,
+                                    shot_video_path,clip_frame_length,frame_range,change_speed_info,
+                                    material_number,create_time,time_start,duration,
+                                    material_frame_length,width,height))
         conn.commit()
         cursor.close()
         conn.close()
@@ -126,6 +134,10 @@ def putter(task_queue,xml_path,project_id,field_id,data,path,task):
                 if os.path.exists(pathurl):
                     start = i.find('start').text
                     end = i.find('end').text
+                    width = i.find('.//width').text
+                    height = i.find('.//height').text
+                    info['width'] = width
+                    info['height'] = height
                     material_frame_length = int(end)-int(start)
                     frame_range = start+','+end
                     material_number = ''
