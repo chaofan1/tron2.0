@@ -181,8 +181,8 @@ def handle(conn,localIP):
 			print('end')
 
 		elif data.endswith('clip2'):
-			video_path,img_path,tim,rate,width,height,data_id,command_id,UpTask = data_split
-			BackInsert().insert(video_path,img_path,tim,rate,data_id,width,height)
+			video_path,img_path,tim,rate,data_id,command_id,UpTask = data_split
+			BackInsert().insert(video_path,img_path,tim,rate,data_id)
 			# httpUrl.render_callback(command_id)
 
 		elif data.endswith('clip3'):   # 打包
