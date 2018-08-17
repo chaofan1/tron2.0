@@ -2,11 +2,7 @@
 #-*- coding: utf-8 -*-
 #创建项目以及项目内各个文件夹
 # Filename: createProject.py
-# Author: liangcy
-# Created: 2016/12/14
-# Latest Modified:
-# Platform: windows
-# Copyright: Illumina ltd, PTD department, 2016
+
 
 import os
 from createFolder import TronFolder

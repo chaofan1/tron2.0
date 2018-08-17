@@ -2,14 +2,9 @@
 #-*- coding: utf-8 -*-
 # Filename: createFolder.py
 #创建文件夹
-# Author: liangcy
-# Created: 2016/12/14
-# Latest Modified:
-# Platform:
-# Copyright: Illumina ltd, PTD department, 2016
+
 
 import os,pwd
-import re
 
 
 class TronFolder:

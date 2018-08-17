@@ -7,7 +7,6 @@ import pymysql
 from shutil import copy
 from clipLine import to_php
 import re
-from PIL import Image
 
 
 class BackInsert(object):
@@ -24,8 +23,15 @@ class BackInsert(object):
         ffmpeg = 'ffmpeg'
         command = "%s -i %s -i %s -y -g 2 -keyint_min 2 -filter_complex " % (ffmpeg,input_mov, input_img) + \
                   repr("[0:v][1:v]overlay=enable='between(n,%s,%s)'")%(frame,frame) + " -acodec copy %s" % output_mov
-        subprocess.Popen(command, shell=True)
-        self.update_sql(sql_id,output_mov)
+        if '_postil.' in input_mov:
+            su = subprocess.Popen(command, shell=True)
+            su.wait()
+            os.remove(input_mov)
+            os.rename(output_mov, input_mov)
+        else:
+            subprocess.Popen(command, shell=True)
+            self.update_sql(sql_id,output_mov)
+
 
     def update_sql(self,sql_id,output_mov):
         try:
