@@ -1,5 +1,6 @@
 #-*- coding: utf-8 -*-
 import os
+import re
 import time
 import json
 import boto3
@@ -7,6 +8,7 @@ import shutil
 import zipfile
 import logging
 import smtplib
+import platform
 import threadpool
 from botocore.client import Config
 from server_callback import callback
@@ -22,14 +24,22 @@ class TronDistribute:
         self.material = 'material'
         self.asset = 'asset'
         self.references = 'references'
-        self.outputPath = '/Users/zhaojiusi/Code/tron/uploads/Outsource'   # 上线更改盘符
         self.compressType = 'zip'  # tar,bztar,gzrar
         self.pool = threadpool.ThreadPool(8)
-        logging.basicConfig(filename='./runtime/log/distribute_log/dis_' + time.strftime("%Y%m%d")  # 上线更改
-                                     + '.log', level=logging.INFO, format="%(asctime)s - %(levelname)s - %(message)s")
+        self.rpath = os.getcwd()
+        if platform.system() == 'Windows':
+            self.outputPath = re.search(r'(.*)\tron', self.rpath ).group(1) + '\tron\uploads\Outsource'
+            logging.basicConfig(filename=re.search(r'(.*)\tron', self.rpath).group(1) + '\tron\runtime\log\distribute_log\dis_' + time.strftime("%Y%m%d") + '.log', level=logging.INFO, format="%(asctime)s - %(levelname)s - %(message)s")
+        else:
+            self.outputPath = re.search(r'(.*)/tron', self.rpath ).group(1) + '/tron/uploads/Outsource'
+            logging.basicConfig(filename=re.search(r'(.*)/tron', self.rpath).group(1) + '/tron/runtime/log/distribute_log/dis_' + time.strftime("%Y%m%d") + '.log', level=logging.INFO, format="%(asctime)s - %(levelname)s - %(message)s")
 
     def argParse(self, filePath):
-        self.filePath = filePath
+        if platform.system() == 'Windows':
+            self.filePath = re.search(r'(.*)\tron', self.rpath).group(1) + os.sep + 'tron' + os.sep + filePath
+        else:
+            self.filePath = re.search(r'(.*)/tron', self.rpath).group(1) + os.sep + 'tron' + os.sep + filePath
+
         self.progectName, self.userid, self.timeStamp = os.path.splitext(os.path.basename(filePath))[0].split('_')
         try:
             with open(self.filePath, 'r') as f:
@@ -113,8 +123,6 @@ class TronDistribute:
             arg, arg2 = args
             if isinstance(arg2, list):
                 for path in arg2:
-                    print('dir')
-                    print(path)
                     basename = os.path.basename(path)
                     if os.path.isdir(path):
                         shutil.copytree(path, arg + os.sep + basename)

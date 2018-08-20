@@ -20,7 +20,7 @@
 #追加 'add_xml' 'IP|xml_path|path|项目id|场id|xml_id|command_id'
 #回插 'clip2' 'IP|video_path|img_path|time|rate|id|command_id' 7
 #打包 'clip3'  'IP|FUY/001|xml_path|command_id'  4
-'127.0.0.1|uploads/Projects/xml_files/20180731/93926b72a9bea849b74e5d51ee72a512.xml|uploads/Projects/FUY/001/|1|002|26'
+#'127.0.0.1|uploads/Projects/xml_files/20180731/93926b72a9bea849b74e5d51ee72a512.xml|uploads/Projects/FUY/001/|1|002|26'
 
 
 import sys
