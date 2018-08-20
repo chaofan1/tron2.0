@@ -6,6 +6,7 @@ import boto3
 import shutil
 import zipfile
 import logging
+import smtplib
 import threadpool
 from botocore.client import Config
 from server_callback import callback
@@ -24,7 +25,8 @@ class TronDistribute:
         self.outputPath = '/Users/zhaojiusi/Code/tron/uploads/Outsource'   # 上线更改盘符
         self.compressType = 'zip'  # tar,bztar,gzrar
         self.pool = threadpool.ThreadPool(8)
-        logging.basicConfig(filename='./runtime/log/distribute_log/dis_' + time.strftime("%Y%m%d") + '.log', level=logging.INFO, format="%(asctime)s - %(levelname)s - %(message)s")
+        logging.basicConfig(filename='./runtime/log/distribute_log/dis_' + time.strftime("%Y%m%d")  # 上线更改
+                                     + '.log', level=logging.INFO, format="%(asctime)s - %(levelname)s - %(message)s")
 
     def argParse(self, filePath):
         self.filePath = filePath
@@ -80,7 +82,7 @@ class TronDistribute:
             [self.pool.putRequest(req) for req in requests]
             try:
                 self.pool.wait()
-                os.remove(self.filePath) # 测试打开
+                os.remove(self.filePath)  # 测试打开
                 callback(self.command_id)  # 云确定之后删掉
                 # self.putThread('transit')
             except Exception as e:
@@ -89,6 +91,16 @@ class TronDistribute:
         elif task == 'transit':
             print('---开始上传云---')
             requests = threadpool.makeRequests(self.transitYun, self.cnameList, callback=self.result)
+            [self.pool.putRequest(req) for req in requests]
+            try:
+                self.pool.wait()
+                self.putThread('sendmail')
+            except Exception as e:
+                pass
+
+        elif task == 'sendmail':
+            print('---开始发邮件---')
+            requests = threadpool.makeRequests(self.sendMail, '外包公司邮件地址', callback=self.result)  # 填写公司邮件地址
             [self.pool.putRequest(req) for req in requests]
             try:
                 self.pool.wait()
@@ -167,6 +179,38 @@ class TronDistribute:
         # AWS Secret Access Key: bar
         # Default region name [us-west-2]: us-west-2
         # Default output format [None]: json
+
+    def sendMail(self, mailAdd):
+        smtp_server = 'smtp.163.com'
+        from_mail = '15810448048@163.com'   # 发送邮箱
+        mail_pass = '1993323086li'          # 邮箱密码
+        mailAdd = mailAdd   # 外包公司邮箱
+        # cc_mail = ['lizhenliang@xxx.com']      # 抄送邮箱
+        from_name = '聚光绘影'           # 发送人姓名
+        subject = '聚光绘影'  # 主题
+        mail = [
+            "From: %s <%s>" % (from_name, from_mail),
+            "To: %s" % ','.join(mailAdd),  # 转成字符串，以逗号分隔元素
+            "Subject: %s" % subject,
+            # "Cc: %s" % ','.join(cc_mail),
+            "",
+            "分发test"
+        ]
+        msg = '\n'.join(mail)  # 这种方式先将头信息放到列表中，然后用join拼接，并以换行符分隔元素，结果就是和上面注释一样了
+        try:
+            s = smtplib.SMTP()
+            s.connect(smtp_server, '25')
+            s.login(from_mail, mail_pass)
+            # s.sendmail(from_mail, to_mail+cc_mail, msg)
+            s.sendmail(from_mail, mailAdd, msg)
+            s.quit()
+            logging.info('发送邮件成功' + mailAdd)
+            return 0, None
+        except Exception as e:
+            logging.info('发送邮件失败')
+            logging.error(e)
+            return 1, e
+
     def result(self, req, res):
         res1, res2 = res
         if res1:
