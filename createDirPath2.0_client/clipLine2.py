@@ -86,6 +86,10 @@ class Pack(object):
                                     copy(mov_path,out_path)
                                     qsize = queue_len-ind-1  # 当前剩余任务数
                                     to_php(queue_len,qsize,'','','',task)  # 将任务进行的百分比传给PHP
+                        else:
+                            print(path, "为空")
+                else:
+                    print(pub,"为空")
 
             self.edit_xml(xml_path,out_path)
 

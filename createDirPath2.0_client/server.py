@@ -174,13 +174,13 @@ def handle(conn,localIP):
 			# httpUrl.render_callback(command_id)
 			print('end')
 
-		elif data.endswith('add_xml'):  # 回插
+		elif data.endswith('add_xml'):
 			xml_path, path, project_id, field_id, xml_id,command_id,UpTask = data_split
 			start_clip(xml_path, path, project_id, field_id,xml_id,UpTask)
 			# httpUrl.render_callback(command_id)
 			print('end')
 
-		elif data.endswith('clip2'):
+		elif data.endswith('clip2'):   # 回插
 			video_path,img_path,tim,rate,data_id,command_id,UpTask = data_split
 			BackInsert().insert(video_path,img_path,tim,rate,data_id)
 			# httpUrl.render_callback(command_id)
