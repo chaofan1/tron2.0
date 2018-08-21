@@ -70,5 +70,3 @@ def SelectDailiesWin(serverName, filePath, fileName, command_id, UpTask):
     else:
         return filePath
     sys.exit(app.exec_())
-
-
