@@ -50,10 +50,6 @@ def handle(conn,localIP):
 					serverName = "J:"
 					filePath = filePath.replace("/", "\\")
 					os.popen('explorer.exe %s' % (serverName + filePath)).close()
-				# elif Uptask == 'References':
-				# 	serverName = "L:\References"
-				# 	filePath = filePath.replace("/", "\\")
-				# 	os.popen('explorer.exe %s' % (serverName + filePath)).read()
 				else:
 					serverName = "X:"
 					filePath = filePath.replace("/", "\\")
@@ -62,9 +58,6 @@ def handle(conn,localIP):
 				if Uptask == 'lgt' or Uptask == 'cmp':
 					serverName = "/Post"
 					os.popen('nautilus %s' % (serverName + filePath)).close()
-				# elif Uptask == 'Referencer':
-				# 	serverName = "/Library/References"
-				# 	os.popen('nautilus %s' % (serverName + filePath)).close()
 				else:
 					serverName = "/All"
 					os.popen('nautilus %s' % (serverName + filePath)).close()
@@ -72,9 +65,6 @@ def handle(conn,localIP):
 				if Uptask == 'lgt' or Uptask == 'cmp':
 					serverName = "/Volumes/Post"
 					os.popen('open %s' % (serverName + filePath)).close()
-				# elif Uptask == 'References':
-				# 	serverName = "/Volumes/Library/References"
-				# 	os.popen('open %s' % (serverName + filePath)).close()
 				else:
 					serverName = "/Volumes/All"
 					os.popen('open %s' % (serverName + filePath)).close()
@@ -91,9 +81,6 @@ def handle(conn,localIP):
 				inPathFile = os.path.join(serverName, filePath[0:14])
 				filename = render_one.render_one(inPathFile)
 				if os.path.exists(filename):
-					# dataTo = localIP + "|" + filename + "|Render"
-					# datadd = clientToRender.client(dataTo)
-					# render_remind.remind(datadd)
 					dataTree(filename, filePath, localIP)
 			httpUrl.render_callback(command_id)
 
@@ -172,18 +159,19 @@ def handle(conn,localIP):
 			xml_path, path, project_id, field_id, xml_id,command_id,UpTask = data_split
 			start_clip(xml_path, path, project_id, field_id,xml_id,UpTask)
 			# httpUrl.render_callback(command_id)
-			print('end')
+			print('clip1 end')
 
 		elif data.endswith('add_xml'):
 			xml_path, path, project_id, field_id, xml_id,command_id,UpTask = data_split
 			start_clip(xml_path, path, project_id, field_id,xml_id,UpTask)
 			# httpUrl.render_callback(command_id)
-			print('end')
+			print('add_xml end')
 
 		elif data.endswith('clip2'):   # 回插
 			video_path,img_path,frame,data_id,command_id,UpTask = data_split
 			BackInsert().insert(video_path,img_path,frame,data_id)
 			# httpUrl.render_callback(command_id)
+			print('clip2 end')
 
 		elif data.endswith('clip3'):   # 打包
 			pro_scene, xml_path, command_id,UpTask = data_split
@@ -196,6 +184,7 @@ def handle(conn,localIP):
 			Pack().pack(pro_scene, xml_path, out_path)
 			os.popen('open %s' % out_path).close()
 			# httpUrl.render_callback(command_id)
+			print('clip3 end')
 
 
 		# 转码 'clip1' 'IP|xml_path|path|项目id|场id|command_id|clip1' 7
@@ -227,8 +216,8 @@ def dataTree(filename, filePath, localIP):
 
 
 def myServer():
-	# localIP = socket.gethostbyname(socket.gethostname())
-	localIP = '127.0.0.1'
+	localIP = socket.gethostbyname(socket.gethostname())
+	# localIP = '127.0.0.1'
 	HOST = localIP
 	PORT = 29400
 	s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)

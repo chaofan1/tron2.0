@@ -9,10 +9,6 @@ import cv2
 from PyQt4.QtGui import *
 from PyQt4.QtCore import *
 
-# from Tkinter import *
-# import tkFileDialog
-# import tkMessageBox
-
 
 def SelectReferenceWin(serverName,filePath,fileName,fileID,UpTask):
     import sys

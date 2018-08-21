@@ -9,6 +9,7 @@ import cv2
 from PyQt4.QtGui import *
 from PyQt4.QtCore import *
 
+
 def SelectReferenceWin(serverName,filePath,fileName,fileID,UpTask):
     import sys
     if platform.system() == 'Linux' or platform.system() == 'Darwin':
