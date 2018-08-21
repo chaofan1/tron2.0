@@ -209,7 +209,9 @@ def dataTree(filename, filePath, localIP):
 	file_size = os.path.getsize(filename)
 	file_mtime = os.path.getmtime(filename)
 	pro_name = filePath.split('/')[1]
-	with open(r'W:\tronPipelineScript\%s.csv' % pro_name, 'a+') as f:
+	pro_path = os.getcwd()
+	csv_path = os.path.join(pro_path,'%s.csv'%pro_name)
+	with open(csv_path, 'a+') as f:
 		con_write = filePath, file_size, file_mtime
 		con_read = set(f.readlines())
 		con_write = str(con_write) + '\n'

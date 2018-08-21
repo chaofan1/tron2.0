@@ -5,12 +5,14 @@ import sys
 import os
 
 
-def remind(datadd):
+def remind(datadd,file_number):
     app = QApplication(sys.argv)
-    if datadd is "True":
-        QMessageBox.information(None, 'INFORMATION', u'文件上传成功，请稍后查看Renderbus网站！', QString('OK'))
+    if datadd == "True":
+        QMessageBox.information(None, 'INFORMATION', file_number+ u'上传成功，请查看Renderbus网站！', QString('OK'))
+    elif datadd == 'send':
+        QMessageBox.information(None, 'INFORMATION', file_number + u'开始上传，请稍后查看Renderbus网站！', QString('OK'))
     else:
-        QMessageBox.information(None, 'INFORMATION', u'上传失败！', QString('OK'))
+        QMessageBox.information(None, 'INFORMATION', file_number+ u'上传失败,错误信息:'+datadd, QString('OK'))
     return
     sys.exit(app.exec_())
 
