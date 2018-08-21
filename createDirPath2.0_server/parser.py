@@ -51,6 +51,9 @@ def _init_():
 		elif args[0] == "add_xml":
 			clipData = args[1]+'|add_xml'
 			clientLink(clipData)
+		elif args[0] == "download":
+			clipData = args[1]+'|download'
+			clientLink(clipData)
 	elif len(args) == 3:
 		if args[0] == "Project":
 			TronProject().CreatePro(args[1])  # createProject.CreatePro("Project","HAC","command_id")

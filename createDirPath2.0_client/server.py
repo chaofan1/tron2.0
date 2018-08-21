@@ -18,6 +18,7 @@ import render_remind
 import clientToRender
 from clipLine import start_clip
 from clipLine2 import BackInsert,Pack
+from distribute_download import Download
 
 
 def handle(conn,localIP):
@@ -186,6 +187,10 @@ def handle(conn,localIP):
 			# httpUrl.render_callback(command_id)
 			print('clip3 end')
 
+		elif data.endswith('download'):   # 下载
+			save_path,load_path,UpTask = data_split
+			Download(save_path,load_path).download()
+			# httpUrl.render_callback(command_id)
 
 		# 转码 'clip1' 'IP|xml_path|path|项目id|场id|command_id|clip1' 7
 		# 回插 'clip2' 'IP|video_path|img_path|frame|width|height|id|command_id|clip2' 8

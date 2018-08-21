@@ -9,6 +9,7 @@ import zipfile
 import logging
 import smtplib
 import platform
+import paramiko
 import threadpool
 from botocore.client import Config
 from server_callback import callback
@@ -166,20 +167,44 @@ class TronDistribute:
 
     def transitYun(self, cpName):
         try:
-            cpdirPath = cpName + '_' + self.userid + '_' + self.timeStamp + '.zip'
-            s3 = boto3.resource('s3', config=Config(signature_version='s3v4'))
-            if 'Distribute' not in s3.buckets.all():
-                s3.create_bucket(Bucket='Distribute')
-
-            s3.Object("Distribute", cpName + '_' + self.userid + '_' + self.timeStamp).upload_file(cpdirPath)
-            # 成功之后删除压缩包
-            os.remove(cpdirPath)
-            logging.info('上传云成功' + cpdirPath )
+            hostname = '10.1.101.186'
+            username = 'root'
+            password = '123456'
+            port = 22
+            local_dir = '/root/paramiko'
+            remote_dir = '/root/paramiko'
+            try:
+                t = paramiko.Transport((hostname, port))
+                t.connect(username=username, password=password)
+                sftp = paramiko.SFTPClient.from_transport(t)
+                files = os.listdir(local_dir)
+                for f in files:
+                    sftp.put(os.path.join(local_dir, f), os.path.join(remote_dir, f))
+                t.close()
+            except Exception:
+                print "connect error!"
             return 0, None
         except Exception as e:
             logging.info('上传云出错')
             logging.error(e)
             return 1, e
+
+    # def transitYun(self, cpName):
+    #     try:
+    #         cpdirPath = cpName + '_' + self.userid + '_' + self.timeStamp + '.zip'
+    #         s3 = boto3.resource('s3', config=Config(signature_version='s3v4'))
+    #         if 'Distribute' not in s3.buckets.all():
+    #             s3.create_bucket(Bucket='Distribute')
+    #
+    #         s3.Object("Distribute", cpName + '_' + self.userid + '_' + self.timeStamp).upload_file(cpdirPath)
+    #         # 成功之后删除压缩包
+    #         os.remove(cpdirPath)
+    #         logging.info('上传云成功' + cpdirPath )
+    #         return 0, None
+    #     except Exception as e:
+    #         logging.info('上传云出错')
+    #         logging.error(e)
+    #         return 1, e
 
         # 设置凭证
         # aws configure
