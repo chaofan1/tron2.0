@@ -22,7 +22,7 @@ def callback(command_id):
 
 def disCallback(task_ids):
     url_update = '?'
-    query_args = {'id': task_ids}
+    query_args = {'name': task_ids[0], 'id': task_ids[1]}
     encoded_args = urllib.urlencode(query_args)
     try:
         urllib2.urlopen(url_update, encoded_args)

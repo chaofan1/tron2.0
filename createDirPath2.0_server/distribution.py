@@ -119,7 +119,6 @@ class TronDistribute:
                     else:
                         shutil.copyfile(path, arg + os.sep + basename)
             else:
-                print(arg2)
                 basename = os.path.basename(arg2)
                 if os.path.isdir(arg2):
                     shutil.copytree(arg2, arg + os.sep + basename)
