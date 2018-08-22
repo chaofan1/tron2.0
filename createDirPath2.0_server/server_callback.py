@@ -20,6 +20,16 @@ def callback(command_id):
     except urllib2.URLError, e:
         print e.reason
 
+def disCallback(task_ids):
+    url_update = '?'
+    query_args = {'id': task_ids}
+    encoded_args = urllib.urlencode(query_args)
+    try:
+        urllib2.urlopen(url_update, encoded_args)
+    except urllib2.HTTPError, e:
+        print e.code
+    except urllib2.URLError, e:
+        print e.reason
 
 if __name__ == '__main__':
     callback(1)
