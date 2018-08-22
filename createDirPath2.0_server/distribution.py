@@ -206,7 +206,7 @@ class TronDistribute:
                 s.sendmail(from_mail, mailAdd, msg)
                 s.quit()
                 disCallback([mailAdd['name'], self.task_ids])
-                logging.info(u'发送邮件成功' + mailInfo['name'] + mailAdd)
+                logging.info(u'发送邮件成功' + mailInfo['name'] + '|'+ mailAdd)
                 return 0, None
             except Exception as e:
                 logging.info('发送邮件失败')
