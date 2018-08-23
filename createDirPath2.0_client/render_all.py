@@ -1,4 +1,3 @@
-# coding:utf8
 from PyQt4.QtGui import *
 from PyQt4.QtCore import *
 import sys
@@ -15,5 +14,4 @@ def render_all(inPathFile):
 
 
 if __name__ == '__main__':
-    path = render_all('')
-    print(path)
+    render_all('')

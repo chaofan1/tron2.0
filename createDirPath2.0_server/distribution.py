@@ -180,7 +180,7 @@ class TronDistribute:
         # Default output format [None]: json
 
     def sendMail(self, mailInfo):
-        if mailInfo:
+        if mailInfo['email']:
             try:
                 smtp_server = 'smtp.163.com'
                 from_mail = '15810448048@163.com'  # 发送邮箱

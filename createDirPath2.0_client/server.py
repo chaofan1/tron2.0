@@ -187,9 +187,10 @@ def handle(conn,localIP):
 			# httpUrl.render_callback(command_id)
 			print('clip3 end')
 
-		elif data.endswith('download'):   # 下载
-			save_path,load_path,UpTask = data_split
-			Download(save_path,load_path).download()
+		elif data.endswith('download'):   # 分发外包下载
+			save_path = render_all.render_all('')
+			load_path,UpTask = data_split
+			Download(save_path,load_path).putThread()
 			# httpUrl.render_callback(command_id)
 
 		# 转码 'clip1' 'IP|xml_path|path|项目id|场id|command_id|clip1' 7
