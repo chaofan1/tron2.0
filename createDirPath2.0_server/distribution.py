@@ -9,10 +9,9 @@ import zipfile
 import logging
 import smtplib
 import platform
-import paramiko
 import threadpool
 from botocore.client import Config
-from server_callback import callback
+from server_callback import disCallback
 
 
 class Finish(SyntaxWarning):
@@ -47,6 +46,7 @@ class TronDistribute:
                 response = json.load(f)
             Paths = []
             # 解析参数
+            self.task_ids = response['task_ids']
             self.cnameList = response['company_data']
             fieldList = response['field_data']
             for field in fieldList:
@@ -58,7 +58,7 @@ class TronDistribute:
                     assetList = shot['asset_data']
                     referencesList = shot['references_data']
                     for cp in self.cnameList:
-                        cp = cp + '_' + self.userid + '_' + self.timeStamp
+                        cp = cp['name'] + '_' + self.userid + '_' + self.timeStamp
                         basePath =self.outputPath + os.sep + cp + os.sep + self.progectName + os.sep + fieldName + os.sep + shotNum + os.sep
                         materialDir = basePath + self.material
                         assetDir = basePath + self.asset
@@ -93,9 +93,8 @@ class TronDistribute:
             [self.pool.putRequest(req) for req in requests]
             try:
                 self.pool.wait()
-                os.remove(self.filePath)  # 测试打开
-                callback(self.command_id)  # 云确定之后删掉
-                # self.putThread('transit')
+                # self.putThread('transit')  用云之后打开
+                os.remove(self.filePath)
             except Exception as e:
                 pass
 
@@ -105,17 +104,7 @@ class TronDistribute:
             [self.pool.putRequest(req) for req in requests]
             try:
                 self.pool.wait()
-                self.putThread('sendmail')
-            except Exception as e:
-                pass
-
-        elif task == 'sendmail':
-            print('---开始发邮件---')
-            requests = threadpool.makeRequests(self.sendMail, '外包公司邮件地址', callback=self.result)  # 填写公司邮件地址
-            [self.pool.putRequest(req) for req in requests]
-            try:
-                self.pool.wait()
-                callback(self.command_id)
+                os.remove(self.filePath)
             except Exception as e:
                 pass
 
@@ -130,7 +119,6 @@ class TronDistribute:
                     else:
                         shutil.copyfile(path, arg + os.sep + basename)
             else:
-                print(arg2)
                 basename = os.path.basename(arg2)
                 if os.path.isdir(arg2):
                     shutil.copytree(arg2, arg + os.sep + basename)
@@ -146,7 +134,7 @@ class TronDistribute:
     def packFile(self, cpName):
         os.chdir(self.outputPath)
         try:
-            cpdirPath = cpName + '_' + self.userid + '_' + self.timeStamp
+            cpdirPath = cpName['name'] + '_' + self.userid + '_' + self.timeStamp
             fileList = []
             for root, dirs, files in os.walk(cpdirPath):
                 for name in files:
@@ -157,8 +145,10 @@ class TronDistribute:
                 zf.write(tar)
             zf.close()
             # 压缩成功，删除公司文件夹
-            shutil.rmtree(self.outputPath + os.sep + cpName + '_' + self.userid + '_' + self.timeStamp)
+            shutil.rmtree(self.outputPath + os.sep + cpName['name'] + '_' + self.userid + '_' + self.timeStamp)
             logging.info(u'压缩文件成功' + cpdirPath )
+            self.sendMail(cpName)   # 上线之后放传云函数里
+            print '发送邮件成功'
             return 0, None
         except Exception as e:
             logging.info(u'压缩出错')
@@ -167,44 +157,20 @@ class TronDistribute:
 
     def transitYun(self, cpName):
         try:
-            hostname = '10.1.101.186'
-            username = 'root'
-            password = '123456'
-            port = 22
-            local_dir = '/root/paramiko'
-            remote_dir = '/root/paramiko'
-            try:
-                t = paramiko.Transport((hostname, port))
-                t.connect(username=username, password=password)
-                sftp = paramiko.SFTPClient.from_transport(t)
-                files = os.listdir(local_dir)
-                for f in files:
-                    sftp.put(os.path.join(local_dir, f), os.path.join(remote_dir, f))
-                t.close()
-            except Exception:
-                print "connect error!"
+            cpdirPath = cpName['name'] + '_' + self.userid + '_' + self.timeStamp + '.zip'
+            s3 = boto3.resource('s3', config=Config(signature_version='s3v4'))
+            if 'Distribute' not in s3.buckets.all():
+                s3.create_bucket(Bucket='Distribute')
+
+            s3.Object("Distribute", cpName + '_' + self.userid + '_' + self.timeStamp).upload_file(cpdirPath)
+            # 成功之后删除压缩包
+            os.remove(cpdirPath)
+            logging.info('上传云成功' + cpdirPath )
             return 0, None
         except Exception as e:
             logging.info('上传云出错')
             logging.error(e)
             return 1, e
-
-    # def transitYun(self, cpName):
-    #     try:
-    #         cpdirPath = cpName + '_' + self.userid + '_' + self.timeStamp + '.zip'
-    #         s3 = boto3.resource('s3', config=Config(signature_version='s3v4'))
-    #         if 'Distribute' not in s3.buckets.all():
-    #             s3.create_bucket(Bucket='Distribute')
-    #
-    #         s3.Object("Distribute", cpName + '_' + self.userid + '_' + self.timeStamp).upload_file(cpdirPath)
-    #         # 成功之后删除压缩包
-    #         os.remove(cpdirPath)
-    #         logging.info('上传云成功' + cpdirPath )
-    #         return 0, None
-    #     except Exception as e:
-    #         logging.info('上传云出错')
-    #         logging.error(e)
-    #         return 1, e
 
         # 设置凭证
         # aws configure
@@ -213,36 +179,40 @@ class TronDistribute:
         # Default region name [us-west-2]: us-west-2
         # Default output format [None]: json
 
-    def sendMail(self, mailAdd):
-        smtp_server = 'smtp.163.com'
-        from_mail = '15810448048@163.com'   # 发送邮箱
-        mail_pass = '1993323086li'          # 邮箱密码
-        mailAdd = mailAdd   # 外包公司邮箱
-        # cc_mail = ['lizhenliang@xxx.com']      # 抄送邮箱
-        from_name = '聚光绘影'           # 发送人姓名
-        subject = '聚光绘影'  # 主题
-        mail = [
-            "From: %s <%s>" % (from_name, from_mail),
-            "To: %s" % ','.join(mailAdd),  # 转成字符串，以逗号分隔元素
-            "Subject: %s" % subject,
-            # "Cc: %s" % ','.join(cc_mail),
-            "",
-            "分发test"
-        ]
-        msg = '\n'.join(mail)  # 这种方式先将头信息放到列表中，然后用join拼接，并以换行符分隔元素，结果就是和上面注释一样了
-        try:
-            s = smtplib.SMTP()
-            s.connect(smtp_server, '25')
-            s.login(from_mail, mail_pass)
-            # s.sendmail(from_mail, to_mail+cc_mail, msg)
-            s.sendmail(from_mail, mailAdd, msg)
-            s.quit()
-            logging.info('发送邮件成功' + mailAdd)
-            return 0, None
-        except Exception as e:
-            logging.info('发送邮件失败')
-            logging.error(e)
-            return 1, e
+    def sendMail(self, mailInfo):
+        if mailInfo:
+            try:
+                smtp_server = 'smtp.163.com'
+                from_mail = '15810448048@163.com'  # 发送邮箱
+                mail_pass = '1993323086li'  # 邮箱密码
+                mailAdd = mailInfo['email']  # 外包公司邮箱
+                # cc_mail = ['lizhenliang@xxx.com']      # 抄送邮箱
+                from_name = '聚光绘影'  # 发送人姓名
+                subject = '聚光绘影'  # 主题
+                mail = [
+                    "From: %s <%s>" % (from_name, from_mail),
+                    str("To: %s" % mailAdd),
+                    "Subject: %s" % subject,
+                    # "Cc: %s" % ','.join(cc_mail), "utf8"),
+                    "",
+                    "分发test",
+                ]
+                msg = '\n'.join(mail)
+                s = smtplib.SMTP()
+                s.connect(smtp_server, '25')
+                s.login(from_mail, mail_pass)
+                # s.sendmail(from_mail, to_mail+cc_mail, msg)
+                s.sendmail(from_mail, mailAdd, msg)
+                s.quit()
+                disCallback([mailAdd['name'], self.task_ids])
+                logging.info(u'发送邮件成功' + mailInfo['name'] + '|'+ mailAdd)
+                return 0, None
+            except Exception as e:
+                logging.info('发送邮件失败')
+                logging.error(e)
+                return 1, e
+        else:
+            logging.info('邮箱为空')
 
     def result(self, req, res):
         res1, res2 = res
