@@ -148,7 +148,7 @@ def putter(task_queue,xml_path,project_id,field_id,data,path,task):
                     rate = i.find('.//timebase').text
                     clip_frame_length = i.find('duration').text   # 镜头帧长=剪辑帧长
                     duration = int(round(float(clip_frame_length) / float(rate)))
-                    time_start = time_node + 1
+                    time_start = time_node
                     time_node += duration
                     info['time_start'] = time_start  # 开始时间
                     info['duration'] = duration   # 持续时间
