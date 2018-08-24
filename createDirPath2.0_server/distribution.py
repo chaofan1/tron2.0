@@ -148,7 +148,6 @@ class TronDistribute:
             shutil.rmtree(self.outputPath + os.sep + cpName['name'] + '_' + self.userid + '_' + self.timeStamp)
             logging.info(u'压缩文件成功' + cpdirPath )
             self.sendMail(cpName)   # 上线之后放传云函数里
-            print '发送邮件成功'
             return 0, None
         except Exception as e:
             logging.info(u'压缩出错')
@@ -204,15 +203,13 @@ class TronDistribute:
                 # s.sendmail(from_mail, to_mail+cc_mail, msg)
                 s.sendmail(from_mail, mailAdd, msg)
                 s.quit()
-                disCallback([mailAdd['name'], self.task_ids])
                 logging.info(u'发送邮件成功' + mailInfo['name'] + '|'+ mailAdd)
-                return 0, None
             except Exception as e:
                 logging.info('发送邮件失败')
                 logging.error(e)
-                return 1, e
         else:
             logging.info('邮箱为空')
+        disCallback([mailInfo['name'], self.task_ids])
 
     def result(self, req, res):
         res1, res2 = res
