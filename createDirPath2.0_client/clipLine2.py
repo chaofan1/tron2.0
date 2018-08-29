@@ -32,7 +32,6 @@ class BackInsert(object):
             subprocess.Popen(command, shell=True)
             self.update_sql(sql_id,output_mov)
 
-
     def update_sql(self,sql_id,output_mov):
         try:
             ip = '127.0.0.1'
