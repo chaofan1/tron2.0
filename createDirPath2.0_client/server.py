@@ -19,6 +19,7 @@ import clientToRender
 from clipLine import start_clip
 from clipLine2 import BackInsert,Pack
 from distribute_download import Download
+from clipLine import to_php
 
 
 def handle(conn,localIP):
@@ -159,6 +160,7 @@ def handle(conn,localIP):
 		elif data.endswith('clip1'):  # 转码
 			xml_path, path, project_id, field_id, xml_id,command_id,UpTask = data_split
 			start_clip(xml_path, path, project_id, field_id,xml_id,UpTask)
+			to_php(1, 0, project_id, field_id, xml_id, UpTask)
 			# httpUrl.render_callback(command_id)
 			print('clip1 end')
 

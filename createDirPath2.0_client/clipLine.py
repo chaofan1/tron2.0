@@ -234,9 +234,6 @@ def start_clip(xml_path,path,project_id,field_id,xml_id,task):
         pool.close()
         pool.join()
         print('pool join')
-        qsize = queue.qsize()
-        if qsize is 0:
-            to_php(queue_len, qsize, project_id, field_id, xml_id,task)
     else:
         to_php(1, 0, project_id,field_id,xml_id, task)
         print '没有在xml中获取到任务'
