@@ -58,18 +58,18 @@ class TronFolder:
             if len(seqName):
                 dirPath += seqName + os.sep
                 if len(shotName):
-                    dirPath += shotName + os.sep
-        stuffPath = dirPath + 'Stuff'
+                    dirPath += shotName + os.sep   # 分配镜头任务：/Tron/FUY/01/001/
+        stuffPath = dirPath + 'Stuff'    # 分配镜头任务：/Tron/FUY/01/001/Stuff
         if not os.path.exists(stuffPath):
             self.CreateFolder(stuffPath, "0555","")
-        if len(task) !=0 :
-            taskPath = stuffPath + os.sep + task
+        if len(task) != 0:
+            taskPath = stuffPath + os.sep + task  # 创建项目：/Tron/FUY/Stuff/prd
             self.CreateFolder(taskPath, "0555", "")
             taskPath += os.sep
             userLeader = task+"leader"
             if task == 'prd':
                 if len(shotName) == 0:
-                    self.CreateFolder((taskPath + "elem"),"0775",userLeader)
+                    self.CreateFolder((taskPath + "elem"),"0775",userLeader)  # /Tron/FUY/Stuff/prd/elem
                 else:
                     self.CreateFolder((taskPath + "audio"),"0775",userLeader)
                     self.CreateFolder((taskPath + 'plates'),"0775",userLeader)
@@ -83,9 +83,9 @@ class TronFolder:
                 self.CreateFolder((taskPath + "publish"),"0755",userLeader)
             if task == 'cmp':
                 if len(shotName) == 0:
-                    self.CreateFolder((taskPath + "elem"), "0555", userLeader)
-                    self.CreateFolder((taskPath + "elem"+os.sep+"inner"), "0775", userLeader)
-                    self.CreateFolder((taskPath + "elem"+os.sep+"vender"), "0775", userLeader)
+                    self.CreateFolder((taskPath + "elem"), "0555", userLeader)  # /Post/FUY/Stuff/cmp/elem
+                    self.CreateFolder((taskPath + "elem"+os.sep+"inner"), "0775", userLeader)  # /Post/FUY/Stuff/cmp/elem/inner
+                    self.CreateFolder((taskPath + "elem"+os.sep+"vender"), "0775", userLeader) # /Post/FUY/Stuff/cmp/elem/vender
                 else:
                     self.CreateFolder((taskPath + "elem"), "0775", userLeader)
                     self.CreateFolder((taskPath + 'img'),"0775",userLeader)
@@ -93,7 +93,7 @@ class TronFolder:
             elif task == 'art' or task ==  'ani' or task == 'lgt'or task == 'efx':
                 self.CreateFolder((taskPath + 'img'),"0775",userLeader)
             if task != "efx" or task != "cmp" or task != "lgt" :
-                fileFolder = stuffPath+os.sep+task+os.sep+"publish"
+                fileFolder = os.path.join(stuffPath,task,"publish")
                 if task == "prd":
                    return                            
                 else:
@@ -108,7 +108,7 @@ class TronFolder:
             else:
                 taskCache = "publish","img","process"
                 for cacheD in taskCache:
-                    fileFolder = stuffPath + os.sep + task + os.sep + cacheD
+                    fileFolder = os.path.join(stuffPath,task,cacheD)
                     if len(fileName) != 0:
                         fileFolder += os.sep + fileName
                         if not os.path.exists(fileFolder):

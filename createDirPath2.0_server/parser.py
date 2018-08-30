@@ -77,20 +77,15 @@ def _init_():
 			TronProject().CreateSeq(args[1],args[2])
 			callback(args[3])
 	elif len(args) == 5:
-		if args[0] == "Shot":
+		if args[0] == "Shot":   # "Shot" "HAC" "01" "001" "command_id"
 			TronProject().CreateScene(args[1],args[2],args[3])
 			callback(args[4])
 	elif len(args) == 6:
 		if args[0] == "AssetTask":
 			TronProject().CreateAsset(args[1], args[2], args[3], args[4])
 			callback(args[5])
-	# elif len(args) == 7:
-	# 	if args[0] == "ShotTask":
-	# 		TronProject().CreateShot(args[1], args[2], args[002], args[4], args[5], "")
-	# 		callback(args[6])
-	# 	pass
 	elif len(args) == 8:
-		if args[0] == "ShotTask":
+		if args[0] == "ShotTask":   # "ShotTask" "HAC" "01" "001" "rig" "liangcy" "fileName" "command_id"
 			TronProject().CreateShot(args[1], args[2], args[3], args[4], args[5], args[6])
 			callback(args[7])
 

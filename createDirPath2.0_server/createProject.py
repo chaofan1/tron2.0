@@ -19,10 +19,10 @@ class TronProject:
 
     def CreatePro(self,proName):
         print "create project %s" %(proName)
-        projectChild = {"Doc": "0775", "Dailies": "0555", "Vender": "0555", "Client": "0555", "References": "0555"}
-        proPath = self.serverName + os.sep + proName
-        proPost = os.path.join(self.postName,proName)
-        refPaths = os.path.join(self.refName,proName)
+        projectChild = {"Doc": "0775", "Vender": "0555", "Client": "0555", "References": "0555"}
+        proPath = os.path.join(self.serverName,proName)  # /Tron/FUY
+        proPost = os.path.join(self.postName,proName)  # /Post/FUY
+        refPaths = os.path.join(self.refName,proName)  # /Library/References/FUY
         # daiPaths = os.path.join(self.daiName, proName)
         if not os.path.exists(proPath):
             os.mkdir(proPath)
@@ -71,8 +71,8 @@ class TronProject:
                         TronFolder().CreateFolder(folderPath, "0555", "zhouyc")
                     elif projectChild[i] == "0775":
                         TronFolder().CreateFolder(folderPath, "0775", "zhouyc")
-        TronFolder().CreateStuff(proPath, "", "", "", "", "")
-        TronFolder().CreateStuff(proPost, "", "", "", "", "")
+        # TronFolder().CreateStuff(proPath, "", "", "", "", "")
+        # TronFolder().CreateStuff(proPost, "", "", "", "", "")
         TronFolder().CreateStuff(proPath, "", "", "prd", "", "")
         TronFolder().CreateStuff(proPost, "", "", "cmp", "", "")
         TronFolder().CreateWork(proPath, "", "", "", "", "")
@@ -102,10 +102,10 @@ class TronProject:
             os.chmod(daiPath2, 0777)
 
     def CreateSeq(self, proName, seqName):
-        dirPath = self.serverName + os.sep + proName
-        dirPost = os.path.join(self.postName, proName)
-        seqPath = dirPath+os.sep + seqName
-        seqPost = os.path.join(dirPost, seqName)
+        dirPath = self.serverName + os.sep + proName  # /Tron/FUY
+        dirPost = os.path.join(self.postName, proName)  # /Post/FUY
+        seqPath = dirPath+os.sep + seqName  # /Tron/FUY/01
+        seqPost = os.path.join(dirPost, seqName)  # /Post/FUY/01
         if not os.path.exists(seqPath):
             TronFolder().CreateFolder(seqPath, "0555", "")
             TronFolder().CreateFolder(seqPost, "0555", "")
@@ -116,12 +116,8 @@ class TronProject:
             TronFolder().CreateWork(dirPost, seqName, "", "", "", "")
 
     def CreateScene(self, proName, seqName, shotName):
-        dirPath = self.serverName + os.sep + proName
-        dirPost = os.path.join(self.postName, proName)
-        seqPath = dirPath+os.sep + seqName
-        seqPost = os.path.join(dirPost, seqName)
-        shotPath = seqPath+os.sep + shotName
-        shotPost = os.path.join(seqPost, shotName)
+        shotPath = os.path.join(self.serverName,proName,seqName,shotName)  # /Tron/FUY/01/001
+        shotPost = os.path.join(self.postName,proName,seqName,shotName)   # /Post/FUY/01/001
         if not os.path.exists(shotPath):
             TronFolder().CreateFolder(shotPath, "0555", "")
             TronFolder().CreateFolder(shotPost, "0555", "")
@@ -144,13 +140,14 @@ class TronProject:
             else:
                 TronFolder().CreateWork(dirPath, "", "", user, type_, fileName)
 
+    #                    "FUY"      "01"    "001"   "rig" "liangcy" "fileName"
     def CreateShot(self, proName, seqName, shotName, type_, user, fileName):
-        dirPath = self.serverName+os.sep+proName
-        dirPost = os.path.join(self.postName, proName)
+        dirPath = os.path.join(self.serverName,proName)  # /Tron/FUY
+        dirPost = os.path.join(self.postName, proName)   # /Post/FUY
         if len(fileName) == 0 and len(type_) == 0:
             print "please give me a file"
         else:
-            if type_ == "lgt" or type_ == "cmp":
+            if type_ == "lgt" or type_ == "cmp":   # 灯光渲染与合成都在post盘，其他环节都在tron
                 TronFolder().CreateStuff(dirPost, seqName, shotName, type_, fileName, user)
             else:
                 TronFolder().CreateStuff(dirPath, seqName, shotName, type_, fileName, user)
