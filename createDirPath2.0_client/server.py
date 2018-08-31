@@ -149,13 +149,13 @@ def handle(conn,localIP):
 			print filePath, fileName, command_id, UpTask
 			if platform.system() == 'Windows':
 				serverName = "L:/References"
-				fileOld = saveReferenceWindows.SelectReferenceWin(serverName, filePath, fileName, command_id,UpTask)
+				saveReferenceWindows.SelectReferenceWin(serverName, filePath, fileName, command_id,UpTask)
 			elif platform.system() == 'Linux':
 				serverName = "/library/References"
-				fileOld = saveReferenceWindows.SelectReferenceWin(serverName, filePath, fileName, command_id,UpTask)
+				saveReferenceWindows.SelectReferenceWin(serverName, filePath, fileName, command_id,UpTask)
 			elif platform.system() == 'Darwin':
 				serverName = "/Volumes/library/References"
-				fileOld = saveReferenceMac.SelectReferenceWin(serverName, filePath, fileName, command_id, UpTask)
+				saveReferenceMac.SelectReferenceWin(serverName, filePath, fileName, command_id, UpTask)
 
 		elif data.endswith('clip1'):  # 转码
 			xml_path, path, project_id, field_id, xml_id,command_id,UpTask = data_split

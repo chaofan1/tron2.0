@@ -69,9 +69,9 @@ def _init_():
 		elif args[0] == "Pack":
 			TronDistribute(args[2]).argParse(args[1])
 	elif len(args) == 4:
-		if args[0] == "Reference":
+		if args[0] == "Reference":    # "Reference" "HAC" "shots"  "192.168.1.85|x:/DHG/References/inner/fileName|373"
 			TronProject().CreateRef(args[1],args[2])
-			referencesData = args[3] + "|References"
+			referencesData = args[3] + "|Reference"
 			clientLink(referencesData)
 		elif args[0] == "Seq":  # createProject.CreateSeq("Seq","HAC","01","command_id")
 			TronProject().CreateSeq(args[1],args[2])
@@ -81,7 +81,7 @@ def _init_():
 			TronProject().CreateScene(args[1],args[2],args[3])
 			callback(args[4])
 	elif len(args) == 6:
-		if args[0] == "AssetTask":
+		if args[0] == "AssetTask":    # "AssetTask" "HAC" "rig" "liangcy" "fileName" "command_id"
 			TronProject().CreateAsset(args[1], args[2], args[3], args[4])
 			callback(args[5])
 	elif len(args) == 8:

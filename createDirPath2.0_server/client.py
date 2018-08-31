@@ -18,7 +18,7 @@ def clientLink(data):
     clientIP = args[0]
     senStr = '|'.join(args[1:])
     filePath = ""
-    if len(args)>2:
+    if len(args) > 2:
         filePath = args[1]
 
     HOST = clientIP
@@ -29,10 +29,10 @@ def clientLink(data):
         s.sendall(senStr)
         print('already send info')
         if data.endswith('Dailies1') or data.endswith('Dailies2'):
+            serverName = "/Tron"
             data = s.recv(1024)
             data_replace = data.replace('\\', '/')
             filePath_replace = filePath.replace('\\', '/')
-            serverName = "/Tron"
             if os.path.exists(serverName+data_replace):
                 os.chmod((serverName+data_replace), 0755)
                 os.chmod((serverName + filePath_replace), 0755)

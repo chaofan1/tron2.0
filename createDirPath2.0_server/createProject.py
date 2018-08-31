@@ -79,7 +79,7 @@ class TronProject:
         TronFolder().CreateWork(proPost, "", "", "", "", "")
 
     def CreateRef(self, proName, type_,):
-        refPath = self.refName+os.sep+proName
+        refPath = self.refName+os.sep+proName    # /Library/References/FUY
         if os.path.exists(refPath):
             if os.path.exists(refPath):
                 if type_ == "shots" or type_ == "assets":
@@ -123,8 +123,8 @@ class TronProject:
             TronFolder().CreateFolder(shotPost, "0555", "")
 
     def CreateAsset(self, proName, type_, user, fileName):
-        dirPath = self.serverName+os.sep+proName
-        dirPost = os.path.join(self.postName, proName)
+        dirPath = os.path.join(self.serverName,proName)    # /Tron/FUY
+        dirPost = os.path.join(self.postName, proName)     # /Post/FUY
         if len(fileName) == 0 and len(type_) == 0:
             print "please give me a file"
         else:

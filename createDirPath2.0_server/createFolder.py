@@ -25,7 +25,7 @@ class TronFolder:
                     os.makedirs(folderPath)
                     userID = 11001
                     groupID = 11000
-                    if len(user) != 0:
+                    if user:
                         userAll = []
                         for userDn in pwd.getpwall():
                             userAll.append(userDn[0])

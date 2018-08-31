@@ -8,6 +8,12 @@ from shutil import copy
 from clipLine import to_php
 import re
 
+ip = '127.0.0.1'
+user_name = 'root'
+passwd = 'Root123'
+db_name = 'new_tron'
+table_name = 'oa_approvals'
+
 
 class BackInsert(object):
     def __init__(self):
@@ -22,7 +28,7 @@ class BackInsert(object):
         frame = str(int(round(float(frame))))  # str(int(float(tim) * float(rate))-1)  # 计算要替换第几帧
         ffmpeg = 'ffmpeg'
         command = "%s -i %s -i %s -y -g 2 -keyint_min 2 -filter_complex " % (ffmpeg,input_mov, input_img) + \
-                  repr("[0:v][1:v]overlay=enable='between(n,%s,%s)'")%(frame,frame) + " -acodec copy %s" % output_mov
+                  repr("[0:v][1:v]overlay=enable='between(n,%s,%s)'") % (frame,frame) + " -acodec copy %s" % output_mov
         if '_postil.' in input_mov:
             su = subprocess.Popen(command, shell=True)
             su.wait()
@@ -34,17 +40,13 @@ class BackInsert(object):
 
     def update_sql(self,sql_id,output_mov):
         try:
-            ip = '127.0.0.1'
-            user_name = 'root'
-            passwd = 'Root123'
-            db_name = 'new_tron'
             output_mov = re.search(r'.*(uploads.*)', output_mov).group(1)
             conn = pymysql.connect(ip,user_name, passwd, db_name, charset='utf8', use_unicode=True)
         except:
             print('connect fail')
         else:
             cursor = conn.cursor()
-            insert_sql = "UPDATE oa_approvals SET file='%s' where id = %s"%(output_mov,sql_id)
+            insert_sql = "UPDATE %s SET file='%s' where id = %s" % (table_name,output_mov,sql_id)
             try:
                 cursor.execute(insert_sql)
                 conn.commit()

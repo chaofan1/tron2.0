@@ -24,7 +24,7 @@ def SelectReferenceWin(serverName,filePath,fileName,fileID,UpTask):
     (seqname, ext) = QFileDialog.getOpenFileNameAndFilter(mainWindow, QString('update a reference'), inPathFile, '*.* \n*.mov \n*.mp4 \n*.avi \n*.jpg *.jpeg \n%.png \n*.tiff \n*.tga \n*.dpx \n.mp3 \n.wav \n*.*', options = QFileDialog.ReadOnly)
     fileOld = (seqname.__str__())
 
-    if not len(fileOld) == 0:
+    if fileOld:
         fileType = fileOld.split(".")[-1]
         if os.path.isfile(fileOld):
             shutil.copy(fileOld, (serverName+filePath + "/" + fileName + "." + fileType))
