@@ -100,14 +100,14 @@ def getter(task_queue,queue_len,xml_id,task):
         pathurl = info['pathurl']
         video_name = pathurl.split('/')[-1]
         video_path = os.path.join(dirname,video_name)
-        transcode_command = 'ffmpeg -i %s -c:v libx264 -y -g 2 -keyint_min 2 %s'%(pathurl,video_path)
+        transcode_command = 'ffmpeg -i %s -loglevel -8 -c:v libx264 -y -g 2 -keyint_min 2 %s'%(pathurl,video_path)
         video_su = subprocess.Popen(transcode_command,shell=True)
         video_su.wait()
 
         # 2、创建缩略图文件夹,截取缩略图
         img_name = video_name.split('.')[0] +'.jpg'
         img_path = os.path.join(dirname,img_name)
-        screenshot_command = 'ffmpeg -ss 1 -t 1 -i %s -y %s' % (video_path,img_path)
+        screenshot_command = 'ffmpeg -ss 1 -t 1 -i %s -loglevel -8 -y %s' % (video_path,img_path)
         img_su = subprocess.Popen(screenshot_command, shell=True)
         img_su.wait()
 

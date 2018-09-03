@@ -27,7 +27,7 @@ class BackInsert(object):
         output_mov = os.path.join(mov_path,mov_name_new)
         frame = str(int(round(float(frame))))  # str(int(float(tim) * float(rate))-1)  # 计算要替换第几帧
         ffmpeg = 'ffmpeg'
-        command = "%s -i %s -i %s -y -g 2 -keyint_min 2 -filter_complex " % (ffmpeg,input_mov, input_img) + \
+        command = "%s -i %s -i %s -loglevel -8 -y -g 2 -keyint_min 2 -filter_complex " % (ffmpeg,input_mov, input_img) + \
                   repr("[0:v][1:v]overlay=enable='between(n,%s,%s)'") % (frame,frame) + " -acodec copy %s" % output_mov
         if '_postil.' in input_mov:
             su = subprocess.Popen(command, shell=True)
