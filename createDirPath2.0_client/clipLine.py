@@ -154,7 +154,7 @@ def putter(task_queue,xml_path,project_id,field_id,data,path,task):
                     info['duration'] = duration   # 持续时间
 
                     info['pathurl'] = pathurl       # 本地视频地址
-                    info['project_id'] = project_id # 所属项目ID
+                    info['project_id'] = project_id  # 所属项目ID
                     info['field_id'] = field_id     # 场号ID
                     info['clip_frame_length'] = clip_frame_length    # 镜头帧长=剪辑帧长
                     info['frame_range'] = frame_range              # 帧数范围
