@@ -35,22 +35,6 @@ def SelectDailies(serverName, filePath, fileName, command_id, UpTask):
         elif fileType == "jpg" or fileType == "jpeg" or fileType == "png" or fileType == "tiff" or fileType == "tga":
             filePath = os.path.join(filePath, '/img')
 
-        # if platform.system() == 'Windows':
-        #     outputPath = "D:/TronDailies/%s/%s" % (fileName, fileNow)
-        #     outputFolder = "D:/TronDailies/%s" % fileName
-        # elif platform.system() == 'Linux':
-        #     outPAt = os.environ['HOME']
-        #     outputPath = "%s/%s/%s" % (outPAt, fileName, fileNow)
-        #     outputFolder = "%s/%s" % (outPAt, fileName)
-        #
-        # if os.path.isdir(outputFolder):
-        #     shutil.rmtree(outputFolder)
-        # os.makedirs(outputFolder)
-        # shutil.copy(fileOld, outputPath)
-        # if os.path.isfile(outputPath):
-        #     print outputFolder
-        #     if os.path.exists((serverName+filePath+"/"+fileName+"/")):
-        #         shutil.rmtree((serverName+filePath+"/"+fileName+"/"))
         file_copy_path = os.path.join(serverName, filePath, fileName)  # /FUY/stuff/dmt/mov/filename
         shutil.copy(fileOld, file_copy_path)
         file_abspath = os.path.join(serverName, filePath, fileName, fileNow)
