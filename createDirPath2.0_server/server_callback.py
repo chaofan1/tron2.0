@@ -22,7 +22,7 @@ def callback(command_id):
 
 def disCallback(task_ids):
     url_update = 'http://192.168.1.81/tron/index.php/python/add_download_link'
-    query_args = {'name': task_ids[0], 'id': task_ids[1]}
+    query_args = {'name': task_ids[0], 'task_ids': task_ids[1]}
     encoded_args = urllib.urlencode(query_args)
     try:
         urllib2.urlopen(url_update, encoded_args)
