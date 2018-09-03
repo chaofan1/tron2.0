@@ -9,7 +9,7 @@ import urllib2
 
 def toHttpask(ID, path, fileName, UpTask, imgSize):
     #print fileName
-    if len(imgSize) != 0:
+    if imgSize:
         query_args = {'id': ID, 'path': path, 'filename': fileName, 'imgSize': imgSize}
     else:
         query_args = {'id': ID, 'path': path, 'filename': fileName}

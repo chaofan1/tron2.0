@@ -4,15 +4,15 @@
 # Filename: createThumbnail.py
 
 import cv2
+import os
 
 
-def run(fileName, filePath):
+def run(fileName, filePath):  # filename.mov, /FUY/stuff/dmt/mov/filename
     thumbPicName = fileName.split(".")[0] + ".jpg"
-    a = filePath.split('/')[:-2]
-    a.append('img')
-    filePath_img = '/'.join(a)
-    img_path = filePath_img + '/' + thumbPicName
-    video = cv2.VideoCapture(filePath+"/"+fileName)
+    filePath_img = filePath.replace('mov', 'img')
+    img_path = os.path.join(filePath_img, thumbPicName)
+    video_path = os.path.join(filePath, fileName)
+    video = cv2.VideoCapture(video_path)
     count_frame = video.get(cv2.CAP_PROP_FRAME_COUNT)
     if count_frame < 5:
         if video.isOpened():

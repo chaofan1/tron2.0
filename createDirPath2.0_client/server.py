@@ -8,8 +8,7 @@
 import os, shutil, socket, httpUrl, platform
 from multiprocessing import Process
 import saveReferenceWindows
-import saveDailiesWindows
-import saveDailiesMac
+import saveDailies
 import saveReferenceMac
 import createThumbnail
 import render_one
@@ -106,15 +105,15 @@ def handle(conn,localIP):
 			print filePath, fileName, command_id, UpTask
 			if platform.system() == 'Windows':
 				serverName = "X:"
-				fileOld = saveDailiesWindows.SelectDailiesWin(serverName, filePath, fileName, command_id, UpTask)
+				fileOld = saveDailies.SelectDailies(serverName, filePath, fileName, command_id, UpTask)
 				conn.send(fileOld)
 			elif platform.system() == 'Linux':
 				serverName = "/All"
-				fileOld = saveDailiesWindows.SelectDailiesWin(serverName, filePath, fileName, command_id, UpTask)
+				fileOld = saveDailies.SelectDailies(serverName, filePath, fileName, command_id, UpTask)
 				conn.send(fileOld)
 			elif platform.system() == 'Darwin':
 				serverName = "/Volumes/All"
-				fileOld = saveDailiesMac.SelectDailiesWin(serverName, filePath, fileName, command_id, UpTask)
+				fileOld = saveDailies.SelectDailies(serverName, filePath, fileName, command_id, UpTask)
 				conn.send(fileOld)
 
 		elif data.endswith("Dailies2"):
