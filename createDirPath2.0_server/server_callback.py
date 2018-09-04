@@ -2,8 +2,7 @@
 #-*- coding: utf-8 -*-
 # Filename: server_callback.py
 # 将服务器执行成功的命令告诉数据库
-# Author: wangcf
-# Created: 2018/5/16
+
 
 import urllib
 import urllib2
@@ -19,6 +18,7 @@ def callback(command_id):
         print e.code
     except urllib2.URLError, e:
         print e.reason
+
 
 def disCallback(task_ids):
     url_update = 'http://192.168.1.81/tron/index.php/python/add_download_link'

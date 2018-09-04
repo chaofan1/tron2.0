@@ -8,8 +8,9 @@ import os
 
 
 def run(fileName, filePath):  # filename.mov, /FUY/stuff/dmt/mov/filename
-    thumbPicName = fileName.split(".")[0] + ".jpg"
-    filePath_img = filePath.replace('mov', 'img')
+    thumbPicName = fileName.split(".")[0] + ".jpg"   # filename.jpg
+    if 'mov' in filePath:
+        filePath_img = filePath.replace('mov', 'img')
     img_path = os.path.join(filePath_img, thumbPicName)
     video_path = os.path.join(filePath, fileName)
     video = cv2.VideoCapture(video_path)

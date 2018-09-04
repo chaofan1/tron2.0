@@ -70,15 +70,15 @@ def _init_():
 			TronDistribute(args[2]).argParse(args[1])
 	elif len(args) == 4:
 		if args[0] == "Reference":    # "Reference" "HAC" "shots"  "192.168.1.85|x:/DHG/References/inner/fileName|373"
-			TronProject().CreateRef(args[1],args[2])
+			TronProject().CreateRef(args[1], args[2])
 			referencesData = args[3] + "|Reference"
 			clientLink(referencesData)
 		elif args[0] == "Seq":  # createProject.CreateSeq("Seq","HAC","01","command_id")
-			TronProject().CreateSeq(args[1],args[2])
+			TronProject().CreateSeq(args[1], args[2])
 			callback(args[3])
 	elif len(args) == 5:
-		if args[0] == "Shot":   # "Shot" "HAC" "01" "001" "command_id"
-			TronProject().CreateScene(args[1],args[2],args[3])
+		if args[0] == "Shot":   # "Shot" "HAC" "001" "001" "command_id"
+			TronProject().CreateScene(args[1], args[2], args[3])
 			callback(args[4])
 	elif len(args) == 6:
 		if args[0] == "AssetTask":    # "AssetTask" "HAC" "rig" "liangcy" "fileName" "command_id"

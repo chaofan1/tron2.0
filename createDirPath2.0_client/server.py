@@ -7,9 +7,8 @@
 
 import os, shutil, socket, httpUrl, platform
 from multiprocessing import Process
-import saveReferenceWindows
+import saveReference
 import saveDailies
-import saveReferenceMac
 import createThumbnail
 import render_one
 import render_all
@@ -73,13 +72,13 @@ def handle(conn,localIP):
 		elif data.endswith("Render1"):
 			filePath, Uptask, command_id = data_split
 			if platform.system() == 'Windows':
-				inPathFile = os.path.join('J:', filePath[0:14])
+				inPathFile = 'J:' + filePath[0:14]
 				filename = render_one.render_one(inPathFile).replace("/",'\\')
 				if os.path.exists(filename):
 					dataTree(filename, filePath, localIP)
 			elif platform.system() == 'Linux':
 				serverName = "/Post"
-				inPathFile = os.path.join(serverName, filePath[0:14])
+				inPathFile = serverName + filePath[0:14]
 				filename = render_one.render_one(inPathFile)
 				if os.path.exists(filename):
 					dataTree(filename, filePath, localIP)
@@ -88,13 +87,13 @@ def handle(conn,localIP):
 		elif data.endswith("Render2"):
 			filePath, Uptask, command_id = data_split
 			if platform.system() == 'Windows':
-				inPathFile = os.path.join('J:', filePath[0:14])
+				inPathFile = 'J:' + filePath[0:14]
 				filename = render_all.render_all(inPathFile).replace("/", '\\')
 				if os.path.exists(filename):
 					dataTree(filename, filePath, localIP)
 			elif platform.system() == 'Linux':
 				serverName = "/Post"
-				inPathFile = os.path.join(serverName, filePath[0:14])
+				inPathFile = serverName + filePath[0:14]
 				filename = render_all.render_all(inPathFile)
 				if os.path.exists(filename):
 					dataTree(filename, filePath, localIP)
@@ -105,16 +104,16 @@ def handle(conn,localIP):
 			print filePath, fileName, command_id, UpTask
 			if platform.system() == 'Windows':
 				serverName = "X:"
-				fileOld = saveDailies.SelectDailies(serverName, filePath, fileName, command_id, UpTask)
-				conn.send(fileOld)
+				send_path = saveDailies.SelectDailies(serverName, filePath, fileName, command_id, UpTask)
+				conn.send(send_path)
 			elif platform.system() == 'Linux':
 				serverName = "/All"
-				fileOld = saveDailies.SelectDailies(serverName, filePath, fileName, command_id, UpTask)
-				conn.send(fileOld)
+				send_path = saveDailies.SelectDailies(serverName, filePath, fileName, command_id, UpTask)
+				conn.send(send_path)
 			elif platform.system() == 'Darwin':
 				serverName = "/Volumes/All"
-				fileOld = saveDailies.SelectDailies(serverName, filePath, fileName, command_id, UpTask)
-				conn.send(fileOld)
+				send_path = saveDailies.SelectDailies(serverName, filePath, fileName, command_id, UpTask)
+				conn.send(send_path)
 
 		elif data.endswith("Dailies2"):
 			filePath, fileName, command_id, UpTask = data_split
@@ -135,7 +134,7 @@ def handle(conn,localIP):
 			if os.path.isdir(outputPath):
 				shutil.rmtree(outputPath)
 			os.popen("python //192.168.100.99/Public/tronPipelineScript/IlluminaConverter_v002/IlluminaConverter_v002.py %s" % fileNow).read()
-			print (outputPath + "/")
+			print outputPath
 			if os.path.isdir(outputPath + "/"):
 				shutil.copytree(outputPath, fileD)
 				if os.path.exists(fileAll):
@@ -148,13 +147,16 @@ def handle(conn,localIP):
 			print filePath, fileName, command_id, UpTask
 			if platform.system() == 'Windows':
 				serverName = "L:/References"
-				saveReferenceWindows.SelectReferenceWin(serverName, filePath, fileName, command_id,UpTask)
+				send_path = saveReference.SelectReference(serverName, filePath, fileName, command_id, UpTask)
+				conn.send(send_path)
 			elif platform.system() == 'Linux':
 				serverName = "/library/References"
-				saveReferenceWindows.SelectReferenceWin(serverName, filePath, fileName, command_id,UpTask)
+				send_path = saveReference.SelectReference(serverName, filePath, fileName, command_id, UpTask)
+				conn.send(send_path)
 			elif platform.system() == 'Darwin':
 				serverName = "/Volumes/library/References"
-				saveReferenceMac.SelectReferenceWin(serverName, filePath, fileName, command_id, UpTask)
+				send_path = saveReference.SelectReference(serverName, filePath, fileName, command_id, UpTask)
+				conn.send(send_path)
 
 		elif data.endswith('clip1'):  # 转码
 			xml_path, path, project_id, field_id, xml_id,command_id,UpTask = data_split
@@ -182,7 +184,7 @@ def handle(conn,localIP):
 			pack_path = os.path.join(user_path,'Pack')
 			if not os.path.exists(pack_path):
 				os.mkdir(pack_path)
-			out_path = os.path.join(pack_path,pro_name)  # /Users/wang/Pack/FUY
+			out_path = os.path.join(pack_path, pro_name)  # /Users/wang/Pack/FUY
 			Pack().pack(pro_scene, xml_path, out_path)
 			os.popen('open %s' % out_path).close()
 			# httpUrl.render_callback(command_id)

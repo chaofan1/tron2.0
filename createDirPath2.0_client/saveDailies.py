@@ -7,10 +7,11 @@ import httpUrl
 import cv2
 from PyQt4.QtGui import *
 from PyQt4.QtCore import *
+import sys
 
 
 def SelectDailies(serverName, filePath, fileName, command_id, UpTask):
-    import sys
+    sep = os.sep
     plat = platform.system()
     if plat == 'Linux' or plat == 'Darwin':
         inPathFile = os.environ['HOME']
@@ -31,13 +32,15 @@ def SelectDailies(serverName, filePath, fileName, command_id, UpTask):
 
         # 重构filePath: /FUY/stuff/dmt
         if fileType == "mov" or fileType == "avi" or fileType == "mp4":
-            filePath = os.path.join(filePath, '/mov')
+            filePath = os.path.join(filePath, 'mov')
         elif fileType == "jpg" or fileType == "jpeg" or fileType == "png" or fileType == "tiff" or fileType == "tga":
-            filePath = os.path.join(filePath, '/img')
+            filePath = os.path.join(filePath, 'img')
 
-        file_copy_path = os.path.join(serverName, filePath, fileName)  # /FUY/stuff/dmt/mov/filename
+        file_copy_path = serverName + filePath + sep + fileName  # /FUY/stuff/dmt/mov/filename
+        if not os.path.exists(file_copy_path):
+            os.makedirs(file_copy_path)
         shutil.copy(fileOld, file_copy_path)
-        file_abspath = os.path.join(serverName, filePath, fileName, fileNow)
+        file_abspath = serverName + filePath + sep + fileName + sep + fileNow
         if os.path.exists(file_abspath):
             if fileType == "mov" or fileType == "avi" or fileType == "mp4":
                 httpUrl.toHttpask(command_id, filePath+"/"+fileName, fileNow, UpTask, "")

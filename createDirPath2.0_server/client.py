@@ -1,11 +1,5 @@
 #!/usr/bin/env python2.7
 # -*- coding: utf-8 -*-
-# Filename: client.py
-# Author: liangcy
-# Created: 2016/12/14
-# Latest Modified:
-# Platform: windows
-# Copyright: Illumina ltd, PTD department, 2016
 
 # 192.168.1.85|x:/ZML/Dailies/20161129|zml01001_prd_liangcy_HVD_v0150|194|Dailies2
 
@@ -28,18 +22,14 @@ def clientLink(data):
     if senStr:
         s.sendall(senStr)
         print('already send info')
-        if data.endswith('Dailies1') or data.endswith('Dailies2'):
+        if args[-1] == 'Dailies1' or args[-1] == 'Dailies2' or args[-1] == 'Reference':
             serverName = "/Tron"
             data = s.recv(1024)
-            data_replace = data.replace('\\', '/')
-            filePath_replace = filePath.replace('\\', '/')
-            if os.path.exists(serverName+data_replace):
-                os.chmod((serverName+data_replace), 0755)
-                os.chmod((serverName + filePath_replace), 0755)
-                print (serverName + data_replace)
-            else:
-                os.chmod((serverName + filePath_replace), 0755)
-                print (serverName + filePath_replace)
+            recv_path = data.replace('\\', '/')
+            if os.path.exists(serverName+recv_path):
+                os.chmod((serverName + recv_path), 0755)
+                os.chmod((serverName + filePath), 0755)
+                print (serverName + recv_path)
         s.close()
         print('client close')
     return

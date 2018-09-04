@@ -16,13 +16,14 @@ class TronProject:
         self.refName = '/Library/References'
         self.userID = 11004
         self.groupID = 11000
+        self.sep = os.sep
 
-    def CreatePro(self,proName):
+    def CreatePro(self, proName):
         print "create project %s" %(proName)
         projectChild = {"Doc": "0775", "Vender": "0555", "Client": "0555", "References": "0555"}
-        proPath = os.path.join(self.serverName,proName)  # /Tron/FUY
-        proPost = os.path.join(self.postName,proName)  # /Post/FUY
-        refPaths = os.path.join(self.refName,proName)  # /Library/References/FUY
+        proPath = os.path.join(self.serverName, proName)  # /Tron/FUY
+        proPost = os.path.join(self.postName, proName)  # /Post/FUY
+        refPaths = os.path.join(self.refName, proName)  # /Library/References/FUY
         # daiPaths = os.path.join(self.daiName, proName)
         if not os.path.exists(proPath):
             os.mkdir(proPath)
@@ -79,19 +80,19 @@ class TronProject:
         TronFolder().CreateWork(proPost, "", "", "", "", "")
 
     def CreateRef(self, proName, type_,):
-        refPath = self.refName+os.sep+proName    # /Library/References/FUY
+        refPath = os.path.join(self.refName, proName)    # /Library/References/FUY
         if os.path.exists(refPath):
             if os.path.exists(refPath):
                 if type_ == "shots" or type_ == "assets":
-                    refPath += os.sep+type_
+                    refPath = os.path.join(refPath, type_)
                     if not os.path.exists(refPath):
                         TronFolder().CreateFolder(refPath, "0777", "")
                     else:
                         os.chmod(refPath, 0777)
 
     def CreateDai(self, filePath):
-        daiPath = os.path.join(self.serverName,filePath,'img')
-        daiPath2 = os.path.join(self.serverName,filePath,'mov')
+        daiPath = self.serverName + filePath + self.sep + 'img'
+        daiPath2 = self.serverName + filePath + self.sep + 'mov'
         if not os.path.exists(daiPath):
             TronFolder().CreateFolder(daiPath, "0777", "")
         else:
@@ -104,7 +105,7 @@ class TronProject:
     def CreateSeq(self, proName, seqName):
         dirPath = self.serverName + os.sep + proName  # /Tron/FUY
         dirPost = os.path.join(self.postName, proName)  # /Post/FUY
-        seqPath = dirPath+os.sep + seqName  # /Tron/FUY/01
+        seqPath = os.path.join(dirPath, seqName)  # /Tron/FUY/01
         seqPost = os.path.join(dirPost, seqName)  # /Post/FUY/01
         if not os.path.exists(seqPath):
             TronFolder().CreateFolder(seqPath, "0555", "")
@@ -116,14 +117,14 @@ class TronProject:
             TronFolder().CreateWork(dirPost, seqName, "", "", "", "")
 
     def CreateScene(self, proName, seqName, shotName):
-        shotPath = os.path.join(self.serverName,proName,seqName,shotName)  # /Tron/FUY/01/001
-        shotPost = os.path.join(self.postName,proName,seqName,shotName)   # /Post/FUY/01/001
+        shotPath = os.path.join(self.serverName, proName, seqName, shotName)  # /Tron/FUY/01/001
+        shotPost = os.path.join(self.postName, proName, seqName, shotName)   # /Post/FUY/01/001
         if not os.path.exists(shotPath):
             TronFolder().CreateFolder(shotPath, "0555", "")
             TronFolder().CreateFolder(shotPost, "0555", "")
 
     def CreateAsset(self, proName, type_, user, fileName):
-        dirPath = os.path.join(self.serverName,proName)    # /Tron/FUY
+        dirPath = os.path.join(self.serverName, proName)    # /Tron/FUY
         dirPost = os.path.join(self.postName, proName)     # /Post/FUY
         if len(fileName) == 0 and len(type_) == 0:
             print "please give me a file"
@@ -142,7 +143,7 @@ class TronProject:
 
     #                    "FUY"      "01"    "001"   "rig" "liangcy" "fileName"
     def CreateShot(self, proName, seqName, shotName, type_, user, fileName):
-        dirPath = os.path.join(self.serverName,proName)  # /Tron/FUY
+        dirPath = os.path.join(self.serverName, proName)  # /Tron/FUY
         dirPost = os.path.join(self.postName, proName)   # /Post/FUY
         if len(fileName) == 0 and len(type_) == 0:
             print "please give me a file"
