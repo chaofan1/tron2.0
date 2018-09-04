@@ -10,9 +10,7 @@ from multiprocessing import Process
 import saveReference
 import saveDailies
 import createThumbnail
-import render_one
-import render_all
-import render_remind
+import render
 import clientToRender
 from clipLine import start_clip
 from clipLine2 import BackInsert,Pack
@@ -25,7 +23,7 @@ def handle(conn,localIP):
 		data = conn.recv(1024)
 		if not data:
 			break
-		print('recv data:',data)
+		print('recv data:', data)
 		serverName = ''
 		outputPath = ''
 
@@ -73,13 +71,13 @@ def handle(conn,localIP):
 			filePath, Uptask, command_id = data_split
 			if platform.system() == 'Windows':
 				inPathFile = 'J:' + filePath[0:14]
-				filename = render_one.render_one(inPathFile).replace("/",'\\')
+				filename = render.render_one(inPathFile).replace("/", '\\')
 				if os.path.exists(filename):
 					dataTree(filename, filePath, localIP)
 			elif platform.system() == 'Linux':
 				serverName = "/Post"
 				inPathFile = serverName + filePath[0:14]
-				filename = render_one.render_one(inPathFile)
+				filename = render.render_one(inPathFile)
 				if os.path.exists(filename):
 					dataTree(filename, filePath, localIP)
 			httpUrl.render_callback(command_id)
@@ -88,13 +86,13 @@ def handle(conn,localIP):
 			filePath, Uptask, command_id = data_split
 			if platform.system() == 'Windows':
 				inPathFile = 'J:' + filePath[0:14]
-				filename = render_all.render_all(inPathFile).replace("/", '\\')
+				filename = render.render_all(inPathFile).replace("/", '\\')
 				if os.path.exists(filename):
 					dataTree(filename, filePath, localIP)
 			elif platform.system() == 'Linux':
 				serverName = "/Post"
 				inPathFile = serverName + filePath[0:14]
-				filename = render_all.render_all(inPathFile)
+				filename = render.render_all(inPathFile)
 				if os.path.exists(filename):
 					dataTree(filename, filePath, localIP)
 			httpUrl.render_callback(command_id)
@@ -191,9 +189,9 @@ def handle(conn,localIP):
 			print('clip3 end')
 
 		elif data.endswith('download'):   # 分发外包下载
-			save_path = render_all.render_all('')
-			load_path,UpTask = data_split
-			Download(save_path,load_path).putThread()
+			save_path = render.render_all('')
+			load_path, UpTask = data_split
+			Download(save_path, load_path).putThread()
 			# httpUrl.render_callback(command_id)
 
 		# 转码 'clip1' 'IP|xml_path|path|项目id|场id|command_id|clip1' 7
@@ -208,7 +206,7 @@ def dataTree(filename, filePath, localIP):
 	file_mtime = os.path.getmtime(filename)
 	pro_name = filePath.split('/')[1]
 	pro_path = os.getcwd()
-	csv_path = os.path.join(pro_path,'%s.csv'%pro_name)
+	csv_path = os.path.join(pro_path, '%s.csv' % pro_name)
 	with open(csv_path, 'a+') as f:
 		con_write = filePath, file_size, file_mtime
 		con_read = set(f.readlines())
@@ -217,11 +215,11 @@ def dataTree(filename, filePath, localIP):
 		if con_write not in con_read:
 			f.write(con_write)
 			datadd = clientToRender.client(dataTo)
-			render_remind.remind(datadd)
+			render.remind(datadd)
 		else:
-			render_remind.ask()
+			render.ask()
 			datadd = clientToRender.client(dataTo)
-			render_remind.remind(datadd)
+			render.remind(datadd)
 
 
 def myServer():
@@ -230,7 +228,7 @@ def myServer():
 	HOST = localIP
 	PORT = 29400
 	s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-	s.setsockopt(socket.SOL_SOCKET,socket.SO_REUSEADDR,1)
+	s.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
 	s.bind((HOST, PORT))
 	print "waiting for connection ......"
 	s.listen(10)
