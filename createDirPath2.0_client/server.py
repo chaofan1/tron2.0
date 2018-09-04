@@ -133,7 +133,7 @@ def handle(conn,localIP):
 				shutil.rmtree(outputPath)
 			os.popen("python //192.168.100.99/Public/tronPipelineScript/IlluminaConverter_v002/IlluminaConverter_v002.py %s" % fileNow).read()
 			print outputPath
-			if os.path.isdir(outputPath + "/"):
+			if os.path.isdir(outputPath):
 				shutil.copytree(outputPath, fileD)
 				if os.path.exists(fileAll):
 					createThumbnail.run(fileNow, fileD)

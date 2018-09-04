@@ -346,7 +346,7 @@ class Response(QMainWindow, Ui_Layout):
                  -an -vcodec %s -s %s -qmin 0.1 -qmax 1 -b:v 1000k -bt 1000M -f mov %s' % (fps, startframe, input, fvcodec, self.slateInfo.resolution, output)
             try:
                 os.popen(cmd)
-            except e:
+            except Exception as e:
                 QMessageBox .critical(self, 'ERROR', u' Response::ffmpegConvert(): %s ' % str(e).decode('utf-8'), QString('OK'))
                 
         elif platform.system() == 'Windows':
@@ -362,7 +362,7 @@ class Response(QMainWindow, Ui_Layout):
                 -an -vcodec %s -s %s -qmin 0.1 -qmax 1 -b:v 1000k -bt 1000M -f mov %s' % (fps, startframe, input, fvcodec, self.slateInfo.resolution, output)
             try:
                 os.system(cmd)
-            except e:
+            except Exception as e:
                 QMessageBox .critical(self, 'ERROR', u' Response::ffmpegConvert(): %s ' % str(e).decode('utf-8'), QString('OK'))
 
             
