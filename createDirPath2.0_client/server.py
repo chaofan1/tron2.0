@@ -18,16 +18,16 @@ from distribute_download import Download
 from clipLine import to_php
 
 
-def handle(conn,localIP):
-	while 1:
+def handle(conn, localIP):
+	while True:
 		data = conn.recv(1024)
 		if not data:
 			break
 		print('recv data:', data)
 		serverName = ''
 		outputPath = ''
-
 		data_split = data.strip().split("|")
+
 		if len(data_split) is 1:
 			filePath = data.strip()
 			if platform.system() == 'Windows':
@@ -41,6 +41,7 @@ def handle(conn,localIP):
 			elif platform.system() == 'Darwin':
 				serverName = "/Volumes/All"
 				os.popen('open %s' % (serverName + filePath)).close()
+
 		elif len(data_split) is 2:
 			filePath, Uptask = data_split
 			if platform.system() == 'Windows':
@@ -133,7 +134,7 @@ def handle(conn,localIP):
 				shutil.rmtree(outputPath)
 			os.popen("python //192.168.100.99/Public/tronPipelineScript/IlluminaConverter_v002/IlluminaConverter_v002.py %s" % fileNow).read()
 			print outputPath
-			if os.path.isdir(outputPath + "/"):
+			if os.path.isdir(outputPath):
 				shutil.copytree(outputPath, fileD)
 				if os.path.exists(fileAll):
 					createThumbnail.run(fileNow, fileD)
@@ -157,32 +158,35 @@ def handle(conn,localIP):
 				conn.send(send_path)
 
 		elif data.endswith('clip1'):  # 转码
-			xml_path, path, project_id, field_id, xml_id,command_id,UpTask = data_split
-			start_clip(xml_path, path, project_id, field_id,xml_id,UpTask)
+			xml_path, path, project_id, field_id, xml_id, command_id, UpTask = data_split
+			path = '/Volumes' + path
+			start_clip(xml_path, path, project_id, field_id, xml_id, UpTask)
 			to_php(1, 0, project_id, field_id, xml_id, UpTask)
 			# httpUrl.render_callback(command_id)
 			print('clip1 end')
 
 		elif data.endswith('add_xml'):
-			xml_path, path, project_id, field_id, xml_id,command_id,UpTask = data_split
-			start_clip(xml_path, path, project_id, field_id,xml_id,UpTask)
+			xml_path, path, project_id, field_id, xml_id, command_id, UpTask = data_split
+			path = '/Volumes' + path
+			start_clip(xml_path, path, project_id, field_id, xml_id, UpTask)
 			# httpUrl.render_callback(command_id)
 			print('add_xml end')
 
 		elif data.endswith('clip2'):   # 回插
-			video_path,img_path,frame,data_id,command_id,UpTask = data_split
-			BackInsert().insert(video_path,img_path,frame,data_id)
+			video_path, img_path, frame, data_id, command_id, UpTask = data_split
+			BackInsert().insert(video_path, img_path, frame, data_id)
 			# httpUrl.render_callback(command_id)
 			print('clip2 end')
 
 		elif data.endswith('clip3'):   # 打包
-			pro_scene, xml_path, command_id,UpTask = data_split
+			pro_scene, xml_path, command_id, UpTask = data_split
 			pro_name = pro_scene.strip('/').split('/')[-2]
 			user_path = os.environ['HOME']  # /Users/wang
-			pack_path = os.path.join(user_path,'Pack')
+			pack_path = os.path.join(user_path, 'Pack')
 			if not os.path.exists(pack_path):
 				os.mkdir(pack_path)
 			out_path = os.path.join(pack_path, pro_name)  # /Users/wang/Pack/FUY
+			pro_scene = '/Volumes/All' + pro_scene
 			Pack().pack(pro_scene, xml_path, out_path)
 			os.popen('open %s' % out_path).close()
 			# httpUrl.render_callback(command_id)
