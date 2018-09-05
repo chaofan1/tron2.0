@@ -10,9 +10,9 @@ import time
 import re
 
 
-ip = '127.0.0.1'
+ip = '192.168.1.117'
 user_name = 'root'
-passwd = 'Root123'
+passwd = '123456'
 db_name = 'new_tron'
 table_name = 'oa_shot'
 
