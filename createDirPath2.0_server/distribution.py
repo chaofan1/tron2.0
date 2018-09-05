@@ -3,14 +3,12 @@ import os
 import re
 import time
 import json
-import boto3
 import shutil
 import zipfile
 import logging
 import smtplib
 import platform
 import threadpool
-from botocore.client import Config
 from server_callback import disCallback
 
 
@@ -28,18 +26,14 @@ class TronDistribute:
         self.pool = threadpool.ThreadPool(8)
         self.rpath = os.getcwd()
         if platform.system() == 'Windows':
-            self.outputPath = re.search(r'(.*)\tron', self.rpath ).group(1) + '\tron\uploads\Outsource'
+            self.outputPath = re.search(r'(.*)\tron', self.rpath).group(1) + '\tron\uploads\Outsource'
             logging.basicConfig(filename=re.search(r'(.*)\tron', self.rpath).group(1) + '\tron\runtime\log\distribute_log\dis_' + time.strftime("%Y%m%d") + '.log', level=logging.INFO, format="%(asctime)s - %(levelname)s - %(message)s")
         else:
-            self.outputPath = re.search(r'(.*)/tron', self.rpath ).group(1) + '/tron/uploads/Outsource'
+            self.outputPath = re.search(r'(.*)/tron', self.rpath).group(1) + '/tron/uploads/Outsource'
             logging.basicConfig(filename=re.search(r'(.*)/tron', self.rpath).group(1) + '/tron/runtime/log/distribute_log/dis_' + time.strftime("%Y%m%d") + '.log', level=logging.INFO, format="%(asctime)s - %(levelname)s - %(message)s")
 
     def argParse(self, filePath):
-        if platform.system() == 'Windows':
-            self.filePath = re.search(r'(.*)\tron', self.rpath).group(1) + os.sep + 'tron' + os.sep + filePath
-        else:
-            self.filePath = re.search(r'(.*)/tron', self.rpath).group(1) + os.sep + 'tron' + os.sep + filePath
-
+        self.filePath = filePath
         self.progectName, self.userid, self.timeStamp = os.path.splitext(os.path.basename(filePath))[0].split('_')
         try:
             with open(self.filePath, 'r') as f:
@@ -59,7 +53,7 @@ class TronDistribute:
                     referencesList = shot['references_data']
                     for cp in self.cnameList:
                         cp = cp['name'] + '_' + self.userid + '_' + self.timeStamp
-                        basePath =self.outputPath + os.sep + cp + os.sep + self.progectName + os.sep + fieldName + os.sep + shotNum + os.sep
+                        basePath = self.outputPath + os.sep + cp['name'] + os.sep + cp + os.sep + self.progectName + os.sep + fieldName + os.sep + shotNum + os.sep
                         materialDir = basePath + self.material
                         assetDir = basePath + self.asset
                         referencesDir = basePath + self.references
@@ -142,10 +136,10 @@ class TronDistribute:
 
             zf = zipfile.ZipFile(cpdirPath + '.zip', "w", zipfile.ZIP_STORED, allowZip64=True)
             for tar in fileList:
-                zf.write(tar)
+                zf.write(tar, tar.lstrip(cpdirPath + os.sep))
             zf.close()
             # 压缩成功，删除公司文件夹
-            shutil.rmtree(self.outputPath + os.sep + cpName['name'] + '_' + self.userid + '_' + self.timeStamp)
+            shutil.rmtree(self.outputPath + os.sep + cpName['name'] + os.sep + cpName['name'] + '_' + self.userid + '_' + self.timeStamp)
             logging.info(u'压缩文件成功' + cpdirPath )
             self.sendMail(cpName)   # 上线之后放传云函数里
             return 0, None
@@ -170,13 +164,6 @@ class TronDistribute:
             logging.info('上传云出错')
             logging.error(e)
             return 1, e
-
-        # 设置凭证
-        # aws configure
-        # AWS Access Key ID: foo
-        # AWS Secret Access Key: bar
-        # Default region name [us-west-2]: us-west-2
-        # Default output format [None]: json
 
     def sendMail(self, mailInfo):
         if mailInfo['email']:
@@ -209,12 +196,17 @@ class TronDistribute:
                 logging.error(e)
         else:
             logging.info('邮箱为空')
-        disCallback([mailInfo['name'], self.task_ids])
+        disCallback(['Outsource' + os.sep + mailInfo['name'] + os.sep +
+                     mailInfo['name'] + '_' + self.userid + '_' + self.timeStamp + '.zip', self.task_ids])
 
     def result(self, req, res):
         res1, res2 = res
         if res1:
             raise Finish
+
+
+def delCloud(self, path):
+    pass
 
 
 if __name__ == "__main__":

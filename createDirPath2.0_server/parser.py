@@ -27,7 +27,7 @@ import sys
 from createProject import TronProject
 from client import clientLink
 from server_callback import callback
-from distribution import TronDistribute
+from distribution import TronDistribute, delCloud
 
 
 def _init_():
@@ -54,6 +54,8 @@ def _init_():
 		elif args[0] == "download":
 			clipData = args[1]+'|download'
 			clientLink(clipData)
+		elif args[0] == "DelCloud":
+			delCloud(args[1])
 	elif len(args) == 3:
 		if args[0] == "Project":
 			TronProject().CreatePro(args[1])  # createProject.CreatePro("Project","HAC","command_id")
