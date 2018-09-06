@@ -15,7 +15,7 @@
 #    "Dailies2" "/FUY/001/001/stuff/cmp" "192.168.1.85|FUY/001/001/stuff/cmp|filename|command_id"
 #"Reference" "HAC" "shots"  "192.168.1.85|x:/DHG/References/inner/fileName|373"
 # 剪辑线
-#'clip1' '127.0.0.1|uploads/Projects/xml_files/25/2aac549dbd0a1e7494d6447f85a88c95673c27.xml|/Users/shids/Code/tron/uploads/Projects/FUY/001/|1|002'
+#'clip1' '127.0.0.1|uploads/Projects/xml_files/25/2aa.xml|/Users/shids/Code/tron/uploads/Projects/FUY/001/|1|002'
 #转码 'clip1' 'IP|xml_path|path|项目id|场id|xml_id|command_id' 7
 #追加 'add_xml' 'IP|xml_path|path|项目id|场id|xml_id|command_id'
 #回插 'clip2' 'IP|video_path|img_path|time|rate|id|command_id' 7
@@ -41,6 +41,8 @@ def _init_():
 		elif args[0] == "Render":
 			clientLink(args[1])
 		elif args[0] == "clip1":
+			path = args[1].split('|')[2]
+			TronProject().CreateClip(path)
 			clipData = args[1]+'|clip1'
 			clientLink(clipData)
 		elif args[0] == "clip2":

@@ -165,11 +165,12 @@ def handle(conn, localIP):
 			create_time = int(time.time())
 			insert_sql = "insert ignore into oa_xml_record(project_id,field_id,user_id,create_time) VALUES(%s,%s,%s,%s)" % (project_id, field_id, user_id, create_time)
 			xml_id = handle_db(insert_sql, 'insert')
-			path = '/Volumes' + path
-			start_clip(xml_path, path, project_id, field_id, xml_id, UpTask)
+			user_path = '/Volumes' + path
+			start_clip(xml_path, user_path, project_id, field_id, xml_id, UpTask)
 			to_php(1, 0, project_id, field_id, xml_id, UpTask)
 			# httpUrl.render_callback(command_id)
 			print('clip1 end')
+			conn.send(path)
 
 		elif data.endswith('add_xml'):
 			xml_path, path, project_id, field_id, xml_id, command_id, UpTask = data_split

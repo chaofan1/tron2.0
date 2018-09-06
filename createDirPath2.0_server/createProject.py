@@ -159,3 +159,9 @@ class TronProject:
                 TronFolder().CreateWork(dirPost, seqName, shotName, user, type_, fileName)
             else:
                 TronFolder().CreateWork(dirPath, seqName, shotName, user, type_, fileName)
+
+    def CreateClip(self, path):
+        if not os.path.exists(path):
+            TronFolder().CreateFolder(path, "0777", "")
+        else:
+            os.chmod(path, 0777)
