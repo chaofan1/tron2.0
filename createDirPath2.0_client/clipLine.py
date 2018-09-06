@@ -225,7 +225,7 @@ def start_clip(xml_path, path, project_id, field_id, xml_id, task):
     data = set()
     if task == 'add_xml':
         select_sql = "select clip_frame_length,frame_range from %s where project_id=%s and field_id=%s" % (table_name, project_id,field_id)
-        data = handle_db(select_sql,task)
+        data = handle_db(select_sql,'look')
     queue_len = putter(queue, xml_path, project_id, field_id, data, path, task)
     if queue_len:
         pool = Pool(processes=4)
@@ -247,15 +247,14 @@ def handle_db(sql,task):
         print('connect fail')
     else:
         cursor = conn.cursor()
-        # select_sql = sql
         cursor.execute(sql)
-        if task == 'add_xml':
+        if task == 'look':
             result = set(cursor.fetchall())
             conn.close()
             return result
-        elif task == 'clip1':
-            # insert_sql = "insert ignore into oa_shot(project_id,field_id,) VALUES(%s,%s,%s,%s)"
-            # cursor.execute(insert_sql)
+        elif task == 'insert':
             conn.commit()
+            xml_id = cursor.lastrowid
             cursor.close()
             conn.close()
+            return xml_id

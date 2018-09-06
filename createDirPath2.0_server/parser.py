@@ -32,6 +32,7 @@ from distribution import TronDistribute, delCloud
 
 def _init_():
 	args = sys.argv[1:]
+	print args
 	if len(args) > 8:
 		print 'error: please check your create project'
 	elif len(args) == 2:
