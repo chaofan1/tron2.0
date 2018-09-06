@@ -17,7 +17,7 @@ db_name = 'new_tron'
 table_name = 'oa_shot'
 
 
-def write_sql(info,shot_video_path,shot_image,shot_number):
+def write_sql(info, shot_video_path, shot_image, shot_number):
     # 002、将数据(镜头帧长,范围,缩略图路径......)写入数据库
     try:
         conn = pymysql.connect(ip, user_name, passwd, db_name, charset='utf8', use_unicode=True)
@@ -55,7 +55,7 @@ def write_sql(info,shot_video_path,shot_image,shot_number):
         conn.close()
 
 
-def to_php(queue_len,qsize,project_id,field_id,xml_id,task):
+def to_php(queue_len, qsize, project_id, field_id, xml_id, task):
     url = 'http://tron.com/clips/set_progress'
     all_task = float(queue_len)
     done = float(queue_len - qsize)
@@ -79,7 +79,7 @@ def to_php(queue_len,qsize,project_id,field_id,xml_id,task):
         print(e)
 
 
-def getter(task_queue,queue_len,xml_id,task):
+def getter(task_queue, queue_len, xml_id, task):
     try:
         info = task_queue.get(True,1)
         qsize = task_queue.qsize()
@@ -116,7 +116,7 @@ def getter(task_queue,queue_len,xml_id,task):
         write_sql(info,video_path,img_path,shot_number)
 
 
-def putter(task_queue,xml_path,project_id,field_id,data,path,task):
+def putter(task_queue, xml_path, project_id, field_id, data, path, task):
     # 1、获取所有需要的信息
     tree = et.ElementTree(file=xml_path)
     number = 1
@@ -217,37 +217,45 @@ def putter(task_queue,xml_path,project_id,field_id,data,path,task):
     return task_queue.qsize()
 
 
-def start_clip(xml_path,path,project_id,field_id,xml_id,task):
+def start_clip(xml_path, path, project_id, field_id, xml_id, task):
     print('start xml')
     if not os.path.exists(path):
         os.makedirs(path)
     queue = Manager().Queue()
     data = set()
     if task == 'add_xml':
-        data = select_data(project_id,field_id)
-    queue_len = putter(queue,xml_path,project_id,field_id,data,path,task)
+        select_sql = "select clip_frame_length,frame_range from %s where project_id=%s and field_id=%s" % (table_name, project_id,field_id)
+        data = handle_db(select_sql,task)
+    queue_len = putter(queue, xml_path, project_id, field_id, data, path, task)
     if queue_len:
         pool = Pool(processes=4)
         for i in range(queue_len):
-            pool.apply_async(getter, (queue,queue_len,xml_id,task))
+            pool.apply_async(getter, (queue, queue_len, xml_id, task))
         print('queue len:',queue_len)
         pool.close()
         pool.join()
         print('pool join')
     else:
-        to_php(1, 0, project_id,field_id,xml_id, task)
+        to_php(1, 0, project_id, field_id, xml_id, task)
         print '没有在xml中获取到任务'
 
 
-def select_data(project_id,field_id):
+def handle_db(sql,task):
     try:
         conn = pymysql.connect(ip, user_name, passwd, db_name, charset='utf8', use_unicode=True)
     except:
         print('connect fail')
     else:
         cursor = conn.cursor()
-        select_sql = "select clip_frame_length,frame_range from %s where project_id=%s and field_id=%s" % (table_name, project_id,field_id)
-        cursor.execute(select_sql)
-        result = set(cursor.fetchall())
-        conn.close()
-        return result
+        # select_sql = sql
+        cursor.execute(sql)
+        if task == 'add_xml':
+            result = set(cursor.fetchall())
+            conn.close()
+            return result
+        elif task == 'clip1':
+            # insert_sql = "insert ignore into oa_shot(project_id,field_id,) VALUES(%s,%s,%s,%s)"
+            # cursor.execute(insert_sql)
+            conn.commit()
+            cursor.close()
+            conn.close()

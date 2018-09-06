@@ -12,10 +12,11 @@ import saveDailies
 import createThumbnail
 import render
 import clientToRender
-from clipLine import start_clip
+from clipLine import start_clip,handle_db
 from clipLine2 import BackInsert,Pack
 from distribute_download import Download
 from clipLine import to_php
+import time
 
 
 def handle(conn, localIP):
@@ -158,7 +159,12 @@ def handle(conn, localIP):
 				conn.send(send_path)
 
 		elif data.endswith('clip1'):  # 转码
-			xml_path, path, project_id, field_id, xml_id, command_id, UpTask = data_split
+			inPath = os.environ['HOME']
+			xml_path = render.render_one(inPath)
+			user_id, path, project_id, field_id, xml_id, command_id, UpTask = data_split
+			create_time = int(time.time())
+			sql = "insert ignore into oa_xml_record(project_id,field_id,user_id,create_time) VALUES(%s,%s,%s,%s)" % (project_id, field_id, user_id, create_time)
+			handle_db(sql, UpTask)
 			path = '/Volumes' + path
 			start_clip(xml_path, path, project_id, field_id, xml_id, UpTask)
 			to_php(1, 0, project_id, field_id, xml_id, UpTask)
