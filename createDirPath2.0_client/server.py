@@ -5,18 +5,21 @@
 #回插 'clip2' 'IP|video_path|img_path|frame|width|height|id|command_id|clip2' 8
 #打包 'clip3'  'IP|FUY/001|xml_path|command_id|clip3'  5
 
-import os, shutil, socket, httpUrl, platform
+import shutil, socket, httpUrl, platform
 from multiprocessing import Process
 import saveReference
 import saveDailies
 import createThumbnail
 import render
+import render_remind
 import clientToRender
 from clipLine import start_clip,handle_db
 from clipLine2 import BackInsert,Pack
 from distribute_download import Download
 from clipLine import to_php
 import time
+from PyQt4 import QtGui
+import os,sys
 
 
 def handle(conn, localIP):
@@ -159,12 +162,14 @@ def handle(conn, localIP):
 				conn.send(send_path)
 
 		elif data.endswith('clip1'):  # 转码
-			inPath = os.environ['HOME']
-			xml_path = render.render_one(inPath)
-			user_id, path, project_id, field_id, command_id, UpTask = data_split
-			create_time = int(time.time())
-			insert_sql = "insert ignore into oa_xml_record(project_id,field_id,user_id,create_time) VALUES(%s,%s,%s,%s)" % (project_id, field_id, user_id, create_time)
-			xml_id = handle_db(insert_sql, 'insert')
+			# app = QtGui.QApplication(sys.argv)
+			# inPath = os.environ['HOME']
+			# xml_path = render.render_one(inPath)
+			xml_path, path, project_id, field_id, xml_id, command_id, UpTask = data_split
+			# create_time = int(time.time())
+			# insert_sql = "insert ignore into oa_xml_record(project_id,field_id,user_id,create_time) VALUES(%s,%s,%s,%s)" % (project_id, field_id, user_id, create_time)
+			# xml_id = handle_db(insert_sql, 'insert')
+			xml_path = '/Volumes/UPLOADS/' + xml_path
 			user_path = '/Volumes' + path
 			start_clip(xml_path, user_path, project_id, field_id, xml_id, UpTask)
 			to_php(1, 0, project_id, field_id, xml_id, UpTask)
@@ -174,7 +179,7 @@ def handle(conn, localIP):
 
 		elif data.endswith('add_xml'):
 			xml_path, path, project_id, field_id, xml_id, command_id, UpTask = data_split
-			path = '/Volumes' + path
+			path = '/Volumes/UPLOADS/' + path
 			start_clip(xml_path, path, project_id, field_id, xml_id, UpTask)
 			# httpUrl.render_callback(command_id)
 			print('add_xml end')
@@ -226,11 +231,11 @@ def dataTree(filename, filePath, localIP):
 		if con_write not in con_read:
 			f.write(con_write)
 			datadd = clientToRender.client(dataTo)
-			render.remind(datadd)
+			render_remind.remind(datadd)
 		else:
-			render.ask()
+			render_remind.ask()
 			datadd = clientToRender.client(dataTo)
-			render.remind(datadd)
+			render_remind.remind(datadd)
 
 
 def myServer():

@@ -1,5 +1,5 @@
 import socket
-from render import remind
+from render_remind import remind
 
 
 def client(dataTo):
