@@ -1,8 +1,13 @@
 import os
 import subprocess
+import logging
+import time
 
 
-def render(data,conn):
+def render(data, conn):
+    os.mkdir('/rayvision/log')
+    logging.basicConfig(filename='/rayvision/log/' + time.strftime("%Y%m%d") + '.log', level=logging.INFO, format="%(asctime)s - %(levelname)s - %(message)s")
+
     print '...'
     print 'Intall mappings before anything ...'
     cmd_list = ['touch /var/lock/subsys/local','mount -t nfs 192.168.100.99:/export/All /All','mount -t nfs 192.168.100.99:/export/Public /Public','mount -t nfs 192.168.100.100:/export/Post /Post','mount -t nfs 192.168.100.99:/export/Dailies /Dailies','mount -t nfs 192.168.101.100:/vol/ILLUMINAFX /illuminafx','mount -t nfs 192.168.101.100:/vol/Library /Library']
@@ -32,43 +37,43 @@ def render(data,conn):
                 break
             if not line == '':
                 print line
+                logging.info(line)
                 if 'rayvision transmitter init failure' in line:
                     try:
                         conn.send(line)
                     except:
                         pass
-                    else:
-                        conn.close()
                 elif 'upload file interrupt' in line:
                     try:
                         conn.send(line)
                     except:
                         pass
-                    else:
-                        conn.close()
+                    # else:
+                    #     conn.close()
                 elif 'upload file fail ' in line:
                     try:
                         conn.send(line)
                     except:
                         pass
-                    else:
-                        conn.close()
+                    # else:
+                    #     conn.close()
                 elif '[ERROR]' in line:
                     try:
                         conn.send(line)
                     except:
                         pass
-                    else:
-                        conn.close()
+                    # else:
+                    #     conn.close()
                 elif 'Submit sucess, task_id' in line:
                     try:
                         conn.send(line)
                     except:
                         pass
-                    else:
-                        conn.close()
+                    # else:
+                    #     conn.close()
                 else:
                     continue
+        conn.close()
     else:
         print "%s NOT a regular file or directory!!!" % filePath
 

@@ -17,8 +17,6 @@ from clipLine import start_clip,handle_db
 from clipLine2 import BackInsert,Pack
 from distribute_download import Download
 from clipLine import to_php
-import time
-from PyQt4 import QtGui
 import os,sys
 
 
@@ -108,15 +106,17 @@ def handle(conn, localIP):
 			if platform.system() == 'Windows':
 				serverName = "X:"
 				send_path = saveDailies.SelectDailies(serverName, filePath, fileName, command_id, UpTask)
-				conn.send(send_path)
+				# conn.send(send_path)
 			elif platform.system() == 'Linux':
 				serverName = "/All"
 				send_path = saveDailies.SelectDailies(serverName, filePath, fileName, command_id, UpTask)
-				conn.send(send_path)
+				# conn.send(send_path)
 			elif platform.system() == 'Darwin':
 				serverName = "/Volumes/All"
 				send_path = saveDailies.SelectDailies(serverName, filePath, fileName, command_id, UpTask)
-				conn.send(send_path)
+			chmod_path = serverName + "/" + send_path
+			os.chmod(chmod_path, 0755)
+				# conn.send(send_path)
 
 		elif data.endswith("Dailies2"):
 			filePath, fileName, command_id, UpTask = data_split
@@ -132,7 +132,7 @@ def handle(conn, localIP):
 				serverName = "/All"
 			elif platform.system() == 'Darwin':
 				break
-			fileD = serverName + filePath + "/" + fileName
+			fileD = serverName + "/" + filePath + "/" + fileName
 			fileAll = fileD + "/" + fileNow
 			if os.path.isdir(outputPath):
 				shutil.rmtree(outputPath)
@@ -143,39 +143,42 @@ def handle(conn, localIP):
 				if os.path.exists(fileAll):
 					createThumbnail.run(fileNow, fileD)
 					httpUrl.toHttpask(command_id, filePath + "/" + fileName, fileNow, UpTask, "")
-			conn.send(filePath + "/" + fileName)
+			chmod_path = serverName + "/" + filePath + "/" + fileName
+			os.chmod(chmod_path, 0755)
+			# conn.send(filePath + "/" + fileName)
 
 		elif data.endswith("Reference"):
 			filePath, fileName, command_id, UpTask = data_split
 			print filePath, fileName, command_id, UpTask
+			chmod_server = ''
 			if platform.system() == 'Windows':
 				serverName = "L:/References"
+				chmod_server = 'X:'
 				send_path = saveReference.SelectReference(serverName, filePath, fileName, command_id, UpTask)
-				conn.send(send_path)
+				# conn.send(send_path)
 			elif platform.system() == 'Linux':
 				serverName = "/library/References"
+				chmod_server = '/All'
 				send_path = saveReference.SelectReference(serverName, filePath, fileName, command_id, UpTask)
-				conn.send(send_path)
+				# conn.send(send_path)
 			elif platform.system() == 'Darwin':
 				serverName = "/Volumes/library/References"
+				chmod_server = '/Volumes/All'
 				send_path = saveReference.SelectReference(serverName, filePath, fileName, command_id, UpTask)
-				conn.send(send_path)
+			chmod_path = chmod_server + "/" + send_path
+			os.chmod(chmod_path, 0755)
 
 		elif data.endswith('clip1'):  # 转码
-			# app = QtGui.QApplication(sys.argv)
-			# inPath = os.environ['HOME']
-			# xml_path = render.render_one(inPath)
 			xml_path, path, project_id, field_id, xml_id, command_id, UpTask = data_split
-			# create_time = int(time.time())
-			# insert_sql = "insert ignore into oa_xml_record(project_id,field_id,user_id,create_time) VALUES(%s,%s,%s,%s)" % (project_id, field_id, user_id, create_time)
-			# xml_id = handle_db(insert_sql, 'insert')
 			xml_path = '/Volumes/UPLOADS/' + xml_path
 			user_path = '/Volumes' + path
 			start_clip(xml_path, user_path, project_id, field_id, xml_id, UpTask)
 			to_php(1, 0, project_id, field_id, xml_id, UpTask)
 			# httpUrl.render_callback(command_id)
+			os.remove(xml_path)
+			os.chmod(user_path, 0755)
 			print('clip1 end')
-			conn.send(path)
+			# conn.send(path)
 
 		elif data.endswith('add_xml'):
 			xml_path, path, project_id, field_id, xml_id, command_id, UpTask = data_split

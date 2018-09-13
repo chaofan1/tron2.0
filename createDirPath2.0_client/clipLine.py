@@ -224,7 +224,7 @@ def putter(task_queue, xml_path, project_id, field_id, data, path, task):
 
 
 def start_clip(xml_path, path, project_id, field_id, xml_id, task):
-    print('start xml',xml_path)
+    print('start xml', xml_path)
     if not os.path.exists(path):
         # os.makedirs(path)
         print(path, 'not exists')
