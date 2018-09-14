@@ -15,8 +15,8 @@
 #    "Dailies2" "/FUY/001/001/stuff/cmp" "192.168.1.85|FUY/001/001/stuff/cmp|filename|command_id"
 #"Reference" "HAC" "shots"  "192.168.1.85|x:/DHG/References/inner/fileName|373"
 # 剪辑线
-#'clip1' '127.0.0.1|uploads/Projects/xml_files/25/2aa.xml|/Users/shids/Code/tron/uploads/Projects/FUY/001/|1|002'
-#转码 'clip1' 'IP|user_id|path|项目id|场id|command_id'
+#'clip1' '127.0.0.1|uploads/Projects/xml_files/25/2aa.xml|FUY/001/|7|60|20|44'
+#转码 'clip1' 'IP|user_id|path|项目id|场id|xml_id|command_id'
 #追加 'add_xml' 'IP|xml_path|path|项目id|场id|xml_id|command_id'
 #回插 'clip2' 'IP|video_path|img_path|time|rate|id|command_id'
 #打包 'clip3'  'IP|FUY/001|xml_path|command_id'
@@ -41,6 +41,7 @@ def _init_():
 		elif args[0] == "Render":
 			clientLink(args[1])
 		elif args[0] == "clip1":
+			# 修改相应场次的权限
 			path = args[1].split('|')[2]
 			os.chmod(path, 0777)
 			clipData = args[1]+'|clip1'
@@ -52,8 +53,13 @@ def _init_():
 			clipData = args[1]+'|clip3'
 			clientLink(clipData)
 		elif args[0] == "add_xml":
+			# 修改相应场以及场下镜头的权限
 			path = args[1].split('|')[2]
-			os.chmod(path, 0777)
+			all_path = '/Tron'+'/'+path
+			os.chmod(all_path, 0777)
+			ch_li = os.listdir(all_path)
+			for i in ch_li:
+				os.chmod(all_path+i, 0777)
 			clipData = args[1]+'|add_xml'
 			clientLink(clipData)
 		elif args[0] == "download":
