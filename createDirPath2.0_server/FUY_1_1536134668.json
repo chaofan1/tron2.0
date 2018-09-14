@@ -1,0 +1,32 @@
+{
+    "task_ids" : [1,2,3],
+	"company_data": {"dir_name":"huangyu", "email":""},
+	"field_data": [{
+		"field_id": 30,
+		"field_name": "001",
+		"shot_data": [{
+			"shot_number": "005",
+			"material": "D:/QQ/AuI18N",
+		}, {
+			"shot_number": "008",
+			"material": "C:/Program Files/Common Files/Autodesk Shared",
+		}]
+	},{
+		"field_id": 31,
+		"field_name": "002",
+		"shot_data": [{
+			"shot_number": "005",
+			"material": "D:/QQ/AuI18N",
+		}, {
+			"shot_number": "008",
+			"material": "C:/Program Files/Common Files/Autodesk Shared",
+		}]
+	}],
+	"assets": ["D:/QQ/AuI18N","D:/QQ/AuI18N"],
+	"references": ["D:/QQ/AuI18N","D:/QQ/AuI18N"],
+	"user_name":"",
+	"user_secret":"",
+	"user_mail":"",
+	"describe":""
+}
+
