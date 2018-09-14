@@ -10,6 +10,7 @@ import os
 def clientLink(data):
     args = data.split("|")
     clientIP = args[0]
+    task = args[-1]
     senStr = '|'.join(args[1:])
     filePath = ""
     if len(args) > 2:
@@ -22,15 +23,20 @@ def clientLink(data):
     if senStr:
         s.sendall(senStr)
         print('already send info')
-        # if args[-1] == 'Dailies1' or args[-1] == 'Dailies2' or args[-1] == 'Reference':
-        #     serverName = "/Tron"
-        #     data = s.recv(1024)
-        #     recv_path = data.replace('\\', '/')
-        #     if os.path.exists(serverName+recv_path):
-        #         os.chmod((serverName + recv_path), 0755)
-        #         # if args[-1] != 'clip1':
-        #         os.chmod((serverName + filePath), 0755)
-        #         print (serverName + recv_path)
+        task_set1 = set('Dailies1', 'Dailies2', 'Reference', 'clip1', 'add_xml')
+        task_set2 = set('Dailies1', 'Dailies2', 'Reference')
+        task_set3 = set('clip1', 'add_xml')
+        if task in task_set1:
+            serverName = "/Tron"
+            data = s.recv(1024)
+            recv_path = data.replace('\\', '/')
+            if os.path.exists(serverName+"/"+recv_path):
+                if task in task_set2:
+                    os.chmod((serverName+"/"+recv_path), 0755)
+                    os.chmod((serverName+"/"+filePath), 0755)
+                elif task in task_set3:
+                    os.chmod((serverName+"/"+recv_path), 0555)
+                print (serverName+"/"+recv_path)
         s.close()
         print('client close')
     return

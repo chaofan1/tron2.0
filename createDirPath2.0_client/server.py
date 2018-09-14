@@ -29,6 +29,7 @@ def handle(conn, localIP):
 		serverName = ''
 		outputPath = ''
 		data_split = data.strip().split("|")
+		sep = os.sep
 
 		if len(data_split) is 1:
 			filePath = data.strip()
@@ -73,13 +74,13 @@ def handle(conn, localIP):
 		elif data.endswith("Render1"):
 			filePath, Uptask, command_id = data_split
 			if platform.system() == 'Windows':
-				inPathFile = 'J:' + filePath[0:14]
+				inPathFile = 'J:' + sep + filePath[0:14]
 				filename = render.render_one(inPathFile).replace("/", '\\')
 				if os.path.exists(filename):
 					dataTree(filename, filePath, localIP)
 			elif platform.system() == 'Linux':
 				serverName = "/Post"
-				inPathFile = serverName + filePath[0:14]
+				inPathFile = serverName + sep + filePath[0:14]
 				filename = render.render_one(inPathFile)
 				if os.path.exists(filename):
 					dataTree(filename, filePath, localIP)
@@ -88,13 +89,13 @@ def handle(conn, localIP):
 		elif data.endswith("Render2"):
 			filePath, Uptask, command_id = data_split
 			if platform.system() == 'Windows':
-				inPathFile = 'J:' + filePath[0:14]
+				inPathFile = 'J:' + sep + filePath[0:14]
 				filename = render.render_all(inPathFile).replace("/", '\\')
 				if os.path.exists(filename):
 					dataTree(filename, filePath, localIP)
 			elif platform.system() == 'Linux':
 				serverName = "/Post"
-				inPathFile = serverName + filePath[0:14]
+				inPathFile = serverName + sep + filePath[0:14]
 				filename = render.render_all(inPathFile)
 				if os.path.exists(filename):
 					dataTree(filename, filePath, localIP)
@@ -106,17 +107,15 @@ def handle(conn, localIP):
 			if platform.system() == 'Windows':
 				serverName = "X:"
 				send_path = saveDailies.SelectDailies(serverName, filePath, fileName, command_id, UpTask)
-				# conn.send(send_path)
+				conn.send(send_path)
 			elif platform.system() == 'Linux':
 				serverName = "/All"
 				send_path = saveDailies.SelectDailies(serverName, filePath, fileName, command_id, UpTask)
-				# conn.send(send_path)
+				conn.send(send_path)
 			elif platform.system() == 'Darwin':
 				serverName = "/Volumes/All"
 				send_path = saveDailies.SelectDailies(serverName, filePath, fileName, command_id, UpTask)
-			chmod_path = serverName + "/" + send_path
-			os.chmod(chmod_path, 0755)
-				# conn.send(send_path)
+				conn.send(send_path)
 
 		elif data.endswith("Dailies2"):
 			filePath, fileName, command_id, UpTask = data_split
@@ -143,30 +142,25 @@ def handle(conn, localIP):
 				if os.path.exists(fileAll):
 					createThumbnail.run(fileNow, fileD)
 					httpUrl.toHttpask(command_id, filePath + "/" + fileName, fileNow, UpTask, "")
-			chmod_path = serverName + "/" + filePath + "/" + fileName
-			os.chmod(chmod_path, 0755)
-			# conn.send(filePath + "/" + fileName)
+			conn.send(filePath + "/" + fileName)
 
 		elif data.endswith("Reference"):
 			filePath, fileName, command_id, UpTask = data_split
 			print filePath, fileName, command_id, UpTask
-			chmod_server = ''
 			if platform.system() == 'Windows':
 				serverName = "L:/References"
-				chmod_server = 'X:'
 				send_path = saveReference.SelectReference(serverName, filePath, fileName, command_id, UpTask)
-				# conn.send(send_path)
+				conn.send(send_path)
 			elif platform.system() == 'Linux':
 				serverName = "/library/References"
-				chmod_server = '/All'
 				send_path = saveReference.SelectReference(serverName, filePath, fileName, command_id, UpTask)
-				# conn.send(send_path)
+				conn.send(send_path)
 			elif platform.system() == 'Darwin':
 				serverName = "/Volumes/library/References"
-				chmod_server = '/Volumes/All'
 				send_path = saveReference.SelectReference(serverName, filePath, fileName, command_id, UpTask)
-			chmod_path = chmod_server + "/" + send_path
-			os.chmod(chmod_path, 0755)
+				conn.send(send_path)
+			# chmod_path = chmod_server + "/" + send_path
+			# os.chmod(chmod_path, 0755)
 
 		elif data.endswith('clip1'):  # 转码
 			xml_path, path, project_id, field_id, xml_id, command_id, UpTask = data_split
@@ -176,14 +170,14 @@ def handle(conn, localIP):
 			to_php(1, 0, project_id, field_id, xml_id, UpTask)
 			# httpUrl.render_callback(command_id)
 			os.remove(xml_path)
-			os.chmod(user_path, 0755)
+			conn.send(path)
 			print('clip1 end')
-			# conn.send(path)
 
 		elif data.endswith('add_xml'):
 			xml_path, path, project_id, field_id, xml_id, command_id, UpTask = data_split
 			path = '/Volumes/UPLOADS/' + path
 			start_clip(xml_path, path, project_id, field_id, xml_id, UpTask)
+			conn.send(path)
 			# httpUrl.render_callback(command_id)
 			print('add_xml end')
 

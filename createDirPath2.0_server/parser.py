@@ -23,7 +23,7 @@
 #'127.0.0.1|uploads/Projects/xml_files/20180731/93926b72a9bea849b74e5d51ee72a512.xml|uploads/Projects/FUY/001/|1|002|26'
 
 
-import sys
+import sys,os
 from createProject import TronProject
 from client import clientLink
 from server_callback import callback
@@ -42,7 +42,7 @@ def _init_():
 			clientLink(args[1])
 		elif args[0] == "clip1":
 			path = args[1].split('|')[2]
-			TronProject().CreateClip(path)
+			os.chmod(path, 0777)
 			clipData = args[1]+'|clip1'
 			clientLink(clipData)
 		elif args[0] == "clip2":
@@ -52,6 +52,8 @@ def _init_():
 			clipData = args[1]+'|clip3'
 			clientLink(clipData)
 		elif args[0] == "add_xml":
+			path = args[1].split('|')[2]
+			os.chmod(path, 0777)
 			clipData = args[1]+'|add_xml'
 			clientLink(clipData)
 		elif args[0] == "download":

@@ -105,7 +105,7 @@ class TronProject:
     def CreateSeq(self, proName, seqName):
         dirPath = self.serverName + os.sep + proName  # /Tron/FUY
         dirPost = os.path.join(self.postName, proName)  # /Post/FUY
-        seqPath = os.path.join(dirPath, seqName)  # /Tron/FUY/01
+        seqPath = os.path.join(dirPath, seqName)  # /Tron/FUY/001
         seqPost = os.path.join(dirPost, seqName)  # /Post/FUY/01
         if not os.path.exists(seqPath):
             TronFolder().CreateFolder(seqPath, "0555", "")
@@ -159,9 +159,3 @@ class TronProject:
                 TronFolder().CreateWork(dirPost, seqName, shotName, user, type_, fileName)
             else:
                 TronFolder().CreateWork(dirPath, seqName, shotName, user, type_, fileName)
-
-    def CreateClip(self, path):
-        if not os.path.exists(path):
-            TronFolder().CreateFolder(path, "0777", "")
-        else:
-            os.chmod(path, 0777)
