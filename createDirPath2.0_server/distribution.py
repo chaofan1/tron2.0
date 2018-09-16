@@ -4,12 +4,14 @@ import re
 import time
 import json
 import shutil
-import zipfile
+# import zipfile
 import logging
 import smtplib
 import platform
 import threadpool
-from server_callback import disCallback
+# from server_callback import disCallback
+from server_callback import callback
+
 
 
 class Finish(SyntaxWarning):
@@ -18,7 +20,7 @@ class Finish(SyntaxWarning):
 
 class TronDistribute:
     def __init__(self, command_id):
-        # self.command_id = command_id
+        self.command_id = command_id
         # self.material = 'material'
         # self.asset = 'asset'
         # self.references = 'references'
@@ -40,7 +42,7 @@ class TronDistribute:
                 response = json.load(f)
             Paths = []
             # 解析参数
-            self.task_ids = response['task_ids']
+            # self.task_ids = response['task_ids']
             self.cpname = response['company_data']['dir_name']
             self.email = response['company_data']['email']
             self.user_name = response['user_name']
@@ -188,9 +190,9 @@ class TronDistribute:
                     self.describe,
                 ]
                 msg = '\n'.join(mail)
-                s = smtplib.SMTP('localhost')
-                # s.connect(smtp_server, '25')
-                # s.login(from_mail, mail_pass)
+                s = smtplib.SMTP()
+                s.connect(smtp_server, '25')
+                s.login(from_mail, mail_pass)
                 # s.sendmail(from_mail, to_mail+cc_mail, msg)
                 s.sendmail(from_mail, mailAdd, msg)
                 s.quit()
@@ -200,8 +202,7 @@ class TronDistribute:
                 logging.error(e)
         else:
             logging.info('邮箱为空')
-        disCallback(['Outsource' + os.sep + name + os.sep +
-                     name + '_' + self.userid + '_' + self.timeStamp, self.task_ids])
+        callback(self.command_id)
 
     def result(self, req, res):
         res1, res2 = res

@@ -20,16 +20,16 @@ def callback(command_id):
         print e.reason
 
 
-def disCallback(task_ids):
-    url_update = 'http://192.168.1.81/tron/index.php/python/add_download_link'
-    query_args = {'name': task_ids[0], 'task_ids': task_ids[1]}
-    encoded_args = urllib.urlencode(query_args)
-    try:
-        urllib2.urlopen(url_update, encoded_args)
-    except urllib2.HTTPError, e:
-        print e.code
-    except urllib2.URLError, e:
-        print e.reason
+# def disCallback(task_ids):
+#     url_update = 'http://192.168.1.81/tron/index.php/python/add_download_link'
+#     query_args = {'name': task_ids[0], 'task_ids': task_ids[1]}
+#     encoded_args = urllib.urlencode(query_args)
+#     try:
+#         urllib2.urlopen(url_update, encoded_args)
+#     except urllib2.HTTPError, e:
+#         print e.code
+#     except urllib2.URLError, e:
+#         print e.reason
 
 
 if __name__ == '__main__':
