@@ -13,11 +13,11 @@ import createThumbnail
 import render
 import render_remind
 import clientToRender
-from clipLine import start_clip,handle_db
-from clipLine2 import BackInsert,Pack
+from clipLine import start_clip
+from clipLine2 import Pack,insert
 from distribute_download import Download
 from clipLine import to_php
-import os,sys
+import os
 
 
 def handle(conn, localIP):
@@ -183,7 +183,7 @@ def handle(conn, localIP):
 
 		elif data.endswith('clip2'):   # 回插
 			video_path, img_path, frame, data_id, command_id, UpTask = data_split
-			BackInsert().insert(video_path, img_path, frame, data_id)
+			insert(video_path, img_path, frame, data_id)
 			# httpUrl.render_callback(command_id)
 			print('clip2 end')
 
