@@ -233,7 +233,7 @@ def start_clip(xml_path, path, project_id, field_id, xml_id, task):
     data = set()
     if task == 'add_xml':
         select_sql = "select clip_frame_length,frame_range from %s where project_id=%s and field_id=%s" % (table_name, project_id,field_id)
-        data = handle_db(select_sql, 'look')
+        data = handle_db(select_sql)
     queue_len = putter(queue, xml_path, project_id, field_id, data, path, task)
     if queue_len:
         pool = Pool(processes=4)
@@ -248,7 +248,7 @@ def start_clip(xml_path, path, project_id, field_id, xml_id, task):
         print '没有在xml中获取到任务'
 
 
-def handle_db(sql,task):
+def handle_db(sql):
     try:
         conn = pymysql.connect(ip, user_name, passwd, db_name, charset='utf8', use_unicode=True)
     except:
@@ -256,13 +256,6 @@ def handle_db(sql,task):
     else:
         cursor = conn.cursor()
         cursor.execute(sql)
-        if task == 'look':
-            result = set(cursor.fetchall())
-            conn.close()
-            return result
-        elif task == 'insert':
-            conn.commit()
-            xml_id = cursor.lastrowid
-            cursor.close()
-            conn.close()
-            return xml_id
+        result = set(cursor.fetchall())
+        conn.close()
+        return result
