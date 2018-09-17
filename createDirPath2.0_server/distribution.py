@@ -11,7 +11,9 @@ import platform
 import threadpool
 # from server_callback import disCallback
 from server_callback import callback
-
+import sys
+reload(sys)
+sys.setdefaultencoding('utf8')
 
 
 class Finish(SyntaxWarning):
@@ -46,12 +48,9 @@ class TronDistribute:
             self.cpname = response['company_data']['dir_name']
             self.email = response['company_data']['email']
             self.user_name = response['user_name']
-            self.user_secret = response['user_name']
-            self.user_mail = response['user_mail']
             self.describe = response['describe']
 
             fieldList = response['field_data']
-            assetList = response['assets']
             referencesList = response['references']
             for field in fieldList:
                 fieldName = field['field_name']
@@ -59,20 +58,24 @@ class TronDistribute:
                 for shot in shotList:
                     shotNum = shot['shot_number']
                     material = shot['material']
-
-                    self.cp = self.cpname + '_' + self.userid + '_' + self.timeStamp
                     basePath = self.outputPath + os.sep + self.cpname + os.sep + self.progectName + \
                                os.sep + fieldName + os.sep + shotNum + os.sep
                     os.makedirs(basePath)
                     Paths.append(((basePath, material), None))
+            for asset in response['assets']:
+                for tache in asset['taches']:
+                    tache_name = tache['tache_tolower_name']
+                    extension_name = tache['extension_name']
+                    linux_path = tache['linux_path']
+                    asset_basepath = self.outputPath + os.sep + self.cpname + os.sep + self.progectName + os.sep + \
+                       "assets" + os.sep + tache_name
+                    if not os.path.exists(asset_basepath):
+                        os.makedirs(asset_basepath)
+                    Paths.append(((asset_basepath, linux_path), None))
 
-            assetDir = self.outputPath + os.sep + self.cpname + os.sep + self.progectName + os.sep + \
-                       "assets"
             referencesDir = self.outputPath + os.sep + self.cpname + os.sep + self.progectName + \
                             os.sep + "references"
-            os.makedirs(assetDir)
             os.makedirs(referencesDir)
-            Paths.append(((assetDir, assetList), None))
             Paths.append(((referencesDir, referencesList), None))
 
             logging.info('打开文件，解析参数成功' + self.filePath )
@@ -88,7 +91,7 @@ class TronDistribute:
             [self.pool.putRequest(req) for req in requests]
             try:
                 self.pool.wait()
-                os.remove(self.filePath)
+                # os.remove(self.filePath)
                 self.putThread('transit')
             except Exception as e:
                 pass
@@ -106,12 +109,19 @@ class TronDistribute:
 
         elif task == 'transit':
             print('---开始上传云---')
-            requests = threadpool.makeRequests(self.transitYun, callback=self.result)
+            cpdirPath = self.outputPath + os.sep + self.cpname + os.sep + self.progectName
+            # 连接腾讯云   判断腾讯云是否有 公司+项目文件夹
+                # 云代码
+            if '不存在': #没有创建,并上传
+                # 云创建代码
+                all_dir = map(lambda x: cpdirPath + os.sep + x, os.listdir(cpdirPath))
+                print all_dir
+            requests = threadpool.makeRequests(self.transitYun, all_dir, callback=self.result)
             [self.pool.putRequest(req) for req in requests]
             try:
                 self.pool.wait()
                 self.sendMail(self.cpname, self.email)
-                shutil.rmtree(self.outputPath + os.sep + self.cpname + os.sep + self.progectName)
+                # shutil.rmtree(self.outputPath + os.sep + self.cpname + os.sep + self.progectName)
             except Exception as e:
                 pass
 
@@ -163,8 +173,10 @@ class TronDistribute:
 
     def transitYun(self):
         try:
-            cpdirPath = self.outputPath + os.sep + self.cpname + os.sep + self.cp
-            #写上传云代码
+            # 进入云 公司+项目文件夹  self.cpname + os.sep + self.progectName
+                #上传资料到云代码
+
+
             return 0, None
         except Exception as e:
             logging.info('上传云出错')
@@ -175,8 +187,8 @@ class TronDistribute:
         if email:
             try:
                 smtp_server = 'smtp.163.com'
-                from_mail = self.user_mail  # 发送邮箱
-                mail_pass = self.user_secret  # 邮箱密码
+                from_mail = '15810448048@163.com' # 发送邮箱
+                mail_pass = '086023li'  # 邮箱密码
                 mailAdd = email  # 外包公司邮箱
                 # cc_mail = ['lizhenliang@xxx.com']      # 抄送邮箱
                 from_name = self.user_name  # 发送人姓名
@@ -208,10 +220,6 @@ class TronDistribute:
         res1, res2 = res
         if res1:
             raise Finish
-
-
-def delCloud(self, path):
-    pass
 
 
 if __name__ == "__main__":
