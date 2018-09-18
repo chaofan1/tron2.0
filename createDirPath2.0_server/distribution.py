@@ -115,17 +115,31 @@ class TronDistribute:
             if '不存在': #没有创建,并上传
                 # 云创建代码
                 all_dir = map(lambda x: cpdirPath + os.sep + x, os.listdir(cpdirPath))
-                print all_dir
-            requests = threadpool.makeRequests(self.transitYun, all_dir, callback=self.result)
-            [self.pool.putRequest(req) for req in requests]
-            try:
-                self.pool.wait()
-                self.sendMail(self.cpname, self.email)
-                # shutil.rmtree(self.outputPath + os.sep + self.cpname + os.sep + self.progectName)
-            except Exception as e:
-                pass
+                requests = threadpool.makeRequests(self.transitYun, all_dir, callback=self.result)
+                [self.pool.putRequest(req) for req in requests]
+                try:
+                    self.pool.wait()
+                    self.sendMail(self.cpname, self.email)
+                    # shutil.rmtree(self.outputPath + os.sep + self.cpname + os.sep + self.progectName)
+                except Exception as e:
+                    pass
+            else:
+                all_dir = []
+                for root, dirs, files in os.walk(cpdirPath):
+                    for name in files:
+                        all_dir.append(os.path.join(root, name))
+                requests = threadpool.makeRequests(self.transitYunone, all_dir, callback=self.result)
+                [self.pool.putRequest(req) for req in requests]
+                try:
+                    self.pool.wait()
+                    self.sendMail(self.cpname, self.email)
+                    # shutil.rmtree(self.outputPath + os.sep + self.cpname + os.sep + self.progectName)
+                except Exception as e:
+                    pass
 
     def copyFile(self, *args):
+        #X:\BFB\001\001\Stuff\mmv\publish\bfb001001_mmv_wanggang_matchmove\pro
+        #X:\BFB\Stuff\dmt\publish\bfb_dmt_caojj_camp3Ri_master\geo\bfb086026_dmt_caojj_YingDiRiJing_v0104.0129
         try:
             arg, arg2 = args
             if isinstance(arg2, list):
@@ -171,12 +185,23 @@ class TronDistribute:
     #         logging.error(e)
     #         return 1, e
 
-    def transitYun(self):
+    def transitYun(self, filepath):
         try:
-            # 进入云 公司+项目文件夹  self.cpname + os.sep + self.progectName
+            # 进入云公司+项目文件夹下   self.cpname + os.sep + self.progectName
                 #上传资料到云代码
 
+            return 0, None
+        except Exception as e:
+            logging.info('上传云出错')
+            logging.error(e)
+            return 1, e
 
+    def transitYunone(self, filepath):
+        try:
+            dirname, filename = os.path.split(filepath)
+            yunPath = self.cpname + dirname.split(self.cpname)[1]
+            # 判断云路径是否存在，不存在创建
+                #拷贝文件 filepath  到创建目录下
             return 0, None
         except Exception as e:
             logging.info('上传云出错')
