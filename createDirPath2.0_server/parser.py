@@ -42,7 +42,8 @@ def _init_():
 		elif args[0] == "clip1":
 			# 修改相应场次的权限
 			path = args[1].split('|')[2]
-			os.chmod(path, 0777)
+			all_path = '/Tron' + '/' + path
+			os.chmod(all_path, 0777)
 			clipData = args[1]+'|clip1'
 			clientLink(clipData)
 		elif args[0] == "clip2":

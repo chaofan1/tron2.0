@@ -23,9 +23,9 @@ def clientLink(data):
     if senStr:
         s.sendall(senStr)
         print('already send info')
-        task_set1 = set('Dailies1', 'Dailies2', 'Reference', 'clip1', 'add_xml')
-        task_set2 = set('Dailies1', 'Dailies2', 'Reference')
-        task_set3 = set('clip1', 'add_xml')
+        task_set1 = {'Dailies1', 'Dailies2', 'Reference', 'clip1', 'add_xml'}
+        task_set2 = {'Dailies1', 'Dailies2', 'Reference'}
+        task_set3 = {'clip1', 'add_xml'}
         if task in task_set1:
             serverName = "/Tron"
             data = s.recv(1024)
