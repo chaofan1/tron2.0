@@ -13,8 +13,8 @@
 #"Folder" "192.168.1.85|/DHG/Dailies/20161214"
 # 服务器与客户端
 #old "Dailies2" "HAC" "fileName" "192.168.1.85|x:/DHG/Dailies/20161214|dhg01001_prd_liangcy_HFG_v0103|373"
-#new "Dailies1" "/FUY/001/001/stuff/cmp" "192.168.1.85|FUY/001/001/stuff/cmp|filename|command_id"
-#    "Dailies2" "/FUY/001/001/stuff/cmp" "192.168.1.85|FUY/001/001/stuff/cmp|filename|command_id"
+#new "Dailies1" "/FUY/001/001/stuff/cmp" "192.168.1.85|/FUY/001/001/stuff/cmp|ruy001004_cmp_xiecy_weqw_v0101|command_id"
+#    "Dailies2" "/FUY/001/001/stuff/cmp" "192.168.1.85|/FUY/001/001/stuff/cmp|filename|command_id"
 #"Reference" "HAC" "shots"  "192.168.1.85|x:/DHG/References/inner/fileName|373"
 # 剪辑线
 #'clip1' '127.0.0.1|HZG/001/work/note/2aa.xml|FUY/001/|7|60|20|44'
@@ -72,11 +72,11 @@ def _init_():
 		if args[0] == "Project":
 			TronProject().CreatePro(args[1])  # createProject.CreatePro("Project","HAC","command_id")
 			callback(args[2])
-		elif args[0] == "Dailies1":  # "Dailies1" "FUY/001/001/stuff/cmp/" "IP|FUY/001/001/stuff/cmp|filename|command_id"
+		elif args[0] == "Dailies1":  # "Dailies1" "/FUY/001/001/stuff/cmp/" "IP|/FUY/001/001/stuff/cmp|filename|command_id"
 			TronProject().CreateDai(args[1])
 			dailiesData = args[2]+"|Dailies1"
 			clientLink(dailiesData)
-		elif args[0] == "Dailies2":  # "Dailies2" "FUY/001/001/stuff/cmp/" "IP|FUY/001/001/stuff/cmp|filename|command_id"
+		elif args[0] == "Dailies2":  # "Dailies2" "/FUY/001/001/stuff/cmp/" "IP|/FUY/001/001/stuff/cmp|filename|command_id"
 			TronProject().CreateDai(args[1])
 			dailiesData = args[2]+"|Dailies2"
 			clientLink(dailiesData)

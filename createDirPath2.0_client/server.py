@@ -103,7 +103,7 @@ def handle(conn, localIP):
 
 		elif data.endswith("Dailies1"):   # FUY/001/001/stuff/cmp|filename|command_id|Dailies1
 			filePath, fileName, command_id, UpTask = data_split
-			print filePath, fileName, command_id, UpTask
+			# print filePath, fileName, command_id, UpTask
 			if platform.system() == 'Windows':
 				serverName = "X:"
 				send_path = saveDailies.SelectDailies(serverName, filePath, fileName, command_id, UpTask)
@@ -120,7 +120,7 @@ def handle(conn, localIP):
 
 		elif data.endswith("Dailies2"):
 			filePath, fileName, command_id, UpTask = data_split
-			print filePath, fileName, command_id, UpTask
+			# print filePath, fileName, command_id, UpTask
 			fileNow = fileName + ".mov"
 			# 重构filePath: /FUY/stuff/dmt
 			filePath = filePath + '/mov'

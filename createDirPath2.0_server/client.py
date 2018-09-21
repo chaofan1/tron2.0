@@ -30,17 +30,18 @@ def clientLink(data):
             serverName = "/Tron"
             data = s.recv(1024)
             recv_path = data.replace('\\', '/')
-            ser_recv_path = serverName+"/"+recv_path
+            ser_recv_path = serverName+recv_path  # Dailies /Tron/FUY/001/001/stuff/cmp/mov/filename
             if os.path.exists(ser_recv_path):
                 if task in task_set2:
-                    os.chmod(ser_recv_path, 0755)
-                    os.chmod((serverName+"/"+filePath), 0755)
+                    os.chmod(ser_recv_path, 0555)
+                    os.chmod((serverName+filePath+'/mov'), 0555)  # filePath /FUY/001/001/stuff/cmp/
+                    os.chmod((serverName+filePath+'/img'), 0555)  # filePath /FUY/001/001/stuff/cmp/
                 elif task in task_set3:
                     ch_li = os.listdir(ser_recv_path)
                     for i in ch_li:
                         os.chmod(ser_recv_path+'/'+i, 0555)
                     os.chmod(ser_recv_path, 0555)
-                print (serverName+"/"+recv_path)
+                print serverName+filePath+'/mov'
         s.close()
         print('client close')
     return

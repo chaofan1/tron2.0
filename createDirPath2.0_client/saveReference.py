@@ -17,10 +17,7 @@ def SelectReference(serverName, filePath, fileName, fileID, UpTask):
     else:
         inPathFile = "D:/"
     app = QApplication(sys.argv)
-    # app.setStyle('windows')
-    # app.setStyleSheet('QMainWindow {border:0px solid black;background:rgb(255, 255, 255)}')
     mainWindow = QMainWindow()
-    # mainWindow.setWindowFlags(Qt.WindowStaysOnTopHint)
     (seqname, ext) = QFileDialog.getOpenFileNameAndFilter(mainWindow, QString('update a reference'), inPathFile, '*.* \n*.mov \n*.mp4 \n*.avi \n*.jpg *.jpeg \n%.png \n*.tiff \n*.tga \n*.dpx \n.mp3 \n.wav \n*.*', options = QFileDialog.ReadOnly)
     fileOld = (seqname.__str__())
 
