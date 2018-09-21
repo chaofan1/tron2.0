@@ -38,14 +38,9 @@ class TronDistribute:
                 response = json.load(f)
             Paths = []
             # 解析参数
-            # self.task_ids = response['task_ids']
-            # self.cpname = response['company_data']['dir_name']
-            # self.email = response['company_data']['email']
-            self.user_name = response['user_name']
-            self.describe = response['describe']
-
             fieldList = response['field_data']
             referencesList = response['references']
+            # 解析素材，将素材所在路径与素材目标路径放到列表
             for field in fieldList:
                 fieldName = field['field_name']
                 shotList = field['shot_data']
@@ -55,8 +50,10 @@ class TronDistribute:
                     for cp in response['company_data']:
                         basePath = self.outputPath + os.sep + cp['dir_name'] + os.sep + self.progectName + \
                                    os.sep + fieldName + os.sep + shotNum + os.sep
-                        os.makedirs(basePath)
+                        if not os.path.exists(basePath):
+                            os.makedirs(basePath)
                         Paths.append(((basePath, material), None))
+            # 解析资产，将资产所在路径与资产目标路径放到列表
             for asset in response['assets']:
                 for tache in asset['taches']:
                     tache_name = tache['tache_tolower_name']
@@ -68,10 +65,12 @@ class TronDistribute:
                         if not os.path.exists(asset_basepath):
                             os.makedirs(asset_basepath)
                         Paths.append(((asset_basepath, linux_path), None))
+            # 解析相关文件，将相关文件所在路径与相关文件目标路径放到列表
             for cp in response['company_data']:
                 referencesDir = self.outputPath + os.sep + cp['dir_name'] + os.sep + self.progectName + \
                                 os.sep + "references"
-                os.makedirs(referencesDir)
+                if not os.path.exists(referencesDir):
+                    os.makedirs(referencesDir)
                 Paths.append(((referencesDir, referencesList), None))
 
             logging.info('打开文件，解析参数成功' + self.filePath )
@@ -81,17 +80,17 @@ class TronDistribute:
             logging.error(e)
 
     def putThread(self, task, publicArg=None):
+        # 接受到argParse函数传递的大列表，用线程池去拷贝
         if task == 'copy':
             print('---开始拷贝---')
             requests = threadpool.makeRequests(self.copyFile, publicArg, callback=self.result)
             [self.pool.putRequest(req) for req in requests]
             try:
                 self.pool.wait()
-                # os.remove(self.filePath)
-                # self.putThread('transit')
+                # os.remove(self.filePath) # 测试或上线打开，拷贝完文件，删除json文件
             except Exception as e:
                 pass
-
+        # 暂时用不上
         # elif task == 'pack':
         #     print('---开始压缩---')
         #     requests = threadpool.makeRequests(self.packFile, callback=self.result)
@@ -103,14 +102,20 @@ class TronDistribute:
         #     except Exception as e:
         #         pass
 
+        # 上传云，publicArg为 parse.py传来的json文件路径
         elif task == 'transit':
             print('---开始上传云---')
             argslist = []
-            self.cpname = publicArg[1]
-            self.progectName = publicArg[3]
+            with open(publicArg, 'r') as f:
+                response = json.load(f)
+            self.cpname = response['company_name']
+            self.progectName = response['project_name']
+            # 外包公司文件路径
             dirPath = self.outputPath + os.sep + self.cpname + os.sep + self.progectName
-            # 连接云,判断 公司名/项目文件夹是否存在
+            # 连接云,判断 公司名/项目 文件夹是否存在
             s = '云对象'
+            # 不存在说明第一次给外包公司发包，直接创建 /公司/项目文件夹 进去文件夹，将本地文件上传到该文件夹下
+            # 存在说明后增文件，也要按照对应文件夹放好
             if "不存在":
                 # 创建 /公司/项目文件夹 进去文件夹
                 filePaths = map(lambda x: dirPath + os.sep + x, os.listdir(dirPath))
@@ -128,47 +133,65 @@ class TronDistribute:
             [self.pool.putRequest(req) for req in requests]
             try:
                 self.pool.wait()
-                self.sendMail(self.cpname, publicArg[2])
+                # 上传云之后发送邮件
+                self.sendMail(self.cpname, response['email'], response['user_name'], response['remark'])
+                callback(self.command_id)
+                # 递归删除本地公司下项目文件夹，测试或上线打开
                 # shutil.rmtree(self.outputPath + os.sep + self.cpname + os.sep + self.progectName)
             except Exception as e:
                 pass
 
     def copyFile(self, *args):
         # X:\BFB\001\001\Stuff\mmv\publish\bfb001001_mmv_wanggang_matchmove\pro
+        # X:\BFB\001\Stuff\mmv\publish\bfb001001_mmv_wanggang_matchmove\pro
         # X:\BFB\Stuff\dmt\publish\bfb_dmt_caojj_camp3Ri_master\geo\bfb086026_dmt_caojj_YingDiRiJing_v0104.0129
         try:
+            # arg拷贝的目标路径，arg2被拷贝文件路径，有可能是列表（资产，相关），有可能单独路径（素材）
             arg, arg2 = args
             if isinstance(arg2, list):
                 for path in arg2:
                     basename = os.path.basename(path)
                     arg = arg.replace('\\', '/')  # 上线删除
-                    if 'assets' in arg and self.progectName + os.sep + 'Stuff' not in path and (
-                            'pro' in path or 'geo' in path):
-                        print path, arg, arg2
-                        filePath = path.split('\\')  # 上线改为'/'
-                        cpname = arg.split('/')[2]
-                        shotassetsPath = self.outputPath + os.sep + cpname + os.sep + self.progectName + os.sep + \
-                                         filePath[1] + os.sep + filePath[2] + os.sep + filePath[
-                                             3] + os.sep + 'assets' + os.sep + filePath[5]
-                        print shotassetsPath
-                        os.makedirs(self.outputPath + os.sep + cpname + os.sep + self.progectName + os.sep +
-                                    filePath[1] + os.sep + filePath[2] + os.sep + filePath[
-                                        3] + os.sep + 'assets' + os.sep + filePath[5])
-                        if os.path.isdir(path):
-                            shutil.copytree(path, shotassetsPath)
-                            # 解析
+                    filePath = path.split('\\')  # 上线改为'/'
+                    # 判断是否为资产
+                    if 'assets' in arg and len(filePath) >= 5:
+                        # 是资产且长度大于5，同时第四位是Stuff,并且geo,pro在路径里，说明是某个镜头的未制作完成资产，需要去解析文件
+                        if filePath[4] == 'Stuff' and ('pro' in path or 'geo' in path):
+                            cpname = arg.split('/')[2]
+                            # 创建属于某个镜头的单独资产文件夹
+                            shotassetsPath = self.outputPath + os.sep + cpname + os.sep + self.progectName + os.sep + \
+                                             filePath[2] + os.sep + filePath[3] + os.sep + 'assets' + os.sep + filePath[
+                                                 5]
+                            os.makedirs(self.outputPath + os.sep + cpname + os.sep + self.progectName + os.sep +
+                                        filePath[2] + os.sep + filePath[3] + os.sep + 'assets' + os.sep + filePath[5])
+                            if os.path.isdir(path):
+                                if os.path.exists(shotassetsPath + os.sep + basename):
+                                    shutil.rmtree(shotassetsPath + os.sep + basename)
+                                shutil.copytree(path, shotassetsPath)
+                                # 解析
+                            else:
+                                shutil.copyfile(path, shotassetsPath)
+                                # 解析
                         else:
-                            shutil.copyfile(path, shotassetsPath)
-                            # 解析
+                            if os.path.isdir(path):
+                                if os.path.exists(arg + os.sep + basename):
+                                    shutil.rmtree(arg + os.sep + basename)
+                                shutil.copytree(path, arg + os.sep + basename)
+                            else:
+                                shutil.copyfile(path, arg + os.sep + basename)
 
                     else:
                         if os.path.isdir(path):
+                            if os.path.exists(arg + os.sep + basename):
+                                shutil.rmtree(arg + os.sep + basename)
                             shutil.copytree(path, arg + os.sep + basename)
                         else:
                             shutil.copyfile(path, arg + os.sep + basename)
             else:
                 basename = os.path.basename(arg2)
                 if os.path.isdir(arg2):
+                    if os.path.exists(arg + os.sep + basename):
+                        shutil.rmtree(arg + os.sep + basename)
                     shutil.copytree(arg2, arg + os.sep + basename)
                 else:
                     shutil.copyfile(arg2, arg + os.sep + basename)
@@ -205,11 +228,13 @@ class TronDistribute:
 
     def transitYun(self, arglist):
         try:
+            # 后增文件
             if arglist[0] == 0:
                 dirname, filename = os.path.split(arglist[1][0])
                 yunPath = self.cpname + dirname.split(self.cpname)[1]
                 # 判断云路径是否存在，不存在创建
                 # 拷贝文件 filepath  到创建目录下
+            # 第一次上传云
             else:
                 pass
                 # 进去 公司/项目文件夹下
@@ -220,23 +245,23 @@ class TronDistribute:
             logging.error(e)
             return 1, e
 
-    def sendMail(self, name, email):
+    def sendMail(self, cpname, email, user_name, remark):
         if email:
             try:
-                smtp_server = 'smtp.163.com'
-                from_mail = '15810448048@163.com' # 发送邮箱
-                mail_pass = '086023li'  # 邮箱密码
+                smtp_server = 'smtp.yeah.net'
+                from_mail = 'tron2018@yeah.net' # 发送邮箱
+                mail_pass = 'liangcy880716'  # 邮箱密码
                 mailAdd = email  # 外包公司邮箱
                 # cc_mail = ['lizhenliang@xxx.com']      # 抄送邮箱
-                from_name = self.user_name  # 发送人姓名
-                subject = '您有一封来自' + self.user_name + '的邮件'  # 主题
+                from_name = user_name  # 发送人姓名
+                subject = '您有一封来自' + user_name + '的邮件'  # 主题
                 mail = [
                     "From: %s <%s>" % (from_name, from_mail),
                     str("To: %s" % mailAdd),
                     "Subject: %s" % subject,
                     # "Cc: %s" % ','.join(cc_mail), "utf8"),
                     "",
-                    self.describe,
+                    remark,
                 ]
                 msg = '\n'.join(mail)
                 s = smtplib.SMTP()
@@ -245,7 +270,7 @@ class TronDistribute:
                 # s.sendmail(from_mail, to_mail+cc_mail, msg)
                 s.sendmail(from_mail, mailAdd, msg)
                 s.quit()
-                logging.info(u'发送邮件成功' + name + '|'+ mailAdd)
+                logging.info(u'发送邮件成功' + cpname + '|'+ mailAdd)
             except Exception as e:
                 logging.info('发送邮件失败')
                 logging.error(e)

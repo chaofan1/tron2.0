@@ -82,6 +82,8 @@ def _init_():
 			clientLink(dailiesData)
 		elif args[0] == "Pack":
 			TronDistribute(args[2]).argParse(args[1])
+		elif args[0] == "Transit":
+			TronDistribute(args[2]).putThread('transit', args[1])
 	elif len(args) == 4:
 		if args[0] == "Reference":    # "Reference" "HAC" "shots"  "192.168.1.85|x:/DHG/References/inner/fileName|373"
 			TronProject().CreateRef(args[1], args[2])
@@ -90,8 +92,6 @@ def _init_():
 		elif args[0] == "Seq":  # createProject.CreateSeq("Seq","HAC","01","command_id")
 			TronProject().CreateSeq(args[1], args[2])
 			callback(args[3])
-		elif args[0] == "Transit":
-			TronDistribute(args[4]).putThread('transit', [args[1], args[2], args[3]])
 	elif len(args) == 5:
 		if args[0] == "Shot":   # "Shot" "HAC" "001" "001" "command_id"
 			TronProject().CreateScene(args[1], args[2], args[3])
