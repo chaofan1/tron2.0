@@ -1,0 +1,67 @@
+{   "type": 1,
+	"company_data": {
+		"dir_name": "huanju",
+		"email": "13247744375@qq.com"
+	},
+  "field_data": [{
+		"field_id": 30,
+		"field_name": "001",
+		"shot_data": [{
+			"shot_number": "005",
+			"material": "D:/QQ/AuI18N",
+		}, {
+			"shot_number": "008",
+			"material": "C:/Program Files/Common Files/Autodesk Shared"
+		}]
+	},{
+		"field_id": 31,
+		"field_name": "002",
+		"shot_data": [{
+			"shot_number": "005",
+			"material": "D:/QQ/AuI18N"
+		}, {
+			"shot_number": "008",
+			"material": "C:/Program Files/Common Files/Autodesk Shared"
+		}]
+	}],
+	"assets": [{
+		"asset_id": "2",
+		"asset_name": "埒",
+		"taches": [{
+			"tache_id": 16,
+			"status": 1,
+			"tache_name": "rig",
+            "tache_tolower_name":"rig",
+			"extension_name": ["'.ma'", "'.swatches'"],
+			"linux_path": ["C:/Program Files/Common Files/Autodesk Shared", "D:/QQ/AuI18N"]
+		}, {
+			"tache_id": 14,
+			"status": 1,
+			"tache_name": "art",
+            "tache_tolower_name":"art",
+			"extension_name": ["'.png'", "'.sc'", "'.jpg'", "'.psd'", "'.tif'"],
+			"linux_path": ["C:/Program Files/Common Files/Autodesk Shared", "D:/QQ/AuI18N"]
+		}]
+	}, {
+		"asset_id": "3",
+		"asset_name": null,
+		"taches": [{
+			"tache_id": 16,
+			"status": 1,
+			"tache_name": "rig",
+            "tache_tolower_name":"mmv",
+			"extension_name": ["'.ma'", "'.swatches'"],
+			"linux_path": ["C:/Program Files/Common Files/Autodesk Shared", "D:/QQ/AuI18N"]
+		}, {
+			"tache_id": 14,
+			"status": 1,
+			"tache_name": "ART",
+            "tache_tolower_name":"cmp",
+			"extension_name": ["'.png'", "'.sc'", "'.jpg'", "'.psd'", "'.tif'"],
+			"linux_path": ["C:/Program Files/Common Files/Autodesk Shared", "D:/QQ/AuI18N"]
+		}]
+	}],
+	"references": ["C:/Program Files/Common Files/Autodesk Shared", "D:/QQ/AuI18N"],
+	"user_name": "周佳霖",
+	"describe": "这是一个测试"
+}

@@ -1,5 +1,4 @@
 {
-    "task_ids" : [1,2,3],
 	"company_data": {"dir_name":"huangyu", "email":""},
 	"field_data": [{
 		"field_id": 30,
@@ -25,8 +24,6 @@
 	"assets": ["D:/QQ/AuI18N","D:/QQ/AuI18N"],
 	"references": ["D:/QQ/AuI18N","D:/QQ/AuI18N"],
 	"user_name":"",
-	"user_secret":"",
-	"user_mail":"",
 	"describe":""
 }
 

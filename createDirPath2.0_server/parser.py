@@ -6,6 +6,8 @@
 #"Shot" "HAC" "01" "001" "command_id"
 #"AssetTask" "HAC" "rig" "liangcy" "fileName" "command_id"
 #"ShotTask" "HAC" "01" "001" "rig" "liangcy" "fileName" "command_id"
+#"Pack" "Json路径" "command_id"
+#"Transit" "外包公司名" “外包公司邮箱”“command_id”
 # 客户端
 #'Render' '192.168.100.44|/FUY/999/003/Stuff/lgt/publish/fuy999003_lgt_wangcf_yuanBao_master|Render2|command_id'
 #"Folder" "192.168.1.85|/DHG/Dailies/20161214"
@@ -26,7 +28,7 @@ import sys,os
 from createProject import TronProject
 from client import clientLink
 from server_callback import callback
-from distribution import TronDistribute, delCloud
+from distribution import TronDistribute
 
 
 def _init_():
@@ -65,8 +67,7 @@ def _init_():
 		elif args[0] == "download":
 			clipData = args[1]+'|download'
 			clientLink(clipData)
-		elif args[0] == "DelCloud":
-			delCloud(args[1])
+
 	elif len(args) == 3:
 		if args[0] == "Project":
 			TronProject().CreatePro(args[1])  # createProject.CreatePro("Project","HAC","command_id")
@@ -89,6 +90,8 @@ def _init_():
 		elif args[0] == "Seq":  # createProject.CreateSeq("Seq","HAC","01","command_id")
 			TronProject().CreateSeq(args[1], args[2])
 			callback(args[3])
+		elif args[0] == "Transit":
+			TronDistribute(args[4]).putThread('transit', [args[1], args[2], args[3]])
 	elif len(args) == 5:
 		if args[0] == "Shot":   # "Shot" "HAC" "001" "001" "command_id"
 			TronProject().CreateScene(args[1], args[2], args[3])
