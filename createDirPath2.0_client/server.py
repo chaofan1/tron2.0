@@ -113,7 +113,8 @@ def handle(conn, localIP):
 				send_path = saveDailies.SelectDailies(serverName, filePath, fileName, command_id, UpTask)
 				conn.send(send_path)
 			elif platform.system() == 'Darwin':
-				serverName = "/Volumes/All"
+				# serverName = "/Volumes/All"
+				serverName = "/Volumes/UPLOADS"
 				send_path = saveDailies.SelectDailies(serverName, filePath, fileName, command_id, UpTask)
 				conn.send(send_path)
 
