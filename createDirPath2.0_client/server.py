@@ -137,6 +137,7 @@ def handle(conn, localIP):
 			if os.path.isdir(outputPath):
 				shutil.rmtree(outputPath)
 			os.popen("python //192.168.100.99/Public/tronPipelineScript/IlluminaConverter_v002/IlluminaConverter_v002.py %s" % fileNow).read()
+			# os.popen("python /Volumes/library/tron/IlluminaConverter_v002/IlluminaConverter_v002.py %s" % fileNow).read()
 			print outputPath
 			if os.path.isdir(outputPath):
 				shutil.copytree(outputPath, fileD)

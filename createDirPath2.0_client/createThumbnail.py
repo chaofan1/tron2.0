@@ -1,6 +1,6 @@
 #!/usr/bin/env python2.7
-#-*- coding: utf-8 -*-
-#创建视频的缩略图
+# -*- coding: utf-8 -*-
+# 创建视频的缩略图
 
 import cv2
 
