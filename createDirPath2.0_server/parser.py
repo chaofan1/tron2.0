@@ -1,13 +1,14 @@
 # !/usr/bin/env python2.7
 # -*- coding: utf-8 -*-
 # 服务器
-# "Project" "HAC" "command_id"
-# "Seq" "HAC" "01" "command_id"
-# "Shot" "HAC" "01" "001" "command_id"
-# "AssetTask" "HAC" "rig" "liangcy" "fileName" "command_id"
-# "ShotTask" "HAC" "01" "001" "rig" "liangcy" "fileName" "command_id"
-# "Pack" "Json路径" "command_id"
-# "Transit" "外包公司名" “外包公司邮箱”“command_id”
+#"Project" "HAC" "command_id"
+#"Seq" "HAC" "01" "command_id"
+#"Shot" "HAC" "01" "001" "command_id"
+#"AssetTask" "HAC" "rig" "liangcy" "fileName" "command_id"
+#"ShotTask" "HAC" "01" "001" "rig" "liangcy" "fileName" "command_id"
+#"Pack" "Json路径" "command_id"
+#"Transit" "json路径" “公司_项目_userid”“command_id”
+#"Del" "公司_项目_userid"
 # 客户端
 # 'Render' '192.168.100.44|/FUY/999/003/Stuff/lgt/publish/fuy999003_lgt_wangcf_yuanBao_master|Render2|command_id'
 # "Folder" "192.168.1.85|/DHG/Dailies/20161214"
@@ -67,7 +68,8 @@ def _init_():
 		elif args[0] == "download":
 			clipData = args[1]+'|download'
 			clientLink(clipData)
-
+		elif args[0] == "Del":
+			TronDistribute().Deldir(args[1])
 	elif len(args) == 3:
 		if args[0] == "Project":
 			TronProject().CreatePro(args[1])  # createProject.CreatePro("Project","HAC","command_id")
@@ -81,9 +83,8 @@ def _init_():
 			dailiesData = args[2]+"|Dailies2"
 			clientLink(dailiesData)
 		elif args[0] == "Pack":
-			TronDistribute(args[2]).argParse(args[1])
-		elif args[0] == "Transit":
-			TronDistribute(args[2]).putThread('transit', args[1])
+			TronDistribute().argParse(args[1])
+			callback(args[2])
 	elif len(args) == 4:
 		if args[0] == "Reference":    # "Reference" "HAC" "shots"  "192.168.1.85|x:/DHG/References/inner/fileName|373"
 			TronProject().CreateRef(args[1], args[2])
@@ -91,6 +92,9 @@ def _init_():
 			clientLink(referencesData)
 		elif args[0] == "Seq":  # createProject.CreateSeq("Seq","HAC","01","command_id")
 			TronProject().CreateSeq(args[1], args[2])
+			callback(args[3])
+		elif args[0] == "Transit":
+			TronDistribute().putThread('transit', args[1], args[2])
 			callback(args[3])
 	elif len(args) == 5:
 		if args[0] == "Shot":   # "Shot" "HAC" "001" "001" "command_id"
