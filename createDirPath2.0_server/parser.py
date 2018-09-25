@@ -1,5 +1,5 @@
-# !/usr/bin/env python2.7
-# -*- coding: utf-8 -*-
+#!/usr/bin/env python2.7
+#-*- coding: utf-8 -*-
 # 服务器
 #"Project" "HAC" "command_id"
 #"Seq" "HAC" "01" "command_id"
@@ -7,8 +7,8 @@
 #"AssetTask" "HAC" "rig" "liangcy" "fileName" "command_id"
 #"ShotTask" "HAC" "01" "001" "rig" "liangcy" "fileName" "command_id"
 #"Pack" "Json路径" "command_id"
-#"Transit" "json路径" “公司_项目_userid”“command_id”
-#"Del" "公司_项目_userid"
+#"Transit" "json路径" “公司_项目_主键id”“command_id”
+#"Del" "公司_项目_主键id"
 # 客户端
 # 'Render' '192.168.100.44|/FUY/999/003/Stuff/lgt/publish/fuy999003_lgt_wangcf_yuanBao_master|Render2|command_id'
 # "Folder" "192.168.1.85|/DHG/Dailies/20161214"
