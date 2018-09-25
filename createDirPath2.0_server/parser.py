@@ -1,5 +1,5 @@
-# !/usr/bin/env python2.7
-# -*- coding: utf-8 -*-
+#!/usr/bin/env python2.7
+#-*- coding: utf-8 -*-
 # 服务器
 #"Project" "HAC" "command_id"
 #"Seq" "HAC" "01" "command_id"
