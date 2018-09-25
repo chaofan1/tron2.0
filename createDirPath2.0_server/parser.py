@@ -1,27 +1,27 @@
-#!/usr/bin/env python2.7
-#-*- coding: utf-8 -*-
+# !/usr/bin/env python2.7
+# -*- coding: utf-8 -*-
 # 服务器
-#"Project" "HAC" "command_id"
-#"Seq" "HAC" "01" "command_id"
-#"Shot" "HAC" "01" "001" "command_id"
-#"AssetTask" "HAC" "rig" "liangcy" "fileName" "command_id"
-#"ShotTask" "HAC" "01" "001" "rig" "liangcy" "fileName" "command_id"
-#"Pack" "Json路径" "command_id"
-#"Transit" "外包公司名" “外包公司邮箱”“command_id”
+# "Project" "HAC" "command_id"
+# "Seq" "HAC" "01" "command_id"
+# "Shot" "HAC" "01" "001" "command_id"
+# "AssetTask" "HAC" "rig" "liangcy" "fileName" "command_id"
+# "ShotTask" "HAC" "01" "001" "rig" "liangcy" "fileName" "command_id"
+# "Pack" "Json路径" "command_id"
+# "Transit" "外包公司名" “外包公司邮箱”“command_id”
 # 客户端
-#'Render' '192.168.100.44|/FUY/999/003/Stuff/lgt/publish/fuy999003_lgt_wangcf_yuanBao_master|Render2|command_id'
-#"Folder" "192.168.1.85|/DHG/Dailies/20161214"
+# 'Render' '192.168.100.44|/FUY/999/003/Stuff/lgt/publish/fuy999003_lgt_wangcf_yuanBao_master|Render2|command_id'
+# "Folder" "192.168.1.85|/DHG/Dailies/20161214"
 # 服务器与客户端
-#old "Dailies2" "HAC" "fileName" "192.168.1.85|x:/DHG/Dailies/20161214|dhg01001_prd_liangcy_HFG_v0103|373"
-#new "Dailies1" "/FUY/001/001/stuff/cmp" "192.168.1.85|/FUY/001/001/stuff/cmp|ruy001004_cmp_xiecy_weqw_v0101|command_id"
+# old "Dailies2" "HAC" "fileName" "192.168.1.85|x:/DHG/Dailies/20161214|dhg01001_prd_liangcy_HFG_v0103|373"
+# new "Dailies1" "/FUY/001/001/stuff/cmp" "192.168.1.85|/FUY/001/001/stuff/cmp|ruy001004_cmp_xiecy_weqw_v0101|command_id"
 #    "Dailies2" "/FUY/001/001/stuff/cmp" "192.168.1.85|/FUY/001/001/stuff/cmp|filename|command_id"
-#"Reference" "HAC" "shots"  "192.168.1.85|x:/DHG/References/inner/fileName|373"
+# "Reference" "HAC" "shots"  "192.168.1.85|/RUY/assets|1537848665|5"
 # 剪辑线
-#'clip1' '127.0.0.1|HZG/001/work/note/2aa.xml|FUY/001/|7|60|20|44'
-#转码 'clip1' 'IP|user_id|path|项目id|场id|xml_id|command_id'
-#追加 'add_xml' 'IP|xml_path|path|项目id|场id|xml_id|command_id'
-#回插 'clip2' 'IP|video_path|img_path|time|rate|id|command_id'
-#打包 'clip3'  'IP|FUY/001|xml_path|command_id'
+# 'clip1' '127.0.0.1|HZG/001/work/note/2aa.xml|FUY/001/|7|60|20|44'
+# 转码 'clip1' 'IP|user_id|path|项目id|场id|xml_id|command_id'
+# 追加 'add_xml' 'IP|xml_path|path|项目id|场id|xml_id|command_id'
+# 回插 'clip2' 'IP|video_path|img_path|time|rate|id|command_id'
+# 打包 'clip3'  'IP|FUY/001|xml_path|command_id'
 
 
 import sys,os

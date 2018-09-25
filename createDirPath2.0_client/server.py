@@ -150,16 +150,16 @@ def handle(conn, localIP):
 			print filePath, fileName, command_id, UpTask
 			if platform.system() == 'Windows':
 				serverName = "L:/References"
-				send_path = saveReference.SelectReference(serverName, filePath, fileName, command_id, UpTask)
-				conn.send(send_path)
+				saveReference.SelectReference(serverName, filePath, fileName, command_id, UpTask)
+				# conn.send(send_path)
 			elif platform.system() == 'Linux':
 				serverName = "/library/References"
-				send_path = saveReference.SelectReference(serverName, filePath, fileName, command_id, UpTask)
-				conn.send(send_path)
+				saveReference.SelectReference(serverName, filePath, fileName, command_id, UpTask)
+				# conn.send(send_path)
 			elif platform.system() == 'Darwin':
 				serverName = "/Volumes/library/References"
-				send_path = saveReference.SelectReference(serverName, filePath, fileName, command_id, UpTask)
-				conn.send(send_path)
+				saveReference.SelectReference(serverName, filePath, fileName, command_id, UpTask)
+				# conn.send(send_path)
 			# chmod_path = chmod_server + "/" + send_path
 			# os.chmod(chmod_path, 0755)
 

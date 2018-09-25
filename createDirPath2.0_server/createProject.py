@@ -91,12 +91,14 @@ class TronProject:
                         os.chmod(refPath, 0777)
 
     def CreateDai(self, filePath):
-        daiPath = self.serverName + filePath + 'img'   # /Tron/FUY/001/001/stuff/cmp/img
-        daiPath2 = self.serverName + filePath + 'mov'
+        daiPath = self.serverName + filePath + '/img'   # /Tron/FUY/001/001/stuff/cmp/img
+        daiPath2 = self.serverName + filePath + '/mov'
+        print daiPath
         if not os.path.exists(daiPath):
             TronFolder().CreateFolder(daiPath, "0777", "")
         else:
             os.chmod(daiPath, 0777)
+            print 'already chmod daiPath'
         if not os.path.exists(daiPath2):
             TronFolder().CreateFolder(daiPath2, "0777", "")
         else:
