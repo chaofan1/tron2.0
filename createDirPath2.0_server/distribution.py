@@ -21,12 +21,18 @@ class TronDistribute:
     def __init__(self):
         self.pool = threadpool.ThreadPool(8)
         self.rpath = os.getcwd()
+        # if platform.system() == 'Windows':
+        #     self.outputPath = re.search(r'(.*)\tron', self.rpath).group(1) + '\tron\uploads\Outsource'
+        #     logging.basicConfig(filename=re.search(r'(.*)\tron', self.rpath).group(1) + '\tron\runtime\log\distribute_log\dis_' + time.strftime("%Y%m%d") + '.log', level=logging.INFO, format="%(asctime)s - %(levelname)s - %(message)s")
+        # else:
+        #     self.outputPath = re.search(r'(.*)/tron', self.rpath).group(1) + '/tron/uploads/Outsource'
+        #     logging.basicConfig(filename=re.search(r'(.*)/tron', self.rpath).group(1) + '/tron/runtime/log/distribute_log/dis_' + time.strftime("%Y%m%d") + '.log', level=logging.INFO, format="%(asctime)s - %(levelname)s - %(message)s")
         if platform.system() == 'Windows':
-            self.outputPath = re.search(r'(.*)\tron', self.rpath).group(1) + '\tron\uploads\Outsource'
-            logging.basicConfig(filename=re.search(r'(.*)\tron', self.rpath).group(1) + '\tron\runtime\log\distribute_log\dis_' + time.strftime("%Y%m%d") + '.log', level=logging.INFO, format="%(asctime)s - %(levelname)s - %(message)s")
+                self.outputPath = '\usr\local\Code\tron\uploads\Projects\Outsource'
+                logging.basicConfig(filename='\usr\local\Code\tron\runtime\log\distribute_log\dis_' + time.strftime("%Y%m%d") + '.log', level=logging.INFO, format="%(asctime)s - %(levelname)s - %(message)s")
         else:
-            self.outputPath = re.search(r'(.*)/tron', self.rpath).group(1) + '/tron/uploads/Outsource'
-            logging.basicConfig(filename=re.search(r'(.*)/tron', self.rpath).group(1) + '/tron/runtime/log/distribute_log/dis_' + time.strftime("%Y%m%d") + '.log', level=logging.INFO, format="%(asctime)s - %(levelname)s - %(message)s")
+                self.outputPath = '/usr/local/Code/tron/uploads/Projects/Outsource'
+                logging.basicConfig(filename='/usr/local/Code/tron/runtime/log/distribute_log/dis_' + time.strftime("%Y%m%d") + '.log', level=logging.INFO, format="%(asctime)s - %(levelname)s - %(message)s")
 
     def argParse(self, filePath):
         self.filePath = filePath
@@ -294,7 +300,6 @@ class TronDistribute:
         res1, res2 = res
         if res1:
             raise Finish
-
 
 
 if __name__ == "__main__":
