@@ -2,10 +2,10 @@
 import xml.etree.cElementTree as et
 from urllib import unquote
 import os
-from multiprocessing import Manager,Pool,Queue,Process
+from multiprocessing import Manager,Pool
 import subprocess
 import pymysql
-import urllib,urllib2
+import urllib, urllib2
 import time
 import re
 

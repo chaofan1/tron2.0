@@ -246,7 +246,7 @@ def myServer():
 	s.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
 	s.bind((HOST, PORT))
 	print "waiting for connection ......"
-	s.listen(10)
+	s.listen(5)
 	while 1:
 		conn, addr = s.accept()
 		print "connected form ....", addr
