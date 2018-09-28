@@ -1,9 +1,9 @@
 #!/usr/bin/env python2.7
-#-*- coding: utf-8 -*-
+# -*- coding: utf-8 -*-
 
-#转码 'clip1' 'IP|xml_path|path|项目id|场id|xml_id|command_id|clip1' 7
-#回插 'clip2' 'IP|video_path|img_path|frame|width|height|id|command_id|clip2' 8
-#打包 'clip3'  'IP|FUY/001|xml_path|command_id|clip3'  5
+# 转码 'clip1' 'IP|xml_path|path|项目id|场id|xml_id|command_id|clip1' 7
+# 回插 'clip2' 'IP|video_path|img_path|frame|width|height|id|command_id|clip2' 8
+# 打包 'clip3'  'IP|FUY/001|xml_path|command_id|clip3'  5
 
 import shutil, socket, httpUrl, platform
 from multiprocessing import Process
