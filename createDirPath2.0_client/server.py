@@ -251,6 +251,11 @@ def myServer():
 		conn, addr = s.accept()
 		print "connected form ....", addr
 		# 实现并发的三种方式：多进程、多线程、协程
+		# 多进程的报错：Mac 10.13 objc[72931]: +[__NSPlaceholderDate initialize] may have been in progress in another thread when fork() was called.
+		# QtCore与多进程无法同时使用，会导致程序意外退出；
+		# windows的socket无法用多进程，因为无法被序列化；
+		# 多线程与协程：虽然可以实现socket的并发，但QT库的UI界面只能在主线程运行，无法并发，想要并发只能用内部的QThread；
+		# 所以Mac与windows无法实现socket的并发
 		if platform.system() == 'Linux':
 			p = Process(target=handle, args=(conn, localIP))
 			p.start()
