@@ -27,9 +27,9 @@ class TronDistribute:
         # else:
         #     self.outputPath = re.search(r'(.*)/tron', self.rpath).group(1) + '/tron/uploads/Outsource'
         #     logging.basicConfig(filename=re.search(r'(.*)/tron', self.rpath).group(1) + '/tron/runtime/log/distribute_log/dis_' + time.strftime("%Y%m%d") + '.log', level=logging.INFO, format="%(asctime)s - %(levelname)s - %(message)s")
-        self.outputPath = '\usr\local\Code\tron\uploads\Projects\Outsource'  # 存放外包公司目录的位置
+        self.outputPath = '/usr/local/Code/tron/uploads/Projects/Outsource'  # 存放外包公司目录的位置
         # 日志位置
-        logging.basicConfig(filename='\usr\local\Code\tron\runtime\log\distribute_log\dis_' +
+        logging.basicConfig(filename='/usr/local/Code/tron/runtime/log/distribute_log/dis_' +
                                      time.strftime("%Y%m%d") + '.log', level=logging.INFO, format="%(asctime)s - %(levelname)s - %(message)s")
 
     # 解析php传来的json文件，filePath为json路径
