@@ -19,21 +19,20 @@ class Finish(SyntaxWarning):
 
 class TronDistribute:
     def __init__(self):
-        self.pool = threadpool.ThreadPool(8)
-        self.rpath = os.getcwd()
+        self.pool = threadpool.ThreadPool(8)  # 创建线程池
+        # self.rpath = os.getcwd()
         # if platform.system() == 'Windows':
         #     self.outputPath = re.search(r'(.*)\tron', self.rpath).group(1) + '\tron\uploads\Outsource'
         #     logging.basicConfig(filename=re.search(r'(.*)\tron', self.rpath).group(1) + '\tron\runtime\log\distribute_log\dis_' + time.strftime("%Y%m%d") + '.log', level=logging.INFO, format="%(asctime)s - %(levelname)s - %(message)s")
         # else:
         #     self.outputPath = re.search(r'(.*)/tron', self.rpath).group(1) + '/tron/uploads/Outsource'
         #     logging.basicConfig(filename=re.search(r'(.*)/tron', self.rpath).group(1) + '/tron/runtime/log/distribute_log/dis_' + time.strftime("%Y%m%d") + '.log', level=logging.INFO, format="%(asctime)s - %(levelname)s - %(message)s")
-        if platform.system() == 'Windows':
-                self.outputPath = '\usr\local\Code\tron\uploads\Projects\Outsource'
-                logging.basicConfig(filename='\usr\local\Code\tron\runtime\log\distribute_log\dis_' + time.strftime("%Y%m%d") + '.log', level=logging.INFO, format="%(asctime)s - %(levelname)s - %(message)s")
-        else:
-                self.outputPath = '/usr/local/Code/tron/uploads/Projects/Outsource'
-                logging.basicConfig(filename='/usr/local/Code/tron/runtime/log/distribute_log/dis_' + time.strftime("%Y%m%d") + '.log', level=logging.INFO, format="%(asctime)s - %(levelname)s - %(message)s")
+        self.outputPath = '\usr\local\Code\tron\uploads\Projects\Outsource'  # 存放外包公司目录的位置
+        # 日志位置
+        logging.basicConfig(filename='\usr\local\Code\tron\runtime\log\distribute_log\dis_' +
+                                     time.strftime("%Y%m%d") + '.log', level=logging.INFO, format="%(asctime)s - %(levelname)s - %(message)s")
 
+    # 解析php传来的json文件，filePath为json路径
     def argParse(self, filePath):
         self.filePath = filePath
         self.progectName, self.userid, self.timeStamp = os.path.splitext(os.path.basename(filePath))[0].split('_')
@@ -76,8 +75,8 @@ class TronDistribute:
                 if not os.path.exists(referencesDir):
                     os.makedirs(referencesDir)
                 Paths.append(((referencesDir, referencesList), None))
-
             logging.info('打开文件，解析参数成功' + self.filePath )
+            # 将列表放到线程池，去copy文件
             self.putThread('copy', Paths)
         except Exception as e:
             logging.info('打开文件,解析参数出错')
@@ -91,7 +90,7 @@ class TronDistribute:
             [self.pool.putRequest(req) for req in requests]
             try:
                 self.pool.wait()
-                # os.remove(self.filePath) # 测试或上线打开，拷贝完文件，删除json文件
+                # os.remove(self.filePath) # 测试或上线打开，拷贝完，删除json文件
             except Exception as e:
                 pass
         # 暂时用不上
