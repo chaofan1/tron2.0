@@ -250,7 +250,8 @@ def myServer():
 	while 1:
 		conn, addr = s.accept()
 		print "connected form ....", addr
-		if platform.system() != 'Windows':
+		# 实现并发的三种方式：多进程、多线程、协程
+		if platform.system() == 'Linux':
 			p = Process(target=handle, args=(conn, localIP))
 			p.start()
 			conn.close()
