@@ -72,19 +72,18 @@ def insert_data(sql_data):
     db_name = 'new_tron'
     table_name = 'oa_references'
 
-    sql_data = dict(sql_data)
-    if len(sql_data) is '13':
-        file_name = sql_data.get('file_name')
-        resource_type = sql_data.get('resource_type')
-        project_id = sql_data.get('project_id')
-        field_id = sql_data.get('field_id')
-        resource_id = sql_data.get('resource_id')
-        tache_info = sql_data.get('tache_info')
-        path = sql_data.get('path')
-        directory = sql_data.get('directory')
-        user_id = sql_data.get('user_id')
-        create_year = sql_data.get('create_year')
-        create_time = sql_data.get('create_time')
+    sql_data = eval(sql_data)
+    file_name = sql_data.get('file_name')
+    resource_type = int(sql_data.get('resource_type'))
+    project_id = int(sql_data.get('project_id'))
+    field_id = int(sql_data.get('field_id'))
+    resource_id = int(sql_data.get('resource_id'))
+    tache_info = sql_data.get('tache_info')
+    path = sql_data.get('path')
+    directory = sql_data.get('directory')
+    user_id = int(sql_data.get('user_id'))
+    create_year = int(sql_data.get('create_year'))
+    create_time = int(sql_data.get('create_time'))
 
     try:
         conn = pymysql.connect(ip, user_name, passwd, db_name, charset='utf8', use_unicode=True)
@@ -92,12 +91,20 @@ def insert_data(sql_data):
         print('connect fail')
     else:
         cursor = conn.cursor()
-        insert_sql = "insert ignore into %s(file_name,resource_type,project_id,field_id,resource_id," \
+        insert_sql = "insert ignore into oa_references(file_name,resource_type,project_id,field_id,resource_id," \
                      "tache_info,path,directory,user_id,create_year,create_time) " \
-                     "VALUES(%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)" % table_name
+                     "VALUES(%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)"
         cursor.execute(insert_sql, (file_name,resource_type,project_id,field_id,resource_id,
                                     tache_info,path,directory,user_id,create_year,create_time))
         conn.commit()
         cursor.close()
         conn.close()
+
+
+if __name__ == '__main__':
+    sql_data = '{"file_name":"1538217282","resource_type":"2","project_id":1,"field_id":33,' \
+               '"resource_id":176,"tache_info":"21,16,18,14,26",' \
+               '"path":"\/FUY\/shots","directory":"shots","user_id":1,"create_year":"2018",' \
+               '"create_time":1538217282}'
+    insert_data(sql_data)
 
