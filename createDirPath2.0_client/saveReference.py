@@ -34,14 +34,14 @@ def SelectReference(serverName, filePath, fileName, fileID, UpTask, sql_data):
         if os.path.exists(file_copy_path):
             if fileType == "mov" or fileType == "avi" or fileType == "mp4":
                 createThumbnail.run(fileNow, (serverName+filePath))
-                # httpUrl.toHttpask(fileID, filePath, fileNow, UpTask, "")
+                httpUrl.toHttpask(fileID, filePath, fileNow, UpTask, "")
                 insert_data(sql_data)
                 QtGui.QMessageBox.information(None, 'INFORMATION', u'提交成功！', QtCore.QString('OK'))
             elif fileType == "jpg" or fileType == "jpeg" or fileType == "png" or fileType == "tiff" or fileType == "tga":
                 img = cv2.imread(file_copy_path)
                 thumbnail_img = serverName + filePath + sep + '.' + fileNow
                 cv2.imwrite(thumbnail_img, img, [int(cv2.IMWRITE_JPEG_QUALITY), 40])
-                # httpUrl.toHttpask(fileID, filePath, fileNow, UpTask, "")
+                httpUrl.toHttpask(fileID, filePath, fileNow, UpTask, "")
                 insert_data(sql_data)
                 QtGui.QMessageBox.information(None, 'INFORMATION', u'提交成功！', QtCore.QString('OK'))
             return
