@@ -16,9 +16,9 @@ def toHttpask(ID, path, fileName, UpTask, imgSize):
     encoded_args = urllib.urlencode(query_args)
     url = ""
     if UpTask == "Dailies1" or UpTask == "Dailies2":
-        url = 'http://192.168.1.117/index.php/Home/python/updatafile'
+        url = 'http://192.168.1.117/callback/dailies'
     elif UpTask == "References":
-        url = 'http://192.168.1.117/index.php/Home/reference/updataFileName'
+        url = 'http://192.168.1.117/callback/reference'
     print urllib2.urlopen(url, encoded_args).read()
 
 

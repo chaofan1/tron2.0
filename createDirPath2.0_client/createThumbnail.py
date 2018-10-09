@@ -7,7 +7,7 @@ import cv2
 
 def run(fileName, filePath):  # filename.mov, /Volumes/UPLOADS/FUY/stuff/dmt/mov/filename
     thumbPicName = fileName.split(".")[0] + ".jpg"   # filename.jpg
-    img_path = filePath+"/"+thumbPicName
+    img_path = filePath+"/."+thumbPicName
     video_path = filePath+"/"+fileName
     video = cv2.VideoCapture(video_path)
     if video.isOpened():

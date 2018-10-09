@@ -33,7 +33,7 @@ def SelectDailies(serverName, filePath, fileName, command_id, UpTask):
         elif fileType == "jpg" or fileType == "jpeg" or fileType == "png" or fileType == "tiff" or fileType == "tga":
             filePath = os.path.join(filePath, 'img')
 
-        file_copy_path = serverName + filePath + sep + fileName  # /Volumes/UPLOADS/FUY/stuff/dmt/mov/filename
+        file_copy_path = serverName + filePath + sep + fileName  # /Volumes/All/FUY/stuff/dmt/mov/filename
         if not os.path.exists(file_copy_path):
             os.makedirs(file_copy_path)
         file_abspath = file_copy_path + sep + fileNow
