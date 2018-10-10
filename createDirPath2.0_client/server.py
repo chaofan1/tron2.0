@@ -146,19 +146,19 @@ def handle(conn, localIP):
 			conn.send(filePath + "/" + fileName)
 
 		elif data.endswith("Reference"):
-			filePath, fileName, sql_data, command_id, UpTask = data_split
-			print filePath, fileName, command_id, UpTask
+			filePath, fileName, sql_data, UpTask = data_split
+			print filePath, fileName, UpTask
 			if platform.system() == 'Windows':
 				serverName = "L:/References"
-				saveReference.SelectReference(serverName, filePath, fileName, command_id, UpTask, sql_data)
+				saveReference.SelectReference(serverName, filePath, fileName, sql_data)
 				# conn.send(send_path)
 			elif platform.system() == 'Linux':
 				serverName = "/library/References"
-				saveReference.SelectReference(serverName, filePath, fileName, command_id, UpTask, sql_data)
+				saveReference.SelectReference(serverName, filePath, fileName, sql_data)
 				# conn.send(send_path)
 			elif platform.system() == 'Darwin':
 				serverName = "/Volumes/library/References"
-				saveReference.SelectReference(serverName, filePath, fileName, command_id, UpTask, sql_data)
+				saveReference.SelectReference(serverName, filePath, fileName, sql_data)
 				# conn.send(send_path)
 			# chmod_path = chmod_server + "/" + send_path
 			# os.chmod(chmod_path, 0755)
