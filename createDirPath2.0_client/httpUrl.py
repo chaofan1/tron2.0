@@ -17,7 +17,7 @@ def toHttpask(ID, path, fileName, UpTask, imgSize):
     url = ""
     if UpTask == "Dailies1" or UpTask == "Dailies2":
         url = 'http://192.168.1.117/callback/dailies'
-    elif UpTask == "References":
+    elif UpTask == "Reference":
         url = 'http://192.168.1.117/callback/reference'
     print urllib2.urlopen(url, encoded_args).read()
 
