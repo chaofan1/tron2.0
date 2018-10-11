@@ -36,7 +36,7 @@ def SelectReference(serverName, filePath, fileName, sql_data):
                 createThumbnail.run(fileNow, (serverName+filePath))
                 # httpUrl.toHttpask(fileID, filePath, fileNow, UpTask, "")
                 file_type = 1
-                thumbnail = '/.' + fileName + ".jpg"  # 缩略图路径
+                thumbnail = '.' + fileName + ".jpg"  # 缩略图路径
                 print thumbnail
                 insert_data(sql_data, file_type, thumbnail)
                 QtGui.QMessageBox.information(None, 'INFORMATION', u'提交成功！', QtCore.QString('OK'))
