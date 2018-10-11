@@ -35,14 +35,20 @@ def SelectReference(serverName, filePath, fileName, sql_data):
             if fileType == "mov" or fileType == "avi" or fileType == "mp4":
                 createThumbnail.run(fileNow, (serverName+filePath))
                 # httpUrl.toHttpask(fileID, filePath, fileNow, UpTask, "")
-                insert_data(sql_data)
+                file_type = 1
+                thumbnail = '/.' + fileName + ".jpg"  # 缩略图路径
+                print thumbnail
+                insert_data(sql_data, file_type, thumbnail)
                 QtGui.QMessageBox.information(None, 'INFORMATION', u'提交成功！', QtCore.QString('OK'))
             elif fileType == "jpg" or fileType == "jpeg" or fileType == "png" or fileType == "tiff" or fileType == "tga":
                 img = cv2.imread(file_copy_path)
                 thumbnail_img = serverName + filePath + sep + '.' + fileNow
                 cv2.imwrite(thumbnail_img, img, [int(cv2.IMWRITE_JPEG_QUALITY), 40])
                 # httpUrl.toHttpask(fileID, filePath, fileNow, UpTask, "")
-                insert_data(sql_data)
+                file_type = 2
+                thumbnail = '.' + fileNow
+                print thumbnail
+                insert_data(sql_data, file_type, thumbnail)
                 QtGui.QMessageBox.information(None, 'INFORMATION', u'提交成功！', QtCore.QString('OK'))
             return
         else:
@@ -53,7 +59,7 @@ def SelectReference(serverName, filePath, fileName, sql_data):
     sys.exit(app.exec_())
 
 
-def insert_data(sql_data):
+def insert_data(sql_data, file_type, thumbnail):
     # {"file_name":"1538217282",     string
     # "resource_type":"2",
     # "project_id":1,
@@ -85,6 +91,8 @@ def insert_data(sql_data):
     create_year = int(sql_data.get('create_year'))
     create_time = int(sql_data.get('create_time'))
 
+    submit_status = 2
+
     try:
         conn = pymysql.connect(ip, user_name, passwd, db_name, charset='utf8', use_unicode=True)
     except:
@@ -92,10 +100,11 @@ def insert_data(sql_data):
     else:
         cursor = conn.cursor()
         insert_sql = "insert ignore into oa_references(file_name,resource_type,project_id,field_id,resource_id," \
-                     "tache_info,path,directory,user_id,create_year,create_time) " \
-                     "VALUES(%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)"
+                     "tache_info,path,directory,user_id,create_year,create_time,thumbnail,submit_status, file_type) " \
+                     "VALUES(%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)"
         cursor.execute(insert_sql, (file_name,resource_type,project_id,field_id,resource_id,
-                                    tache_info,path,directory,user_id,create_year,create_time))
+                                    tache_info,path,directory,user_id,create_year,create_time,
+                                    thumbnail,submit_status, file_type))
         conn.commit()
         cursor.close()
         conn.close()
