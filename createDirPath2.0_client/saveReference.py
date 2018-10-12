@@ -38,7 +38,7 @@ def SelectReference(serverName, filePath, fileName, sql_data):
                 file_type = 1
                 thumbnail = '.' + fileName + ".jpg"  # 缩略图路径
                 print thumbnail
-                insert_data(sql_data, file_type, thumbnail)
+                insert_data(sql_data, file_type, thumbnail, fileType)
                 QtGui.QMessageBox.information(None, 'INFORMATION', u'提交成功！', QtCore.QString('OK'))
             elif fileType == "jpg" or fileType == "jpeg" or fileType == "png" or fileType == "tiff" or fileType == "tga":
                 img = cv2.imread(file_copy_path)
@@ -48,7 +48,7 @@ def SelectReference(serverName, filePath, fileName, sql_data):
                 file_type = 2
                 thumbnail = '.' + fileNow
                 print thumbnail
-                insert_data(sql_data, file_type, thumbnail)
+                insert_data(sql_data, file_type, thumbnail, fileType)
                 QtGui.QMessageBox.information(None, 'INFORMATION', u'提交成功！', QtCore.QString('OK'))
             return
         else:
@@ -59,7 +59,7 @@ def SelectReference(serverName, filePath, fileName, sql_data):
     sys.exit(app.exec_())
 
 
-def insert_data(sql_data, file_type, thumbnail):
+def insert_data(sql_data, file_type, thumbnail, fileType):
     # {"file_name":"1538217282",     string
     # "resource_type":"2",
     # "project_id":1,
@@ -79,7 +79,7 @@ def insert_data(sql_data, file_type, thumbnail):
     table_name = 'oa_references'
 
     sql_data = eval(sql_data)
-    file_name = sql_data.get('file_name')
+    file_name = sql_data.get('file_name')+'.'+fileType
     resource_type = int(sql_data.get('resource_type'))
     project_id = int(sql_data.get('project_id'))
     field_id = int(sql_data.get('field_id'))
