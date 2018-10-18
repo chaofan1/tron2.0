@@ -37,10 +37,10 @@ def write_sql(info, shot_video_path, shot_image, shot_number):
         material_frame_length = info.get('material_frame_length')   # 素材帧长
         time_start = info.get('time_start')  # 开始时间
         duration = info.get('duration')   # 持续时间
-        shot_video_path = re.search(r'.*(UPLOADS.*)', shot_video_path).group(1)
-        shot_image = re.search(r'.*(UPLOADS.*)', shot_image).group(1)
-        shot_video_path = shot_video_path.replace('UPLOADS', 'uploads/Projects')
-        shot_image = shot_image.replace('UPLOADS', 'uploads/Projects')
+        shot_video_path = re.search(r'.*(All.*)', shot_video_path).group(1)
+        shot_image = re.search(r'.*(All.*)', shot_image).group(1)
+        shot_video_path = shot_video_path.replace('All', 'uploads/Projects')
+        shot_image = shot_image.replace('All', 'uploads/Projects')
 
         width = info.get('width')  # char
         height = info.get('height')

@@ -170,7 +170,7 @@ def handle(conn, localIP):
 			start_clip(xml_path, user_path, project_id, field_id, xml_id, UpTask)
 			to_php(1, 0, project_id, field_id, xml_id, UpTask)
 			# httpUrl.render_callback(command_id)
-			os.remove(xml_path)
+			#os.remove(xml_path)
 			conn.send(path)
 			print('clip1 end')
 
