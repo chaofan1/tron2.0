@@ -10,6 +10,7 @@ import os
 def clientLink(data):
     args = data.split("|")
     clientIP = args[0]
+    xml_path = args[1]
     task = args[-1]
     senStr = '|'.join(args[1:])
     filePath = ""
@@ -41,6 +42,8 @@ def clientLink(data):
                     for i in ch_li:
                         os.chmod(ser_recv_path+'/'+i, 0555)
                     os.chmod(ser_recv_path, 0555)
+                    xml_path = serverName + xml_path
+                    os.remove(xml_path)
                 print serverName+filePath+'/mov'
         s.close()
         print('client close')
