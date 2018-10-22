@@ -165,8 +165,8 @@ def handle(conn, localIP):
 
 		elif data.endswith('clip1'):  # 转码
 			xml_path, path, project_id, field_id, xml_id, command_id, UpTask = data_split
-			xml_path = '/Volumes/UPLOADS/' + xml_path
-			user_path = '/Volumes/UPLOADS/' + path
+			xml_path = '/Volumes/All/' + xml_path
+			user_path = '/Volumes/All/' + path
 			start_clip(xml_path, user_path, project_id, field_id, xml_id, UpTask)
 			to_php(1, 0, project_id, field_id, xml_id, UpTask)
 			# httpUrl.render_callback(command_id)
@@ -176,7 +176,8 @@ def handle(conn, localIP):
 
 		elif data.endswith('add_xml'):
 			xml_path, path, project_id, field_id, xml_id, command_id, UpTask = data_split
-			path = '/Volumes/UPLOADS/' + path
+			xml_path = '/Volumes/All/' + xml_path
+			path = '/Volumes/All/' + path
 			start_clip(xml_path, path, project_id, field_id, xml_id, UpTask)
 			conn.send(path)
 			# httpUrl.render_callback(command_id)
