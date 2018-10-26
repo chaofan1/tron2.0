@@ -135,9 +135,14 @@ def putter(task_queue, xml_path, project_id, field_id, data, path, task):
             except Exception as e:
                 print(e)
             else:
-                if pathurl.endswith('mov'):
+                postfix = pathurl.split('.')[-1]
+                postfix_sets = {'mov','dpx'}
+                if postfix in postfix_sets:
                     if pathurl.startswith('file://localhost'):
                         pathurl = pathurl.replace('file://localhost', '')
+                    elif pathurl.startswith('file:///Volumes'):
+                        pathurl = pathurl.replace('file://', '')
+
                     if os.path.exists(pathurl):
                         start = i.find('start').text
                         end = i.find('end').text
