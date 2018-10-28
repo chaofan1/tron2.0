@@ -136,7 +136,7 @@ def putter(task_queue, xml_path, project_id, field_id, data, path, task):
                 print(e)
             else:
                 postfix = pathurl.split('.')[-1]
-                postfix_sets = {'mov','dpx'}
+                postfix_sets = {'mov','dpx','exr'}
                 if postfix in postfix_sets:
                     if pathurl.startswith('file://localhost'):
                         pathurl = pathurl.replace('file://localhost', '')
