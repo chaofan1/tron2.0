@@ -123,20 +123,15 @@ def putter(task_queue, xml_path, project_id, field_id, data, path, task):
     tree = et.ElementTree(file=xml_path)
     number = 1
     time_node = 0
-    try:
+    if tree.findall('.//clipitem'):
         clipitems = tree.findall('.//clipitem')
-    except Exception as e:
-        print(e)
-    else:
         for i in clipitems:
             info = {}
-            try:
-                pathurl = i.find('.//pathurl').text
-            except Exception as e:
-                print(e)
-            else:
+            if i.findall('.//pathurl'):
+                pathurl = i.findall('.//pathurl')[0].text
                 postfix = pathurl.split('.')[-1]
-                postfix_sets = {'mov','dpx','exr'}
+
+                postfix_sets = {'mov', 'dpx', 'exr'}
                 if postfix in postfix_sets:
                     if pathurl.startswith('file://localhost'):
                         pathurl = pathurl.replace('file://localhost', '')
@@ -146,8 +141,12 @@ def putter(task_queue, xml_path, project_id, field_id, data, path, task):
                     if os.path.exists(pathurl):
                         start = i.find('start').text
                         end = i.find('end').text
-                        width = i.find('.//width').text
-                        height = i.find('.//height').text
+
+                        width, height, rate, clip_frame_length = ''
+                        if i.findall('.//width'):
+                            width = i.findall('.//width')[0].text
+                        if i.findall('.//height'):
+                            height = i.findall('.//height')[0].text
                         info['width'] = width
                         info['height'] = height
                         material_frame_length = int(end)-int(start)
@@ -157,14 +156,16 @@ def putter(task_queue, xml_path, project_id, field_id, data, path, task):
                             material_number = pathurl.split('_')[1]
                         pathurl = unquote(pathurl)
                         # 持续时间
-                        rate = i.find('.//timebase').text
-                        clip_frame_length = i.find('duration').text   # 镜头帧长=剪辑帧长
+                        if i.findall('.//timebase'):
+                            rate = i.findall('.//timebase')[0].text
+                        if i.findall('.//duration'):
+                            clip_frame_length = i.findall('duration')[0].text   # 镜头帧长=剪辑帧长
+
                         duration = int(round(float(clip_frame_length) / float(rate)))
                         time_start = time_node
                         time_node += duration
                         info['time_start'] = time_start  # 开始时间
                         info['duration'] = duration   # 持续时间
-
                         info['pathurl'] = pathurl       # 本地视频地址
                         info['project_id'] = project_id  # 所属项目ID
                         info['field_id'] = field_id     # 场号ID
@@ -173,11 +174,8 @@ def putter(task_queue, xml_path, project_id, field_id, data, path, task):
                         info['material_number'] = material_number  # 素材号
                         info['create_time'] = int(time.time())     # 创建时间
                         info['change_speed_info'] = ''  # 变速信息
-                        try:
-                            change_speed_info = i.find('.//parameter/value').text
-                        except:
-                            pass
-                        else:
+                        if i.findall('.//parameter/value'):
+                            change_speed_info = i.findall('.//parameter/value')[0].text
                             info['change_speed_info'] = change_speed_info  # 变速信息
                         info['material_frame_length'] = material_frame_length   # 素材帧长
                         shot_number = str('%03d' % number)
@@ -186,7 +184,7 @@ def putter(task_queue, xml_path, project_id, field_id, data, path, task):
                         info['shot_number'] = shot_number
 
                         # 追加xml,根据镜头帧长和帧数范围判断视频是否经过修改,若涉及中间插入,文件夹依次加1,镜头号发生变化,数据库要相应更新
-                        if task == 'add_xml' and (clip_frame_length,frame_range) not in data:
+                        if task == 'add_xml' and (clip_frame_length, frame_range) not in data:
                             if os.path.exists(dirname) and os.listdir(dirname):
                                 file_li = sorted([i for i in os.listdir(path) if not i.startswith('.')])
                                 ind = file_li.index(shot_number)
