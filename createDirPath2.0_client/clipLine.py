@@ -131,12 +131,14 @@ def putter(task_queue, xml_path, project_id, field_id, data, path, task):
     tree = et.ElementTree(file=xml_path)
     number = 1
     time_node = 0
-    if tree.findall('.//clipitem'):
-        clipitems = tree.findall('.//clipitem')
+    clipitems = tree.findall('.//clipitem')
+    if clipitems:
+        # clipitems = tree.findall('.//clipitem')
         for i in clipitems:
             info = {}
-            if i.findall('.//pathurl'):
-                pathurl = i.findall('.//pathurl')[0].text
+            pathurl = i.findall('.//pathurl')
+            if pathurl:
+                pathurl = pathurl[0].text
                 postfix = pathurl.split('.')[-1]
 
                 postfix_sets = {'mov', 'dpx', 'exr'}
@@ -146,16 +148,16 @@ def putter(task_queue, xml_path, project_id, field_id, data, path, task):
                     elif pathurl.startswith('file:///Volumes'):
                         pathurl = pathurl.replace('file://', '')
 
-                    # if os.path.exists(pathurl):
-                    # if 1:
                     start = i.find('start').text
                     end = i.find('end').text
 
                     width = height = rate = clip_frame_length = change_speed_info = ''
-                    if i.findall('.//width'):
-                        width = i.findall('.//width')[0].text
-                    if i.findall('.//height'):
-                        height = i.findall('.//height')[0].text
+                    width_list = i.findall('.//width')
+                    height_list = i.findall('.//height')
+                    if width_list:
+                        width = width_list[0].text
+                    if height_list:
+                        height = height_list[0].text
 
                     material_frame_length = int(end)-int(start)
                     frame_range = start+','+end
@@ -164,12 +166,17 @@ def putter(task_queue, xml_path, project_id, field_id, data, path, task):
                         material_number = pathurl.split('_')[1]
                     pathurl = unquote(pathurl)
                     # 持续时间
-                    if i.findall('.//timebase'):
-                        rate = i.findall('.//timebase')[0].text
-                    if i.findall('.//duration'):
-                        clip_frame_length = i.findall('duration')[0].text   # 镜头帧长=剪辑帧长
-                    if i.findall('.//parameter/value'):
-                        change_speed_info = i.findall('.//parameter/value')[0].text  # 变速信息
+                    rate_list = i.findall('.//timebase')
+                    if rate_list:
+                        rate = rate_list[0].text
+
+                    duration_list = i.findall('.//duration')
+                    if duration_list:
+                        clip_frame_length = duration_list[0].text   # 镜头帧长=剪辑帧长
+
+                    speed_list = i.findall('.//parameter/value')
+                    if speed_list:
+                        change_speed_info = speed_list[0].text  # 变速信息
 
                     duration = int(round(float(clip_frame_length) / float(rate)))
                     time_start = time_node
