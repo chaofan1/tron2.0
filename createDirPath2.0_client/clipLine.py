@@ -17,6 +17,13 @@ db_name = 'new_tron'
 table_name = 'oa_shot'
 to_php_url = 'http://192.168.1.117/clips/set_progress'
 
+# ip = '192.168.100.49'
+# user_name = 'root'
+# passwd = 'king9188YJQ@'
+# db_name = 'new_tron'
+# table_name = 'oa_shot'
+# to_php_url = 'http://192.168.100.49/clips/set_progress'
+
 
 def write_sql(info, shot_video_path, shot_image, shot_number):
     # 002、将数据(镜头帧长,范围,缩略图路径......)写入数据库
@@ -100,6 +107,7 @@ def getter(task_queue, queue_len, xml_id, task):
 
         # 视频转码
         pathurl = info['pathurl']
+        rate = info['rate']
         video_name = pathurl.split('/')[-1]
         video_path = os.path.join(dirname,video_name)
         transcode_command = 'ffmpeg -i %s -loglevel -8 -c:v libx264 -y -g 2 -keyint_min 2 %s'%(pathurl,video_path)
@@ -138,98 +146,100 @@ def putter(task_queue, xml_path, project_id, field_id, data, path, task):
                     elif pathurl.startswith('file:///Volumes'):
                         pathurl = pathurl.replace('file://', '')
 
-                    if os.path.exists(pathurl):
-                        start = i.find('start').text
-                        end = i.find('end').text
+                    # if os.path.exists(pathurl):
+                    # if 1:
+                    start = i.find('start').text
+                    end = i.find('end').text
 
-                        width, height, rate, clip_frame_length = ''
-                        if i.findall('.//width'):
-                            width = i.findall('.//width')[0].text
-                        if i.findall('.//height'):
-                            height = i.findall('.//height')[0].text
-                        info['width'] = width
-                        info['height'] = height
-                        material_frame_length = int(end)-int(start)
-                        frame_range = start+','+end
-                        material_number = ''
-                        if '_' in pathurl:
-                            material_number = pathurl.split('_')[1]
-                        pathurl = unquote(pathurl)
-                        # 持续时间
-                        if i.findall('.//timebase'):
-                            rate = i.findall('.//timebase')[0].text
-                        if i.findall('.//duration'):
-                            clip_frame_length = i.findall('duration')[0].text   # 镜头帧长=剪辑帧长
+                    width = height = rate = clip_frame_length = change_speed_info = ''
+                    if i.findall('.//width'):
+                        width = i.findall('.//width')[0].text
+                    if i.findall('.//height'):
+                        height = i.findall('.//height')[0].text
 
-                        duration = int(round(float(clip_frame_length) / float(rate)))
-                        time_start = time_node
-                        time_node += duration
-                        info['time_start'] = time_start  # 开始时间
-                        info['duration'] = duration   # 持续时间
-                        info['pathurl'] = pathurl       # 本地视频地址
-                        info['project_id'] = project_id  # 所属项目ID
-                        info['field_id'] = field_id     # 场号ID
-                        info['clip_frame_length'] = clip_frame_length    # 镜头帧长=剪辑帧长
-                        info['frame_range'] = frame_range              # 帧数范围
-                        info['material_number'] = material_number  # 素材号
-                        info['create_time'] = int(time.time())     # 创建时间
-                        info['change_speed_info'] = ''  # 变速信息
-                        if i.findall('.//parameter/value'):
-                            change_speed_info = i.findall('.//parameter/value')[0].text
-                            info['change_speed_info'] = change_speed_info  # 变速信息
-                        info['material_frame_length'] = material_frame_length   # 素材帧长
-                        shot_number = str('%03d' % number)
-                        dirname = os.path.join(path, shot_number)
-                        info['dirname'] = dirname
-                        info['shot_number'] = shot_number
+                    material_frame_length = int(end)-int(start)
+                    frame_range = start+','+end
+                    material_number = ''
+                    if '_' in pathurl:
+                        material_number = pathurl.split('_')[1]
+                    pathurl = unquote(pathurl)
+                    # 持续时间
+                    if i.findall('.//timebase'):
+                        rate = i.findall('.//timebase')[0].text
+                    if i.findall('.//duration'):
+                        clip_frame_length = i.findall('duration')[0].text   # 镜头帧长=剪辑帧长
+                    if i.findall('.//parameter/value'):
+                        change_speed_info = i.findall('.//parameter/value')[0].text  # 变速信息
 
-                        # 追加xml,根据镜头帧长和帧数范围判断视频是否经过修改,若涉及中间插入,文件夹依次加1,镜头号发生变化,数据库要相应更新
-                        if task == 'add_xml' and (clip_frame_length, frame_range) not in data:
-                            if os.path.exists(dirname) and os.listdir(dirname):
-                                file_li = sorted([i for i in os.listdir(path) if not i.startswith('.')])
-                                ind = file_li.index(shot_number)
-                                rename_li = file_li[ind:]   # 要重命名的以镜头号为文件夹名的列表
-                                # 循环之前连接数据库
-                                conn = pymysql.connect(ip, user_name, passwd, db_name, charset='utf8', use_unicode=True)
-                                cursor = conn.cursor()
+                    duration = int(round(float(clip_frame_length) / float(rate)))
+                    time_start = time_node
+                    time_node += duration
+                    shot_number = str('%03d' % number)
+                    dirname = os.path.join(path, shot_number)
 
-                                for x in range(len(rename_li)):
-                                    i = rename_li.pop()
-                                    shot_number_new = '%03d' % (int(i) + 1)
-                                    dirname_new = os.path.join(path, shot_number_new)  # /Users/shids/Code/tron/uploads/Projects/FUY/001/003
-                                    dirname_old = os.path.join(path, i)
-                                    video_img_li = os.listdir(dirname_old)
-                                    os.rename(dirname_old, dirname_new)  # 为文件夹重命名
+                    info['time_start'] = time_start  # 开始时间
+                    info['duration'] = duration   # 持续时间
+                    info['pathurl'] = pathurl       # 本地视频地址
+                    info['project_id'] = project_id  # 所属项目ID
+                    info['field_id'] = field_id     # 场号ID
+                    info['clip_frame_length'] = clip_frame_length    # 镜头帧长=剪辑帧长
+                    info['frame_range'] = frame_range              # 帧数范围
+                    info['material_number'] = material_number  # 素材号
+                    info['create_time'] = int(time.time())     # 创建时间
+                    info['change_speed_info'] = change_speed_info  # 变速信息
+                    info['material_frame_length'] = material_frame_length   # 素材帧长
+                    info['dirname'] = dirname
+                    info['shot_number'] = shot_number
+                    info['width'] = width
+                    info['height'] = height
 
-                                    # 文件夹依次加1以后,要更新的字段:镜头编号shot_number、镜头缩略图地址shot_image、视频路径shot_video_path
-                                    video_name = [i for i in video_img_li if not i.endswith('jpg')][0]
-                                    # video_name = m[0].split('/')[-1]
-                                    img_name = video_name.split('.')[0] + '.jpg'
-                                    video_path_new_all = os.path.join(dirname_new, video_name) # 新的视频路径
-                                    img_path_new_all = os.path.join(dirname_new, img_name)     # 新的缩略图路径
-                                    shot_video_path_new = re.search(r'.*(uploads.*)', video_path_new_all).group(1)
-                                    shot_image_new = re.search(r'.*(uploads.*)', img_path_new_all).group(1)
-                                    update_sql = "update oa_shot set shot_number=%s,shot_video_path='%s',shot_image='%s' " \
-                                                 "where project_id=%s and field_id=%s and shot_number=%s"\
-                                                 %(shot_number_new,shot_video_path_new,shot_image_new,project_id,field_id,i)
-                                    try:
-                                        cursor.execute(update_sql)
-                                        conn.commit()
-                                    except:
-                                        conn.rollback()
-                                cursor.close()
-                                conn.close()
-                            task_queue.put(info)
-                        elif task == 'clip1':
-                            task_queue.put(info)
-                        number += 1
+                    # 追加xml,根据镜头帧长和帧数范围判断视频是否经过修改,若涉及中间插入,文件夹依次加1,镜头号发生变化,数据库要相应更新
+                    if task == 'add_xml' and (clip_frame_length, frame_range) not in data:
+                        if os.path.exists(dirname) and os.listdir(dirname):
+                            file_li = sorted([i for i in os.listdir(path) if not i.startswith('.')])
+                            ind = file_li.index(shot_number)
+                            rename_li = file_li[ind:]   # 要重命名的以镜头号为文件夹名的列表
+                            # 循环之前连接数据库
+                            conn = pymysql.connect(ip, user_name, passwd, db_name, charset='utf8', use_unicode=True)
+                            cursor = conn.cursor()
+
+                            for x in range(len(rename_li)):
+                                i = rename_li.pop()
+                                shot_number_new = '%03d' % (int(i) + 1)
+                                dirname_new = os.path.join(path, shot_number_new)  # /Users/shids/Code/tron/uploads/Projects/FUY/001/003
+                                dirname_old = os.path.join(path, i)
+                                video_img_li = os.listdir(dirname_old)
+                                os.rename(dirname_old, dirname_new)  # 为文件夹重命名
+
+                                # 文件夹依次加1以后,要更新的字段:镜头编号shot_number、镜头缩略图地址shot_image、视频路径shot_video_path
+                                video_name = [i for i in video_img_li if not i.endswith('jpg')][0]
+                                # video_name = m[0].split('/')[-1]
+                                img_name = video_name.split('.')[0] + '.jpg'
+                                video_path_new_all = os.path.join(dirname_new, video_name) # 新的视频路径
+                                img_path_new_all = os.path.join(dirname_new, img_name)     # 新的缩略图路径
+                                shot_video_path_new = re.search(r'.*(uploads.*)', video_path_new_all).group(1)
+                                shot_image_new = re.search(r'.*(uploads.*)', img_path_new_all).group(1)
+                                update_sql = "update oa_shot set shot_number=%s,shot_video_path='%s',shot_image='%s' " \
+                                             "where project_id=%s and field_id=%s and shot_number=%s"\
+                                             %(shot_number_new,shot_video_path_new,shot_image_new,project_id,field_id,i)
+                                try:
+                                    cursor.execute(update_sql)
+                                    conn.commit()
+                                except:
+                                    conn.rollback()
+                            cursor.close()
+                            conn.close()
+                        task_queue.put(info)
+                    elif task == 'clip1':
+                        print info
+                        task_queue.put(info)
+                    number += 1
     return task_queue.qsize()
 
 
 def start_clip(xml_path, path, project_id, field_id, xml_id, task):
     print('start xml', xml_path)
     if not os.path.exists(path):
-        # os.makedirs(path)
         print(path, 'not exists')
         os._exit(0)
     queue = Manager().Queue()
@@ -247,7 +257,7 @@ def start_clip(xml_path, path, project_id, field_id, xml_id, task):
         pool.join()
         print('pool join')
     else:
-        to_php(1, 0, project_id, field_id, xml_id, task)
+        # to_php(1, 0, project_id, field_id, xml_id, task)
         print '没有在xml中获取到任务'
 
 
