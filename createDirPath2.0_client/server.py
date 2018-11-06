@@ -10,8 +10,8 @@ from multiprocessing import Process
 import saveReference
 import saveDailies
 import createThumbnail
-import render
-import render_remind
+from render import Render
+from remind import Remind
 import clientToRender
 from clipLine import start_clip
 from clipLine2 import Pack,insert
@@ -75,13 +75,13 @@ def handle(conn, localIP):
 			filePath, Uptask, command_id = data_split
 			if platform.system() == 'Windows':
 				inPathFile = 'J:' + sep + filePath[0:14]
-				filename = render.render_one(inPathFile).replace("/", '\\')
+				filename = Render().render_one(inPathFile).replace("/", '\\')
 				if os.path.exists(filename):
 					dataTree(filename, filePath, localIP)
 			elif platform.system() == 'Linux':
 				serverName = "/Post"
 				inPathFile = serverName + sep + filePath[0:14]
-				filename = render.render_one(inPathFile)
+				filename = Render().render_one(inPathFile)
 				if os.path.exists(filename):
 					dataTree(filename, filePath, localIP)
 			httpUrl.render_callback(command_id)
@@ -90,32 +90,32 @@ def handle(conn, localIP):
 			filePath, Uptask, command_id = data_split
 			if platform.system() == 'Windows':
 				inPathFile = 'J:' + sep + filePath[0:14]
-				filename = render.render_all(inPathFile).replace("/", '\\')
+				filename = Render().render_all(inPathFile).replace("/", '\\')
 				if os.path.exists(filename):
 					dataTree(filename, filePath, localIP)
 			elif platform.system() == 'Linux':
 				serverName = "/Post"
 				inPathFile = serverName + sep + filePath[0:14]
-				filename = render.render_all(inPathFile)
+				filename = Render().render_all(inPathFile)
 				if os.path.exists(filename):
 					dataTree(filename, filePath, localIP)
 			httpUrl.render_callback(command_id)
 
-		elif data.endswith("Dailies1"):   # FUY/001/001/stuff/cmp|filename|command_id|Dailies1
+		elif data.endswith("Dailies1"):   # /FUY/001/001/stuff/cmp|filename|command_id|Dailies1
 			filePath, fileName, command_id, UpTask = data_split
 			# print filePath, fileName, command_id, UpTask
 			if platform.system() == 'Windows':
 				serverName = "X:"
 				send_path = saveDailies.SelectDailies(serverName, filePath, fileName, command_id, UpTask)
-				conn.send(send_path)
+				# conn.send(send_path)
 			elif platform.system() == 'Linux':
 				serverName = "/All"
 				send_path = saveDailies.SelectDailies(serverName, filePath, fileName, command_id, UpTask)
-				conn.send(send_path)
+				# conn.send(send_path)
 			elif platform.system() == 'Darwin':
 				serverName = "/Volumes/All"
 				send_path = saveDailies.SelectDailies(serverName, filePath, fileName, command_id, UpTask)
-				conn.send(send_path)
+				# conn.send(send_path)
 
 		elif data.endswith("Dailies2"):
 			filePath, fileName, command_id, UpTask = data_split
@@ -143,7 +143,7 @@ def handle(conn, localIP):
 				if os.path.exists(fileAll):
 					createThumbnail.run(fileNow, fileD)
 					httpUrl.toHttpask(command_id, filePath + "/" + fileName, fileNow, UpTask, "")
-			conn.send(filePath + "/" + fileName)
+			# conn.send(filePath + "/" + fileName)
 
 		elif data.endswith("Reference"):
 			filePath, fileName, sql_data, UpTask = data_split
@@ -204,7 +204,7 @@ def handle(conn, localIP):
 			print('clip3 end')
 
 		elif data.endswith('download'):   # 分发外包下载
-			save_path = render.render_all('')
+			save_path = Render().render_all('')
 			load_path, UpTask = data_split
 			Download(save_path, load_path).putThread()
 			# httpUrl.render_callback(command_id)
@@ -229,12 +229,10 @@ def dataTree(filename, filePath, localIP):
 		dataTo = localIP + "|" + filename + "|Render"
 		if con_write not in con_read:
 			f.write(con_write)
-			datadd = clientToRender.client(dataTo)
-			render_remind.remind(datadd)
+			clientToRender.client(dataTo)
 		else:
-			render_remind.ask()
-			datadd = clientToRender.client(dataTo)
-			render_remind.remind(datadd)
+			Remind().ask()
+			clientToRender.client(dataTo)
 
 
 def myServer():

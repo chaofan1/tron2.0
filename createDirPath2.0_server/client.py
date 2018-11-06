@@ -24,7 +24,8 @@ def clientLink(data):
     if senStr:
         s.sendall(senStr)
         print('already send info')
-        task_set1 = {'Dailies1', 'Dailies2', 'clip1', 'add_xml'}
+        # task_set1 = {'Dailies1', 'Dailies2', 'clip1', 'add_xml'}
+        task_set1 = {'clip1', 'add_xml'}
         task_set2 = {'Dailies1', 'Dailies2'}
         task_set3 = {'clip1', 'add_xml'}
         if task in task_set1:
@@ -33,11 +34,11 @@ def clientLink(data):
             recv_path = data.replace('\\', '/')
             ser_recv_path = serverName+recv_path  # Dailies /Tron/FUY/001/001/stuff/cmp/mov/filename
             if os.path.exists(ser_recv_path):
-                if task in task_set2:
-                    os.chmod(ser_recv_path, 0555)
-                    os.chmod((serverName+filePath+'/mov'), 0555)  # filePath /FUY/001/001/stuff/cmp/
-                    os.chmod((serverName+filePath+'/img'), 0555)  # filePath /FUY/001/001/stuff/cmp/
-                elif task in task_set3:
+                # if task in task_set2:
+                #     os.chmod(ser_recv_path, 0555)
+                #     os.chmod((serverName+filePath+'/mov'), 0755)  # filePath /FUY/001/001/stuff/cmp/
+                #     os.chmod((serverName+filePath+'/img'), 0755)  # filePath /FUY/001/001/stuff/cmp/
+                if task in task_set3:
                     ch_li = os.listdir(ser_recv_path)
                     for i in ch_li:
                         os.chmod(ser_recv_path+'/'+i, 0555)

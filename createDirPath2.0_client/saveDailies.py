@@ -9,6 +9,12 @@ from PyQt4 import QtCore, QtGui
 import sys
 
 
+class UploadFile:
+    def __init__(self):
+        self.sep = os.sep
+        self.plat = platform.system()
+
+
 def SelectDailies(serverName, filePath, fileName, command_id, UpTask):
     sep = os.sep
     plat = platform.system()
@@ -34,10 +40,13 @@ def SelectDailies(serverName, filePath, fileName, command_id, UpTask):
             filePath = os.path.join(filePath, 'img')
 
         file_copy_path = serverName + filePath + sep + fileName  # /Volumes/All/FUY/stuff/dmt/mov/filename
-        if not os.path.exists(file_copy_path):
-            os.makedirs(file_copy_path)
-        file_abspath = file_copy_path + sep + fileNow
-        shutil.copy(fileOld, file_abspath)
+        try:
+            if not os.path.exists(file_copy_path):
+                os.makedirs(file_copy_path)
+            file_abspath = file_copy_path + sep + fileNow
+            shutil.copy(fileOld, file_abspath)
+        except Exception as e:
+            print(e)
         if os.path.exists(file_abspath):
             if fileType == "mov" or fileType == "avi" or fileType == "mp4":
                 createThumbnail.run(fileNow, file_copy_path)
@@ -49,10 +58,12 @@ def SelectDailies(serverName, filePath, fileName, command_id, UpTask):
                 cv2.imwrite(thumbnail_img, img, [int(cv2.IMWRITE_JPEG_QUALITY), 1])
                 httpUrl.toHttpask(command_id, filePath+"/"+fileName, fileNow, UpTask, "")
                 QtGui.QMessageBox.information(None, 'INFORMATION', u'提交成功！', QtCore.QString('OK'))
-            return filePath+"/"+fileName
+            return filePath+"/"+fileName   # /FUY/001/001/stuff/cmp/mov/filename
         else:
             QtGui.QMessageBox.information(None, 'INFORMATION', u'提交失败，请检查上传文件！', QtCore.QString('OK'))
             return filePath
     else:
         return filePath
     sys.exit(app.exec_())
+
+

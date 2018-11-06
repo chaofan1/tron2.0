@@ -10,19 +10,19 @@ import time
 import re
 
 
-ip = '192.168.1.117'
-user_name = 'root'
-passwd = '123456'
-db_name = 'new_tron'
-table_name = 'oa_shot'
-to_php_url = 'http://192.168.1.117/clips/set_progress'
-
-# ip = '192.168.100.49'
+# ip = '192.168.1.117'
 # user_name = 'root'
-# passwd = 'king9188YJQ@'
+# passwd = '123456'
 # db_name = 'new_tron'
 # table_name = 'oa_shot'
-# to_php_url = 'http://192.168.100.49/clips/set_progress'
+# to_php_url = 'http://192.168.1.117/clips/set_progress'
+
+ip = '192.168.100.49'
+user_name = 'root'
+passwd = 'king9188YJQ@'
+db_name = 'new_tron'
+table_name = 'oa_shot'
+to_php_url = 'http://192.168.100.49/clips/set_progress'
 
 
 def write_sql(info, shot_video_path, shot_image, shot_number):
@@ -96,8 +96,8 @@ def getter(task_queue, queue_len, xml_id, task):
         print(e)
     else:
         # 传递百分比给php
-        project_id = info['project_id']  # 所属项目ID
-        field_id = info['field_id']  # 场号ID
+        project_id = info.get('project_id')  # 所属项目ID
+        field_id = info.get('field_id')  # 场号ID
         if qsize > 0:
             to_php(queue_len, qsize, project_id, field_id, xml_id,task)
 
@@ -106,16 +106,36 @@ def getter(task_queue, queue_len, xml_id, task):
             os.makedirs(dirname)
 
         # 视频转码
-        pathurl = info['pathurl']
-        rate = info['rate']
+        pathurl = info.get('pathurl')
+        rate = info.get('rate')
         video_name = pathurl.split('/')[-1]
-        video_path = os.path.join(dirname,video_name)
-        transcode_command = 'ffmpeg -i %s -loglevel -8 -c:v libx264 -y -g 2 -keyint_min 2 %s'%(pathurl,video_path)
+        video_name = '.'.join(video_name.split('.')[:-1])+'.mov'
+        video_path = os.path.join(dirname, video_name)
+
+        # 0030_B112C053_180329_R0TK.[0702252-0703320]_.[00702853-00703023].dpx
+        pathurl_split = pathurl.split('.')
+        print pathurl_split
+        p_be = '.'.join(pathurl_split[:-2])+'.'
+        if pathurl_split[-2].startswith('[') and pathurl_split[-2].endswith(']'):
+            file_scope = pathurl_split[-2].lstrip('[').rstrip(']').split('-')
+            range_num = int(float(file_scope[-1]) - float(file_scope[0])) + 1
+            format_len = file_scope[-1].__len__()
+            user_file_path = os.environ['HOME'] + '/filepath.txt'
+            print user_file_path
+            with open(user_file_path,'w') as f:
+                for i in range(0, range_num):
+                    a = format(int(file_scope[0]) + i, '0%d' % format_len)
+                    collect_filepath = p_be + str(a) + '.' + pathurl_split[-1]
+                    f.write('file' + '\t' + collect_filepath + '\r')
+            transcode_command = 'ffmpeg -f concat -safe 0  -r %s -i %s -loglevel -8 -c:v libx264 -y -g 2 -keyint_min 2 %s' % ( rate, user_file_path, video_path)
+            print 'command',transcode_command
+        else:
+            transcode_command = 'ffmpeg -i %s -loglevel -8 -c:v libx264 -y -g 2 -keyint_min 2 %s'%(pathurl,video_path)
         video_su = subprocess.Popen(transcode_command,shell=True)
         video_su.wait()
 
         # 2、创建缩略图文件夹,截取缩略图
-        img_name = video_name.split('.')[0] +'.jpg'
+        img_name = '.'.join(video_name.split('.')[:-1]) +'.jpg'
         img_path = os.path.join(dirname,img_name)
         screenshot_command = 'ffmpeg -ss 1 -t 1 -i %s -loglevel -8 -y %s' % (video_path,img_path)
         img_su = subprocess.Popen(screenshot_command, shell=True)
@@ -199,6 +219,7 @@ def putter(task_queue, xml_path, project_id, field_id, data, path, task):
                     info['shot_number'] = shot_number
                     info['width'] = width
                     info['height'] = height
+                    info['rate'] = rate
 
                     # 追加xml,根据镜头帧长和帧数范围判断视频是否经过修改,若涉及中间插入,文件夹依次加1,镜头号发生变化,数据库要相应更新
                     if task == 'add_xml' and (clip_frame_length, frame_range) not in data:

@@ -1,5 +1,5 @@
 import socket
-from render_remind import remind
+from remind import Remind
 
 
 def client(dataTo):
@@ -15,12 +15,14 @@ def client(dataTo):
     h = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
     h.connect((HOST, PORT))
     h.sendall(args)
-    remind('send', file_number)
+    Remind().remind_start(file_number)
     data = h.recv(1024)
     if 'Submit sucess, task_id' in data:
-        remind('True', file_number)
+        Remind().remind_success(file_number)
+        # remind('True', file_number)
     else:
-        remind(data, file_number)
+        Remind().remind_fail(data, file_number)
+        # remind(data, file_number)
     h.close()
 
 
