@@ -20,7 +20,7 @@ from httpUrl import CallBack
 from upload import UploadFile
 
 
-def handle(conn, localIP):
+def handle(conn):
 	while True:
 		data = conn.recv(1024)
 		if not data:
@@ -215,7 +215,7 @@ def myServer():
 		# 多线程与协程：虽然可以实现socket的并发，但QT库的UI界面只能在主线程运行，无法并发，想要并发只能用内部的QThread；
 		# 所以Mac与windows无法实现socket的并发
 		if platform.system() == 'Linux':
-			p = Process(target=handle, args=(conn, localIP))
+			p = Process(target=handle, args=(conn,))
 			p.start()
 			conn.close()
 		else:
