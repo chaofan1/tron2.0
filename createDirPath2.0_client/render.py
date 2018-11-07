@@ -12,12 +12,12 @@ class Render:
         self.app = QApplication(sys.argv)
         self.mainWindow = QMainWindow()
 
-    def render_one(self,inPathFile):
+    def render_one(self, inPathFile):
         filepath = QFileDialog.getOpenFileName(self.mainWindow, 'open file', inPathFile)
         return filepath
         sys.exit(self.app.exec_())
 
-    def render_all(self,inPathFile):
+    def render_all(self, inPathFile):
         filepath = QFileDialog.getExistingDirectory(self.mainWindow, 'open file', inPathFile)
         return filepath
         sys.exit(self.app.exec_())
