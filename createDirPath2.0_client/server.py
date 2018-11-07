@@ -5,19 +5,20 @@
 # 回插 'clip2' 'IP|video_path|img_path|frame|width|height|id|command_id|clip2' 8
 # 打包 'clip3'  'IP|FUY/001|xml_path|command_id|clip3'  5
 
-import shutil, socket, httpUrl, platform
+import os
+import shutil
+import platform
+import socket
 from multiprocessing import Process
 import saveReference
 import saveDailies
 import createThumbnail
 from render import Render
-from remind import Remind
-import clientToRender
 from clipLine import start_clip
 from clipLine2 import Pack,insert
 from distribute_download import Download
 from clipLine import to_php
-import os
+import httpUrl
 
 
 def handle(conn, localIP):
@@ -73,32 +74,22 @@ def handle(conn, localIP):
 
 		elif data.endswith("Render1"):
 			filePath, Uptask, command_id = data_split
-			if platform.system() == 'Windows':
-				inPathFile = 'J:' + sep + filePath[0:14]
-				filename = Render().render_one(inPathFile).replace("/", '\\')
-				if os.path.exists(filename):
-					dataTree(filename, filePath, localIP)
-			elif platform.system() == 'Linux':
+			if platform.system() == 'Linux':
 				serverName = "/Post"
 				inPathFile = serverName + sep + filePath[0:14]
 				filename = Render().render_one(inPathFile)
 				if os.path.exists(filename):
-					dataTree(filename, filePath, localIP)
+					Render().dataTree(filename, filePath)
 			httpUrl.render_callback(command_id)
 
 		elif data.endswith("Render2"):
 			filePath, Uptask, command_id = data_split
-			if platform.system() == 'Windows':
-				inPathFile = 'J:' + sep + filePath[0:14]
-				filename = Render().render_all(inPathFile).replace("/", '\\')
-				if os.path.exists(filename):
-					dataTree(filename, filePath, localIP)
-			elif platform.system() == 'Linux':
+			if platform.system() == 'Linux':
 				serverName = "/Post"
 				inPathFile = serverName + sep + filePath[0:14]
 				filename = Render().render_all(inPathFile)
 				if os.path.exists(filename):
-					dataTree(filename, filePath, localIP)
+					Render().dataTree(filename, filePath)
 			httpUrl.render_callback(command_id)
 
 		elif data.endswith("Dailies1"):   # /FUY/001/001/stuff/cmp|filename|command_id|Dailies1
@@ -214,25 +205,6 @@ def handle(conn, localIP):
 		# 打包 'clip3'  'IP|FUY/001|xml_path|command_id|clip3'  5
 
 	conn.close()
-
-
-def dataTree(filename, filePath, localIP):
-	file_size = os.path.getsize(filename)
-	file_mtime = os.path.getmtime(filename)
-	pro_name = filePath.split('/')[1]
-	pro_path = os.getcwd()
-	csv_path = os.path.join(pro_path, '%s.csv' % pro_name)
-	with open(csv_path, 'a+') as f:
-		con_write = filePath, file_size, file_mtime
-		con_read = set(f.readlines())
-		con_write = str(con_write) + '\n'
-		dataTo = localIP + "|" + filename + "|Render"
-		if con_write not in con_read:
-			f.write(con_write)
-			clientToRender.client(dataTo)
-		else:
-			Remind().ask()
-			clientToRender.client(dataTo)
 
 
 def myServer():
