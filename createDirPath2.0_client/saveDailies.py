@@ -11,12 +11,6 @@ import createThumbnail
 from httpUrl import CallBack
 
 
-class UploadFile:
-    def __init__(self):
-        self.sep = os.sep
-        self.plat = platform.system()
-
-
 def SelectDailies(serverName, filePath, fileName, command_id, UpTask):
     sep = os.sep
     plat = platform.system()

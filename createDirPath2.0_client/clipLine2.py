@@ -8,9 +8,9 @@ from shutil import copy
 from clipLine import to_php
 import re
 
-ip = '192.168.1.117'
+ip = '192.168.100.49'
 user_name = 'root'
-passwd = '123456'
+passwd = 'king9188YJQ@'
 db_name = 'new_tron'
 table_name = 'oa_approvals'
 

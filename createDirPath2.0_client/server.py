@@ -1,17 +1,15 @@
-#!/usr/bin/env python2.7
+# !/usr/bin/env python2.7
 # -*- coding: utf-8 -*-
 
-# 转码 'clip1' 'IP|xml_path|path|项目id|场id|xml_id|command_id|clip1' 7
-# 回插 'clip2' 'IP|video_path|img_path|frame|width|height|id|command_id|clip2' 8
-# 打包 'clip3'  'IP|FUY/001|xml_path|command_id|clip3'  5
+# 转码 'clip1' 'IP|xml_path|path|项目id|场id|xml_id|command_id|clip1'
+# 回插 'clip2' 'IP|video_path|img_path|frame|width|height|id|command_id|clip2'
+# 打包 'clip3'  'IP|FUY/001|xml_path|command_id|clip3'
 
 import os
 import shutil
 import platform
 import socket
 from multiprocessing import Process
-import saveReference
-import saveDailies
 import createThumbnail
 from render import Render
 from clipLine import start_clip
@@ -19,6 +17,7 @@ from clipLine2 import Pack,insert
 from distribute_download import Download
 from clipLine import to_php
 from httpUrl import CallBack
+from upload import UploadFile
 
 
 def handle(conn, localIP):
@@ -27,102 +26,97 @@ def handle(conn, localIP):
 		if not data:
 			break
 		print('recv data:', data)
-		serverName = ''
+		server_name = ''
 		outputPath = ''
 		data_split = data.strip().split("|")
 		sep = os.sep
 
 		if len(data_split) is 1:
-			filePath = data.strip()
+			file_path = data.strip()
 			if platform.system() == 'Windows':
-				serverName = "X:"
-				filePath = filePath.replace("/", "\\")
-				os.popen('explorer.exe %s' % (serverName + filePath)).close()
-				print (serverName + filePath)
+				server_name = "X:"
+				file_path = file_path.replace("/", "\\")
+				os.popen('explorer.exe %s' % (server_name + file_path)).close()
+				print (server_name + file_path)
 			elif platform.system() == 'Linux':
-				serverName = "/All"
-				os.popen('nautilus %s' % (serverName + filePath)).close()
+				server_name = "/All"
+				os.popen('nautilus %s' % (server_name + file_path)).close()
 			elif platform.system() == 'Darwin':
-				serverName = "/Volumes/All"
-				os.popen('open %s' % (serverName + filePath)).close()
+				server_name = "/Volumes/All"
+				os.popen('open %s' % (server_name + file_path)).close()
 
 		elif len(data_split) is 2:
-			filePath, Uptask = data_split
+			file_path, Uptask = data_split
 			if platform.system() == 'Windows':
 				if Uptask == 'lgt' or Uptask == 'cmp':
-					serverName = "J:"
-					filePath = filePath.replace("/", "\\")
-					os.popen('explorer.exe %s' % (serverName + filePath)).close()
+					server_name = "J:"
+					file_path = file_path.replace("/", "\\")
+					os.popen('explorer.exe %s' % (server_name + file_path)).close()
 				else:
-					serverName = "X:"
-					filePath = filePath.replace("/", "\\")
-					os.popen('explorer.exe %s' % (serverName + filePath)).close()
+					server_name = "X:"
+					file_path = file_path.replace("/", "\\")
+					os.popen('explorer.exe %s' % (server_name + file_path)).close()
 			elif platform.system() == 'Linux':
 				if Uptask == 'lgt' or Uptask == 'cmp':
-					serverName = "/Post"
-					os.popen('nautilus %s' % (serverName + filePath)).close()
+					server_name = "/Post"
+					os.popen('nautilus %s' % (server_name + file_path)).close()
 				else:
-					serverName = "/All"
-					os.popen('nautilus %s' % (serverName + filePath)).close()
+					server_name = "/All"
+					os.popen('nautilus %s' % (server_name + file_path)).close()
 			elif platform.system() == 'Darwin':
 				if Uptask == 'lgt' or Uptask == 'cmp':
-					serverName = "/Volumes/Post"
-					os.popen('open %s' % (serverName + filePath)).close()
+					server_name = "/Volumes/Post"
+					os.popen('open %s' % (server_name + file_path)).close()
 				else:
-					serverName = "/Volumes/All"
-					os.popen('open %s' % (serverName + filePath)).close()
+					server_name = "/Volumes/All"
+					os.popen('open %s' % (server_name + file_path)).close()
 
 		elif data.endswith("Render1"):
-			filePath, Uptask, command_id = data_split
+			file_path, Uptask, command_id = data_split
 			if platform.system() == 'Linux':
-				serverName = "/Post"
-				inPathFile = serverName + sep + filePath[0:14]
-				filename = Render().render_one(inPathFile)
-				if os.path.exists(filename):
-					Render().dataTree(filename, filePath)
+				server_name = "/Post"
+				inPathFile = server_name + sep + file_path[0:14]
+				file_name = Render().render_one(inPathFile)
+				if os.path.exists(file_name):
+					Render().dataTree(file_name, file_path)
 			CallBack().render_callback(command_id)
 
 		elif data.endswith("Render2"):
-			filePath, Uptask, command_id = data_split
+			file_path, Uptask, command_id = data_split
 			if platform.system() == 'Linux':
-				serverName = "/Post"
-				inPathFile = serverName + sep + filePath[0:14]
-				filename = Render().render_all(inPathFile)
-				if os.path.exists(filename):
-					Render().dataTree(filename, filePath)
+				server_name = "/Post"
+				inPathFile = server_name + sep + file_path[0:14]
+				file_name = Render().render_all(inPathFile)
+				if os.path.exists(file_name):
+					Render().dataTree(file_name, file_path)
 			CallBack().render_callback(command_id)
 
-		elif data.endswith("Dailies1"):   # /FUY/001/001/stuff/cmp|filename|command_id|Dailies1
-			filePath, fileName, command_id, UpTask = data_split
-			# print filePath, fileName, command_id, UpTask
+		elif data.endswith("Dailies1"):   # /FUY/001/001/stuff/cmp|file_name|command_id|Dailies1
+			file_path, file_name, command_id, UpTask = data_split
 			if platform.system() == 'Windows':
-				serverName = "X:"
-				send_path = saveDailies.SelectDailies(serverName, filePath, fileName, command_id, UpTask)
-				# conn.send(send_path)
+				server_name = "X:"
+				UploadFile().upload_dailies(server_name, file_path, file_name, command_id)
 			elif platform.system() == 'Linux':
-				serverName = "/All"
-				send_path = saveDailies.SelectDailies(serverName, filePath, fileName, command_id, UpTask)
-				# conn.send(send_path)
+				server_name = "/All"
+				UploadFile().upload_dailies(server_name, file_path, file_name, command_id)
 			elif platform.system() == 'Darwin':
-				serverName = "/Volumes/All"
-				send_path = saveDailies.SelectDailies(serverName, filePath, fileName, command_id, UpTask)
-				# conn.send(send_path)
+				server_name = "/Volumes/All"
+				UploadFile().upload_dailies(server_name, file_path, file_name, command_id)
 
 		elif data.endswith("Dailies2"):
-			filePath, fileName, command_id, UpTask = data_split
-			# print filePath, fileName, command_id, UpTask
-			fileNow = fileName + ".mov"
-			# 重构filePath: /FUY/stuff/dmt
-			filePath = filePath + '/mov'
+			file_path, file_name, command_id, UpTask = data_split
+			fileNow = file_name + ".mov"
+			# 重构file_path: /FUY/stuff/dmt
+			file_path = file_path + '/mov'
 			if platform.system() == 'Windows':
-				outputPath = "D:/TronDailies/%s" % fileName
-				serverName = "X:"
+				outputPath = "D:/TronDailies/%s" % file_name
+				server_name = "X:"
 			elif platform.system() == 'Linux':
-				outputPath = os.path.join(os.environ['HOME'], '/%s' % fileName)
-				serverName = "/All"
+				outputPath = os.path.join(os.environ['HOME'], '/%s' % file_name)
+				server_name = "/All"
 			elif platform.system() == 'Darwin':
 				break
-			fileD = serverName + "/" + filePath + "/" + fileName
+			fileD = server_name + "/" + file_path + "/" + file_name
 			fileAll = fileD + "/" + fileNow
 			if os.path.isdir(outputPath):
 				shutil.rmtree(outputPath)
@@ -133,32 +127,26 @@ def handle(conn, localIP):
 				shutil.copytree(outputPath, fileD)
 				if os.path.exists(fileAll):
 					createThumbnail.run(fileNow, fileD)
-					httpUrl.toHttpask(command_id, filePath + "/" + fileName, fileNow, UpTask, "")
-			# conn.send(filePath + "/" + fileName)
+					CallBack().dai_callback(command_id, file_path + "/" + file_name, fileNow, UpTask, "")
+			# conn.send(file_path + "/" + file_name)
 
 		elif data.endswith("Reference"):
-			filePath, fileName, sql_data, UpTask = data_split
-			print filePath, fileName, UpTask
+			file_path, file_name, sql_data, UpTask = data_split
 			if platform.system() == 'Windows':
-				serverName = "L:/References"
-				saveReference.SelectReference(serverName, filePath, fileName, sql_data)
-				# conn.send(send_path)
+				server_name = "L:/References"
+				UploadFile().upload_reference(server_name, file_path, file_name, sql_data)
 			elif platform.system() == 'Linux':
-				serverName = "/library/References"
-				saveReference.SelectReference(serverName, filePath, fileName, sql_data)
-				# conn.send(send_path)
+				server_name = "/library/References"
+				UploadFile().upload_reference(server_name, file_path, file_name, sql_data)
 			elif platform.system() == 'Darwin':
-				serverName = "/Volumes/library/References"
-				saveReference.SelectReference(serverName, filePath, fileName, sql_data)
-				# conn.send(send_path)
-			# chmod_path = chmod_server + "/" + send_path
-			# os.chmod(chmod_path, 0755)
+				server_name = "/Volumes/library/References"
+				UploadFile().upload_reference(server_name, file_path, file_name, sql_data)
 
 		elif data.endswith('clip1'):  # 转码
 			xml_path, path, project_id, field_id, xml_id, command_id, UpTask = data_split
 			xml_path = '/Volumes/All/' + xml_path
-			file_path = '/Volumes/All/' + path
-			start_clip(xml_path, file_path, project_id, field_id, xml_id, UpTask)
+			video_path = '/Volumes/All/' + path
+			start_clip(xml_path, video_path, project_id, field_id, xml_id, UpTask)
 			to_php(1, 0, project_id, field_id, xml_id, UpTask)
 			# httpUrl.render_callback(command_id)
 			#os.remove(xml_path)
@@ -168,8 +156,8 @@ def handle(conn, localIP):
 		elif data.endswith('add_xml'):
 			xml_path, path, project_id, field_id, xml_id, command_id, UpTask = data_split
 			xml_path = '/Volumes/All/' + xml_path
-			file_path = '/Volumes/All/' + path
-			start_clip(xml_path, file_path, project_id, field_id, xml_id, UpTask)
+			video_path = '/Volumes/All/' + path
+			start_clip(xml_path, video_path, project_id, field_id, xml_id, UpTask)
 			conn.send(path)
 			# httpUrl.render_callback(command_id)
 			print('add_xml end')

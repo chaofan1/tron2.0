@@ -12,12 +12,12 @@ class CallBack:
         self.url = ''
         self.query_args = {}
 
-    def dai_callback(self, ID, path, fileName, imgSize):
+    def dai_callback(self, ID, path, file_name, img_size):
         self.url = 'http://192.168.1.117/callback/dailies'
-        if imgSize:
-            self.query_args = {'id': ID, 'path': path, 'filename': fileName, 'imgSize': imgSize}
+        if img_size:
+            self.query_args = {'id': ID, 'path': path, 'filename': file_name, 'imgSize': img_size}
         else:
-            self.query_args = {'id': ID, 'path': path, 'filename': fileName}
+            self.query_args = {'id': ID, 'path': path, 'filename': file_name}
         self.request()
 
     def render_callback(self, command_id):
