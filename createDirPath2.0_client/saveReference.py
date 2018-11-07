@@ -34,7 +34,6 @@ def SelectReference(serverName, filePath, fileName, sql_data):
         if os.path.exists(file_copy_path):
             if fileType == "mov" or fileType == "avi" or fileType == "mp4":
                 createThumbnail.run(fileNow, (serverName+filePath))
-                # httpUrl.toHttpask(fileID, filePath, fileNow, UpTask, "")
                 file_type = 1
                 thumbnail = '.' + fileName + ".jpg"  # 缩略图路径
                 print thumbnail
@@ -44,7 +43,6 @@ def SelectReference(serverName, filePath, fileName, sql_data):
                 img = cv2.imread(file_copy_path)
                 thumbnail_img = serverName + filePath + sep + '.' + fileNow
                 cv2.imwrite(thumbnail_img, img, [int(cv2.IMWRITE_JPEG_QUALITY), 40])
-                # httpUrl.toHttpask(fileID, filePath, fileNow, UpTask, "")
                 file_type = 2
                 thumbnail = '.' + fileNow
                 print thumbnail

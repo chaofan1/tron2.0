@@ -14,6 +14,7 @@ def clientLink(data):
     task = args[-1]
     senStr = '|'.join(args[1:])
     filePath = ""
+    serverName = "/Tron"
     if len(args) > 2:
         filePath = args[1]
 
@@ -22,22 +23,21 @@ def clientLink(data):
     s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
     s.connect((HOST, PORT))
     if senStr:
+        if task == 'add_xml':
+            ch_li = os.listdir(filePath)
+            for i in ch_li:
+                os.chmod(filePath + '/' + i, 0777)
+            os.chmod(filePath, 0777)
+            print 'already chmod clip 777'
         s.sendall(senStr)
         print('already send info')
-        # task_set1 = {'Dailies1', 'Dailies2', 'clip1', 'add_xml'}
         task_set1 = {'clip1', 'add_xml'}
-        task_set2 = {'Dailies1', 'Dailies2'}
         task_set3 = {'clip1', 'add_xml'}
         if task in task_set1:
-            serverName = "/Tron"
             data = s.recv(1024)
             recv_path = data.replace('\\', '/')
-            ser_recv_path = serverName+recv_path  # Dailies /Tron/FUY/001/001/stuff/cmp/mov/filename
+            ser_recv_path = serverName+recv_path  # clip /Tron/FUY/001
             if os.path.exists(ser_recv_path):
-                # if task in task_set2:
-                #     os.chmod(ser_recv_path, 0555)
-                #     os.chmod((serverName+filePath+'/mov'), 0755)  # filePath /FUY/001/001/stuff/cmp/
-                #     os.chmod((serverName+filePath+'/img'), 0755)  # filePath /FUY/001/001/stuff/cmp/
                 if task in task_set3:
                     ch_li = os.listdir(ser_recv_path)
                     for i in ch_li:

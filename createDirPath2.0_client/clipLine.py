@@ -121,7 +121,7 @@ def getter(task_queue, queue_len, xml_id, task):
             range_num = int(float(file_scope[-1]) - float(file_scope[0])) + 1
             format_len = file_scope[-1].__len__()
             user_file_path = os.environ['HOME'] + '/filepath.txt'
-            print user_file_path
+            print 'filepath.txt', user_file_path
             with open(user_file_path,'w') as f:
                 for i in range(0, range_num):
                     a = format(int(file_scope[0]) + i, '0%d' % format_len)

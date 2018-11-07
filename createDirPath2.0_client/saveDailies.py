@@ -1,12 +1,14 @@
 #!/usr/bin/env python2.7
 # -*- coding: utf-8 -*-
 
-import os, shutil, platform
-import createThumbnail
-import httpUrl
+import os
+import shutil
+import platform
+import sys
 import cv2
 from PyQt4 import QtCore, QtGui
-import sys
+import createThumbnail
+from httpUrl import CallBack
 
 
 class UploadFile:
@@ -50,13 +52,13 @@ def SelectDailies(serverName, filePath, fileName, command_id, UpTask):
         if os.path.exists(file_abspath):
             if fileType == "mov" or fileType == "avi" or fileType == "mp4":
                 createThumbnail.run(fileNow, file_copy_path)
-                httpUrl.toHttpask(command_id, filePath+"/"+fileName, fileNow, UpTask, "")
+                CallBack().dai_callback(command_id, filePath+"/"+fileName, fileNow, "")
                 QtGui.QMessageBox.information(None, 'INFORMATION', u'提交成功！', QtCore.QString('OK'))
             elif fileType == "jpg" or fileType == "jpeg" or fileType == "png" or fileType == "tiff" or fileType == "tga":
                 img = cv2.imread(file_abspath)
                 thumbnail_img = file_copy_path + sep + '.' + fileNow
                 cv2.imwrite(thumbnail_img, img, [int(cv2.IMWRITE_JPEG_QUALITY), 1])
-                httpUrl.toHttpask(command_id, filePath+"/"+fileName, fileNow, UpTask, "")
+                CallBack().dai_callback(command_id, filePath+"/"+fileName, fileNow, "")
                 QtGui.QMessageBox.information(None, 'INFORMATION', u'提交成功！', QtCore.QString('OK'))
             return filePath+"/"+fileName   # /FUY/001/001/stuff/cmp/mov/filename
         else:

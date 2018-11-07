@@ -18,7 +18,7 @@ from clipLine import start_clip
 from clipLine2 import Pack,insert
 from distribute_download import Download
 from clipLine import to_php
-import httpUrl
+from httpUrl import CallBack
 
 
 def handle(conn, localIP):
@@ -80,7 +80,7 @@ def handle(conn, localIP):
 				filename = Render().render_one(inPathFile)
 				if os.path.exists(filename):
 					Render().dataTree(filename, filePath)
-			httpUrl.render_callback(command_id)
+			CallBack().render_callback(command_id)
 
 		elif data.endswith("Render2"):
 			filePath, Uptask, command_id = data_split
@@ -90,7 +90,7 @@ def handle(conn, localIP):
 				filename = Render().render_all(inPathFile)
 				if os.path.exists(filename):
 					Render().dataTree(filename, filePath)
-			httpUrl.render_callback(command_id)
+			CallBack().render_callback(command_id)
 
 		elif data.endswith("Dailies1"):   # /FUY/001/001/stuff/cmp|filename|command_id|Dailies1
 			filePath, fileName, command_id, UpTask = data_split
@@ -157,8 +157,8 @@ def handle(conn, localIP):
 		elif data.endswith('clip1'):  # 转码
 			xml_path, path, project_id, field_id, xml_id, command_id, UpTask = data_split
 			xml_path = '/Volumes/All/' + xml_path
-			user_path = '/Volumes/All/' + path
-			start_clip(xml_path, user_path, project_id, field_id, xml_id, UpTask)
+			file_path = '/Volumes/All/' + path
+			start_clip(xml_path, file_path, project_id, field_id, xml_id, UpTask)
 			to_php(1, 0, project_id, field_id, xml_id, UpTask)
 			# httpUrl.render_callback(command_id)
 			#os.remove(xml_path)
@@ -168,8 +168,8 @@ def handle(conn, localIP):
 		elif data.endswith('add_xml'):
 			xml_path, path, project_id, field_id, xml_id, command_id, UpTask = data_split
 			xml_path = '/Volumes/All/' + xml_path
-			path = '/Volumes/All/' + path
-			start_clip(xml_path, path, project_id, field_id, xml_id, UpTask)
+			file_path = '/Volumes/All/' + path
+			start_clip(xml_path, file_path, project_id, field_id, xml_id, UpTask)
 			conn.send(path)
 			# httpUrl.render_callback(command_id)
 			print('add_xml end')
