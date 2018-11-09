@@ -191,7 +191,7 @@ def handle(conn):
 			print('clip3 end')
 
 		elif data_split[-1] == 'download':   # 分发外包下载
-			save_path = Render().render_all('')
+			save_path = Select().select_dir('')
 			load_path, UpTask = data_split
 			Download(save_path, load_path).putThread()
 			# httpUrl.render_callback(command_id)
