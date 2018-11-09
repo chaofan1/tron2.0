@@ -72,8 +72,8 @@ class TronProject:
                         TronFolder().CreateFolder(folderPath, "0555", "zhouyc")
                     elif projectChild[i] == "0775":
                         TronFolder().CreateFolder(folderPath, "0775", "zhouyc")
-        # TronFolder().CreateStuff(proPath, "", "", "", "", "")
-        # TronFolder().CreateStuff(proPost, "", "", "", "", "")
+        TronFolder().CreateStuff(proPath, "", "", "", "", "")
+        TronFolder().CreateStuff(proPost, "", "", "", "", "")
         TronFolder().CreateStuff(proPath, "", "", "prd", "", "")
         TronFolder().CreateStuff(proPost, "", "", "cmp", "", "")
         TronFolder().CreateWork(proPath, "", "", "", "", "")

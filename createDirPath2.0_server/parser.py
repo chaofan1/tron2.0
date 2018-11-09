@@ -1,14 +1,14 @@
-#!/usr/bin/env python2.7
-#-*- coding: utf-8 -*-
+# !/usr/bin/env python2.7
+# -*- coding: utf-8 -*-
 # 服务器
-#"Project" "HAC" "command_id"
-#"Seq" "HAC" "01" "command_id"
-#"Shot" "HAC" "01" "001" "command_id"
-#"AssetTask" "HAC" "rig" "liangcy" "fileName" "command_id"
-#"ShotTask" "HAC" "01" "001" "rig" "liangcy" "fileName" "command_id"
-#"Pack" "Json路径" "command_id"
-#"Transit" "json路径" “公司_项目_主键id”“command_id”
-#"Del" "公司_项目_主键id"
+# "Project" "HAC" "command_id"
+# "Seq" "HAC" "01" "command_id"
+# "Shot" "HAC" "01" "001" "command_id"
+# "AssetTask" "HAC" "rig" "liangcy" "fileName" "command_id"
+# "ShotTask" "HAC" "01" "001" "rig" "liangcy" "fileName" "command_id"
+# "Pack" "Json路径" "command_id"
+# "Transit" "json路径" “公司_项目_主键id”“command_id”
+# "Del" "公司_项目_主键id"
 # 客户端
 # 'Render' '192.168.100.44|/FUY/999/003/Stuff/lgt/publish/fuy999003_lgt_wangcf_yuanBao_master|Render2|command_id'
 # "Folder" "192.168.1.85|/DHG/Dailies/20161214"
@@ -40,7 +40,7 @@ def _init_():
 	elif len(args) == 2:
 		if args[0] == "Folder":
 			clientLink(args[1])
-		elif args[0] == "Render":
+		elif args[0] == "Ready_render" or args[0] == "Local_render" or args[0] == "Cloud_render":
 			clientLink(args[1])
 		elif args[0] == "clip1":
 			# 修改相应场次的权限

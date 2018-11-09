@@ -45,9 +45,15 @@
     #"Folder" "192.168.1.85|/DHG/Dailies/20161214"
 
 9、渲染
-    'Render' 'IP|文件路径|Render1|command_id'
+# 'Ready_render' 预渲染
+# 'Local_render' 本地渲染
+# 'Cloud_render' 云渲染
+    'Ready_render' 'IP|文件路径|Ready_render1'
+    'Local_render' 'IP|文件路径|Local_render1'
+    'Cloud_render' 'IP|文件路径|Cloud_render1'
+
     例如：
-    #'Render' '192.168.100.44|/FUY/999/003/Stuff/lgt/publish/fuy999003_lgt_wangcf_yuanBao_master|Render2|command_id'
+    #'Ready_render' '192.168.100.44|/FUY/999/003/Stuff/lgt/publish/fuy999003_lgt_wangcf_yuanBao_master|Ready_render2|command_id'
 
 10、剪辑线
     #'clip1' '127.0.0.1|uploads/Projects/xml_files/25/2aac549dbd0a1e7494d6447f85a88c95673c27.xml|uploads/Projects/FUY/001/|1|3'
