@@ -37,7 +37,7 @@ class TronDistribute:
         self.filePath = filePath
         self.progectName, self.userid, self.timeStamp = os.path.splitext(os.path.basename(filePath))[0].split('_')
         try:
-            with open(self.filePath, 'r') as f:
+            with open(self.filePath, 'r') as f:   
                 response = json.load(f)
             Paths = []
             # 解析参数
@@ -275,7 +275,7 @@ class TronDistribute:
                     "Subject: %s" % subject,
                     # "Cc: %s" % ','.join(cc_mail), "utf8"),
                     "",
-                    remark,
+                    remark + "(请勿回复此邮件)",
                 ]
                 msg = '\n'.join(mail)
                 s = smtplib.SMTP()
