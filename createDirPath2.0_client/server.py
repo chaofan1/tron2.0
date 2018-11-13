@@ -204,25 +204,25 @@ def handle(conn):
 			if type_ == "lgt" or type_ == "cmp":
 				if platform.system() == 'Windows':
 					server_name = "J:"
-					os.popen('explorer.exe %s' % (server_name + file_path)).close()
+					os.popen('explorer.exe %s' % (server_name + sep + file_path)).close()
 					print (server_name + file_path)
 				elif platform.system() == 'Linux':
 					server_name = "/Post"
-					os.popen('nautilus %s' % (server_name + file_path)).close()
+					os.popen('nautilus %s' % (server_name + sep + file_path)).close()
 				elif platform.system() == 'Darwin':
 					server_name = "/Volumes/Post"
-					os.popen('open %s' % (server_name + file_path)).close()
+					os.popen('open %s' % (server_name + sep + file_path)).close()
 			else:
 				if platform.system() == 'Windows':
 					server_name = "X:"
-					os.popen('explorer.exe %s' % (server_name + file_path)).close()
+					os.popen('explorer.exe %s' % (server_name + sep + file_path)).close()
 					print (server_name + file_path)
 				elif platform.system() == 'Linux':
 					server_name = "/All"
-					os.popen('nautilus %s' % (server_name + file_path)).close()
+					os.popen('nautilus %s' % (server_name + sep + file_path)).close()
 				elif platform.system() == 'Darwin':
 					server_name = "/Volumes/All"
-					os.popen('open %s' % (server_name + file_path)).close()
+					os.popen('open %s' % (server_name + sep + file_path)).close()
 
 
 		# 转码 'clip1' 'IP|xml_path|path|项目id|场id|command_id|clip1'
