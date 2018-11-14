@@ -75,6 +75,8 @@ class UploadFile:
         self.select_one('')
         if self.fileOld:
             fileType = str(self.fileOld.split(".")[-1]).lower()
+            if fileType == "jpg" or fileType == "jpeg" or fileType == "png" or fileType == "tiff" or fileType == "tga":
+                fileType = "jpg"
             file_copy_path = server_name + file_path + self.sep + file_name + "." + fileType
             shutil.copy(self.fileOld, file_copy_path)
             print file_copy_path
