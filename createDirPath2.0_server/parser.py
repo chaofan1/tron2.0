@@ -12,6 +12,7 @@
 # 'Render' '192.168.100.44|/FUY/999/003/Stuff/lgt/publish/fuy999003_lgt_wangcf_yuanBao_master|Render2|command_id'
 # "Folder" "192.168.1.85|/DHG/Dailies/20161214"
 # 服务器与客户端
+# "Excel" "192.168.1.85" "文件路径" "目标路径"
 # old "Dailies2" "HAC" "fileName" "192.168.1.85|x:/DHG/Dailies/20161214|dhg01001_prd_liangcy_HFG_v0103|373"
 # new "Dailies1" "/FUY/001/001/stuff/cmp" "192.168.1.85|/FUY/001/001/stuff/cmp|ruy001004_cmp_xiecy_weqw_v0101|command_id"
 # "Dailies2" "/FUY/001/001/stuff/cmp" "192.168.1.85|/FUY/001/001/stuff/cmp|filename|command_id"
@@ -104,10 +105,10 @@ def _init_():
 		if args[0] == "AssetTask":    # "AssetTask" "HAC" "rig" "liangcy" "fileName" "command_id"
 			TronProject().CreateAsset(args[1], args[2], args[3], args[4])
 			callback(args[5])
-	elif len(args) == 8:
-		if args[0] == "ShotTask":   # "ShotTask" "HAC" "01" "001" "rig" "liangcy" "fileName" "command_id"
+	elif len(args) == 9:
+		if args[0] == "ShotTask":   # "ShotTask" "HAC" "01" "001" "rig" "liangcy" "fileName" "command_id" "ip"
 			TronProject().CreateShot(args[1], args[2], args[3], args[4], args[5], args[6])
-			args = args[1] + '|' + args[2] + '|' + args[3] + '|' + args[4] + '|' + args[5] + '|' + args[6]
+			args = args[7] + '|' + args[1] + '|' + args[2] + '|' + args[3] + '|' + args[4] + '|' + args[5] + '|' + args[6]
 			ShotTaskData = args + "|ShotTask"
 			clientLink(ShotTaskData)
 
