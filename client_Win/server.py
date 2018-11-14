@@ -21,7 +21,7 @@ from upload import UploadFile
 
 
 def myServer():
-	if platform.system() == 'Windows':
+	if platform.system() != 'Windows':
 		print '这是Windows平台，请使用相应脚本！'
 		exit()
 	localIP = socket.gethostbyname(socket.gethostname())
