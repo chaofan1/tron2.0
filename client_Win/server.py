@@ -155,11 +155,11 @@ def handle(conn):
 						sep + type_ + sep + 'publish' + sep + fileName
 			if type_ == "lgt" or type_ == "cmp":
 				server_name = "J:"
-				os.popen('explorer.exe %s' % (server_name + file_path)).close()
+				os.popen('explorer.exe %s' % (server_name + sep + file_path)).close()
 				print (server_name + file_path)
 			else:
 				server_name = "X:"
-				os.popen('explorer.exe %s' % (server_name + file_path)).close()
+				os.popen('explorer.exe %s' % (server_name + sep + file_path)).close()
 				print (server_name + file_path)
 
 	conn.close()
