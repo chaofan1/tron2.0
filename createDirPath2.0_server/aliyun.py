@@ -11,9 +11,9 @@ from aliyunsdkram.request.v20150501 import CreateUserRequest,CreateAccessKeyRequ
 
 class AliyunOss():
     def __init__(self, userName, phone, filePath, email=None):
-        self.clt = client.AcsClient('LTAIwpOv4aA4PQUS', '4cDyqy3lXuiSRtqR9xjUYmMdikEFxG', 'cn-hangzhou')
-        auth = oss2.Auth('LTAIwpOv4aA4PQUS', '4cDyqy3lXuiSRtqR9xjUYmMdikEFxG')
-        self.bucket = oss2.Bucket(auth, 'http://oss-cn-shanghai.aliyuncs.com', 'jg-testwww')
+        self.clt = client.AcsClient('xxx', 'xxx', 'cn-hangzhou')
+        auth = oss2.Auth('xxxxx', 'xxxx')
+        self.bucket = oss2.Bucket(auth, 'http://oss-cn-shanghai.aliyuncs.com', 'xxx')
         self.filePath = filePath
         self.key = os.path.basename(self.filePath)
         self.userName = userName
