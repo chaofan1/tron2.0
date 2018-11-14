@@ -37,12 +37,14 @@ class UploadFile:
             fileNow = file_name + "." + fileType
 
             # 重构filePath: /FUY/stuff/dmt
+            filePath = ''
             if fileType == "mov" or fileType == "avi" or fileType == "mp4":
                 filePath = os.path.join(file_path, 'mov')
             elif fileType == "jpg" or fileType == "jpeg" or fileType == "png" or fileType == "tiff" or fileType == "tga":
                 filePath = os.path.join(file_path, 'img')
 
             file_copy_path = server_name + filePath + self.sep + file_name  # /Volumes/All/FUY/stuff/dmt/mov/filename
+            file_abspath = ''
             try:
                 if not os.path.exists(file_copy_path):
                     os.makedirs(file_copy_path)

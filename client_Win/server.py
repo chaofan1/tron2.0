@@ -256,7 +256,7 @@ def myServer():
 			p.start()
 			conn.close()
 		else:
-			handle(conn, localIP)
+			handle(conn)
 
 
 if __name__ == '__main__':

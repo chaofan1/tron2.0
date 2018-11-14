@@ -93,17 +93,6 @@ class TronDistribute:
                 # os.remove(self.filePath) # 测试或上线打开，拷贝完，删除json文件
             except Exception as e:
                 pass
-        # 暂时用不上
-        # elif task == 'pack':
-        #     print('---开始压缩---')
-        #     requests = threadpool.makeRequests(self.packFile, callback=self.result)
-        #     [self.pool.putRequest(req) for req in requests]
-        #     try:
-        #         self.pool.wait()
-        #         # self.putThread('transit')  用云之后打开
-        #         os.remove(self.filePath)
-        #     except Exception as e:
-        #         pass
 
         # 上传云，publicArg为 parse.py传来的json文件路径
         elif task == 'transit':

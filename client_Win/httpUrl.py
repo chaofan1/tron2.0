@@ -26,6 +26,7 @@ class CallBack:
         self.request()
 
     def request(self):
+        print self.query_args
         encoded_args = urllib.urlencode(self.query_args)
         try:
             response = urllib2.urlopen(self.url, encoded_args)

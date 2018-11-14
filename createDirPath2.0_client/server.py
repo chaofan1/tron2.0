@@ -201,7 +201,6 @@ def handle(conn):
 			projectName,seqName,shotName,type_,userName,fileName,UpTask = data_split
 			file_path = projectName + sep + seqName + sep + shotName + sep + 'Stuff' + \
 						sep + type_ + sep + 'publish' + sep + fileName
-
 			if type_ == "lgt" or type_ == "cmp":
 				if platform.system() == 'Windows':
 					server_name = "J:"
@@ -257,7 +256,7 @@ def myServer():
 			p.start()
 			conn.close()
 		else:
-			handle(conn, localIP)
+			handle(conn)
 
 
 if __name__ == '__main__':
