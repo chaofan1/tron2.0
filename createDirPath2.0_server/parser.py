@@ -74,11 +74,11 @@ def _init_():
 		if args[0] == "Project":
 			TronProject().CreatePro(args[1])  # createProject.CreatePro("Project","HAC","command_id")
 			callback(args[2])
-		elif args[0] == "Dailies1":  # "Dailies1" "/FUY/001/001/stuff/cmp/" "IP|/FUY/001/001/stuff/cmp|filename|command_id"
+		elif args[0] == "Dailies1":  # "Dailies1" "/FUY/001/001/Stuff/cmp/" "IP|/FUY/001/001/Stuff/cmp|filename|command_id"
 			TronProject().CreateDai(args[1])
 			dailiesData = args[2]+"|Dailies1"
 			clientLink(dailiesData)
-		elif args[0] == "Dailies2":  # "Dailies2" "/FUY/001/001/stuff/cmp/" "IP|/FUY/001/001/stuff/cmp|filename|command_id"
+		elif args[0] == "Dailies2":  # "Dailies2" "/FUY/001/001/Stuff/cmp/" "IP|/FUY/001/001/Stuff/cmp|filename|command_id"
 			TronProject().CreateDai(args[1])
 			dailiesData = args[2]+"|Dailies2"
 			clientLink(dailiesData)

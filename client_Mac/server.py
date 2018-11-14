@@ -6,23 +6,19 @@
 # 打包 'clip3'  'IP|FUY/001|xml_path|command_id|clip3'
 
 import os
-import shutil
 import platform
 import socket
-from multiprocessing import Process
-import createThumbnail
-from render import Render, Select
+import config
 from clipLine import start_clip
 from clipLine2 import Pack, insert
 from distribute_download import Download
 from clipLine import to_php
-from httpUrl import CallBack
 from upload import UploadFile
 
 
 def myServer():
 	if platform.system() != 'Darwin':
-		print '这是Mac平台，请使用相应脚本！'
+		print '这是Mac平台，请使用相应脚本!'
 		exit()
 	localIP = socket.gethostbyname(socket.gethostname())
 	HOST = localIP
@@ -51,36 +47,34 @@ def handle(conn):
 			break
 		print('recv data:', data)
 		data_split = data.strip().split("|")
-		sep = os.sep
+		sep = '/'
+		server_all = config.All
+		server_post = config.Post
+		server_ref = config.Reference
 
 		if len(data_split) is 1:
 			file_path = data.strip()
-			server_name = "/Volumes/All"
-			os.popen('open %s' % (server_name + file_path)).close()
+			os.popen('open %s' % (server_all + file_path)).close()
 
 		elif len(data_split) is 2:
 			file_path, Uptask = data_split
 			if Uptask == 'lgt' or Uptask == 'cmp':
-				server_name = "/Volumes/Post"
-				os.popen('open %s' % (server_name + file_path)).close()
+				os.popen('open %s' % (server_post + file_path)).close()
 			else:
-				server_name = "/Volumes/All"
-				os.popen('open %s' % (server_name + file_path)).close()
+				os.popen('open %s' % (server_all + file_path)).close()
 
 		elif data_split[-1] == "Dailies1":   # /FUY/001/001/stuff/cmp|file_name|command_id|Dailies1
 			file_path, file_name, command_id, UpTask = data_split
-			server_name = "/Volumes/All"
-			UploadFile().upload_dailies(server_name, file_path, file_name, command_id)
+			UploadFile().upload_dailies(server_all, file_path, file_name, command_id)
 
 		elif data_split[-1] =="Reference":
 			file_path, file_name, sql_data, UpTask = data_split
-			server_name = "/Volumes/library/References"
-			UploadFile().upload_reference(server_name, file_path, file_name, sql_data)
+			UploadFile().upload_reference(server_ref, file_path, file_name, sql_data)
 
 		elif data_split[-1] == 'clip1':  # 转码
 			xml_path, path, project_id, field_id, xml_id, command_id, UpTask = data_split
-			xml_path = '/Volumes/All/' + xml_path
-			video_path = '/Volumes/All/' + path
+			xml_path = server_all + sep + xml_path
+			video_path = server_all + sep + path
 			start_clip(xml_path, video_path, project_id, field_id, xml_id, UpTask)
 			to_php(1, 0, project_id, field_id, xml_id, UpTask)
 			conn.send(path)
@@ -89,8 +83,8 @@ def handle(conn):
 
 		elif data_split[-1] == 'add_xml':
 			xml_path, path, project_id, field_id, xml_id, command_id, UpTask = data_split
-			xml_path = '/Volumes/All/' + xml_path
-			video_path = '/Volumes/All/' + path
+			xml_path = server_all + sep + xml_path
+			video_path = server_all + sep + path
 			start_clip(xml_path, video_path, project_id, field_id, xml_id, UpTask)
 			conn.send(path)
 			# httpUrl.render_callback(command_id)
@@ -111,14 +105,14 @@ def handle(conn):
 			if not os.path.exists(pack_path):
 				os.mkdir(pack_path)
 			out_path = os.path.join(pack_path, pro_name)  # /Users/wang/Pack/FUY
-			pro_scene = '/Volumes/All' + pro_scene
+			pro_scene = server_all + sep + pro_scene
 			Pack().pack(pro_scene, xml_path, out_path)
 			os.popen('open %s' % out_path).close()
 			# httpUrl.render_callback(command_id)
 			print('clip3 end')
 
 		elif data_split[-1] == 'download':   # 分发外包下载
-			save_path = Select().select_dir('')
+			save_path = UploadFile().select_dir('')
 			load_path, UpTask = data_split
 			Download(save_path, load_path).putThread()
 			# httpUrl.render_callback(command_id)
@@ -129,27 +123,9 @@ def handle(conn):
 			file_path = projectName + sep + seqName + sep + shotName + sep + 'Stuff' + \
 						sep + type_ + sep + 'publish' + sep + fileName
 			if type_ == "lgt" or type_ == "cmp":
-				if platform.system() == 'Windows':
-					server_name = "J:"
-					os.popen('explorer.exe %s' % (server_name + file_path)).close()
-					print (server_name + file_path)
-				elif platform.system() == 'Linux':
-					server_name = "/Post"
-					os.popen('nautilus %s' % (server_name + file_path)).close()
-				elif platform.system() == 'Darwin':
-					server_name = "/Volumes/Post"
-					os.popen('open %s' % (server_name + file_path)).close()
+				os.popen('open %s' % (server_post + sep + file_path)).close()
 			else:
-				if platform.system() == 'Windows':
-					server_name = "X:"
-					os.popen('explorer.exe %s' % (server_name + file_path)).close()
-					print (server_name + file_path)
-				elif platform.system() == 'Linux':
-					server_name = "/All"
-					os.popen('nautilus %s' % (server_name + file_path)).close()
-				elif platform.system() == 'Darwin':
-					server_name = "/Volumes/All"
-					os.popen('open %s' % (server_name + file_path)).close()
+				os.popen('open %s' % (server_all + sep + file_path)).close()
 	conn.close()
 
 

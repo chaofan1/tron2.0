@@ -30,8 +30,8 @@
     "Dailies2" 是上传序列
     "Dailies1" "文件夹路径" "IP|文件夹路径|文件夹名|命令ID"
     例如：
-    python parser.py "Dailies1" "/FUY/001/001/stuff/cmp/" "192.168.1.85|FUY/001/001/stuff/cmp/img|filename|command_id"
-                     "Dailies2" "/FUY/001/001/stuff/cmp/" "192.168.1.85|FUY/001/001/stuff/cmp/mov|filename|command_id"
+    python parser.py "Dailies1" "/FUY/001/001/Stuff/cmp/" "192.168.1.85|FUY/001/001/stuff/cmp/img|filename|command_id"
+                     "Dailies2" "/FUY/001/001/Stuff/cmp/" "192.168.1.85|FUY/001/001/stuff/cmp/mov|filename|command_id"
 
 7、当上传references的时候：
     "Reference" "项目" "镜头或资产" "IP|文件夹路径|文件名|命令ID"

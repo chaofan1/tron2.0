@@ -16,42 +16,42 @@ class UploadFile:
     def __init__(self):
         self.sep = os.sep
         self.plat = platform.system()
-        self.inPathFile = ''
-        self.fileOld = ''
         self.app = QtGui.QApplication(sys.argv)
         self.mainWindow = QtGui.QMainWindow()
-        self.select_file()
+        self.inPathFile = ''
+        self.fileOld = ''
 
-    def select_file(self):
-        (fileOld, ext) = QtGui.QFileDialog.getOpenFileNameAndFilter(self.mainWindow,
-                                                                    QtCore.QString('update a Dailies'),
-                                                                    self.inPathFile,
-                                                                    '*.* \n*.mov \n*.mp4 \n*.avi \n*.jpg *.jpeg \n%.png \n*.tiff \n*.tga *.dpx \n*.*',
-                                                                    options=QtGui.QFileDialog.ReadOnly)
-        self.fileOld = fileOld.__str__()
+    def select_one(self, inPathFile):
+        self.fileOld = QtGui.QFileDialog.getOpenFileName(self.mainWindow, 'open file', inPathFile)
+
+    def select_dir(self, inPathFile):
+        file_path = QtGui.QFileDialog.getExistingDirectory(self.mainWindow, 'open file', inPathFile)
+        return file_path
+        sys.exit(self.app.exec_())
 
     def upload_dailies(self, server_name, file_path, file_name, command_id):
+        self.select_one('')
         if self.fileOld:
             print self.fileOld
             fileType = str(self.fileOld.split(".")[-1]).lower()
             fileNow = file_name + "." + fileType
-
-            # 重构filePath: /FUY/stuff/dmt
+            # 重构filePath: /FUY/Stuff/dmt
             filePath = ''
             if fileType == "mov" or fileType == "avi" or fileType == "mp4":
                 filePath = os.path.join(file_path, 'mov')
             elif fileType == "jpg" or fileType == "jpeg" or fileType == "png" or fileType == "tiff" or fileType == "tga":
                 filePath = os.path.join(file_path, 'img')
-            file_copy_path = server_name + filePath + self.sep + file_name  # /Volumes/All/FUY/stuff/dmt/mov/filename
+                fileNow = file_name + ".jpg"
+            file_copy_path = server_name + filePath + self.sep + file_name  # /Volumes/All/FUY/Stuff/dmt/mov/filename
             file_abspath = file_copy_path + self.sep + fileNow
             print file_copy_path
-            # try:
-            if not os.path.exists(file_copy_path):
-                os.mkdir(file_copy_path)
-                print 'mkdir'
-            shutil.copy(self.fileOld, file_abspath)
-            # except Exception as e:
-            #     print(e)
+            try:
+                if not os.path.exists(file_copy_path):
+                    os.mkdir(file_copy_path)
+                    print 'mkdir'
+                shutil.copy(self.fileOld, file_abspath)
+            except Exception as e:
+                print(e)
             if os.path.exists(file_abspath):
                 if fileType == "mov" or fileType == "avi" or fileType == "mp4":
                     createThumbnail.run(fileNow, file_copy_path)
@@ -63,17 +63,18 @@ class UploadFile:
                     cv2.imwrite(thumbnail_img, img, [int(cv2.IMWRITE_JPEG_QUALITY), 1])
                     CallBack().dai_callback(command_id, filePath + "/" + file_name, fileNow, "")
                     QtGui.QMessageBox.information(None, 'INFORMATION', u'提交成功！', QtCore.QString('OK'))
-                return filePath + "/" + file_name  # /FUY/001/001/stuff/cmp/mov/filename
+                return  # /FUY/001/001/Stuff/cmp/mov/filename
             else:
                 QtGui.QMessageBox.information(None, 'INFORMATION', u'提交失败，请检查上传文件及权限！', QtCore.QString('OK'))
-                return filePath
+                return
         else:
-            return file_path
-        sys.exit(self.app.exec_())
+            return
+        sys.exit(app.exec_())
 
     def upload_reference(self, server_name, file_path, file_name, sql_data):
+        self.select_one('')
         if self.fileOld:
-            fileType = self.fileOld.split(".")[-1]
+            fileType = str(self.fileOld.split(".")[-1]).lower()
             file_copy_path = server_name + file_path + self.sep + file_name + "." + fileType
             shutil.copy(self.fileOld, file_copy_path)
             print file_copy_path
@@ -83,7 +84,6 @@ class UploadFile:
                     createThumbnail.run(fileNow, (server_name + file_path))
                     file_type = 1
                     thumbnail = '.' + file_name + ".jpg"  # 缩略图路径
-                    print thumbnail
                     self.insert_data(sql_data, file_type, thumbnail, fileType)
                     QtGui.QMessageBox.information(None, 'INFORMATION', u'提交成功！', QtCore.QString('OK'))
                 elif fileType == "jpg" or fileType == "jpeg" or fileType == "png" or fileType == "tiff" or fileType == "tga":
@@ -92,7 +92,6 @@ class UploadFile:
                     cv2.imwrite(thumbnail_img, img, [int(cv2.IMWRITE_JPEG_QUALITY), 40])
                     file_type = 2
                     thumbnail = '.' + fileNow
-                    print thumbnail
                     self.insert_data(sql_data, file_type, thumbnail, fileType)
                     QtGui.QMessageBox.information(None, 'INFORMATION', u'提交成功！', QtCore.QString('OK'))
                 return
@@ -103,7 +102,7 @@ class UploadFile:
             return
         sys.exit(self.app.exec_())
 
-    def insert_data(sql_data, file_type, thumbnail, fileType):
+    def insert_data(self, sql_data, file_type, thumbnail, fileType):
         # {"file_name":"1538217282",     string
         # "resource_type":"2",
         # "project_id":1,
@@ -152,6 +151,7 @@ class UploadFile:
             conn.commit()
             cursor.close()
             conn.close()
+            print 'succes sql'
 
 
 if __name__ == '__main__':

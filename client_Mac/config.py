@@ -1,3 +1,3 @@
-ALL_WIN = ''
-ALL_MAC = ''
-ALL_LINUX = ''
+All = "/Volumes/All"
+Post = "/Volumes/Post"
+Reference = "/Volumes/library/References"
