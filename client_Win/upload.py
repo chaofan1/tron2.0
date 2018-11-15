@@ -42,6 +42,7 @@ class UploadFile:
                 filePath = os.path.join(file_path, 'mov')
             elif fileType == "jpg" or fileType == "jpeg" or fileType == "png" or fileType == "tiff" or fileType == "tga":
                 filePath = os.path.join(file_path, 'img')
+                fileNow = file_name + ".jpg"
 
             file_copy_path = server_name + filePath + self.sep + file_name  # /Volumes/All/FUY/stuff/dmt/mov/filename
             file_abspath = ''
@@ -73,7 +74,9 @@ class UploadFile:
 
     def upload_reference(self, server_name, file_path, file_name, sql_data):
         if self.fileOld:
-            fileType = self.fileOld.split(".")[-1]
+            fileType = str(self.fileOld.split(".")[-1]).lower()
+            if fileType == "jpg" or fileType == "jpeg" or fileType == "png" or fileType == "tiff" or fileType == "tga":
+                fileType = "jpg"
             file_copy_path = server_name + file_path + self.sep + file_name + "." + fileType
             shutil.copy(self.fileOld, file_copy_path)
             print file_copy_path
