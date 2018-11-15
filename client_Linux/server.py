@@ -18,6 +18,7 @@ from distribute_download import Download
 from clipLine import to_php
 from httpUrl import CallBack
 from upload import UploadFile
+import config
 
 
 def myServer():
@@ -52,29 +53,26 @@ def handle(conn):
 		if not data:
 			break
 		print('recv data:', data)
-		server_name = ''
-		outputPath = ''
 		data_split = data.strip().split("|")
 		sep = os.sep
+		server_all = config.All
+		server_post = config.Post
+		server_ref = config.Reference
 
 		if len(data_split) is 1:
 			file_path = data.strip()
-			server_name = "/All"
-			os.popen('nautilus %s' % (server_name + file_path)).close()
+			os.popen('nautilus %s' % (server_all + file_path)).close()
 
 		elif len(data_split) is 2:
 			file_path, Uptask = data_split
 			if Uptask == 'lgt' or Uptask == 'cmp':
-				server_name = "/Post"
-				os.popen('nautilus %s' % (server_name + file_path)).close()
+				os.popen('nautilus %s' % (server_post + file_path)).close()
 			else:
-				server_name = "/All"
-				os.popen('nautilus %s' % (server_name + file_path)).close()
+				os.popen('nautilus %s' % (server_all + file_path)).close()
 
 		elif data_split[-1] == "Ready_render1" or data_split[-1] == "Local_render1" or data_split[-1] == "Cloud_render1":
 			file_path, Uptask = data_split
-			server_name = "/Post"
-			inPathFile = server_name + sep + file_path[0:14]
+			inPathFile = server_post + sep + file_path[0:14]
 			file_name = Select().select_one(inPathFile)
 			if os.path.exists(file_name):
 				Render(file_name, file_path).submit(Uptask)
@@ -82,8 +80,7 @@ def handle(conn):
 
 		elif data_split[-1] == "Ready_render2" or data_split[-1] == "Local_render2" or data_split[-1] == "Cloud_render2":
 			file_path, Uptask = data_split
-			server_name = "/Post"
-			inPathFile = server_name + sep + file_path[0:14]
+			inPathFile = server_post + sep + file_path[0:14]
 			file_name = Select().select_dir(inPathFile)
 			if os.path.exists(file_name):
 				Render(file_name, file_path).submit(Uptask)
@@ -91,8 +88,7 @@ def handle(conn):
 
 		elif data_split[-1] == "Dailies1":   # /FUY/001/001/stuff/cmp|file_name|command_id|Dailies1
 			file_path, file_name, command_id, UpTask = data_split
-			server_name = "/All"
-			UploadFile().upload_dailies(server_name, file_path, file_name, command_id)
+			UploadFile().upload_dailies(server_all, file_path, file_name, command_id)
 
 		elif data_split[-1] == "Dailies2":
 			file_path, file_name, command_id, UpTask = data_split
@@ -100,8 +96,7 @@ def handle(conn):
 			# 重构file_path: /FUY/stuff/dmt
 			file_path = file_path + '/mov'
 			outputPath = os.path.join(os.environ['HOME'], '/%s' % file_name)
-			server_name = "/All"
-			fileD = server_name + "/" + file_path + "/" + file_name
+			fileD = server_all + "/" + file_path + "/" + file_name
 			fileAll = fileD + "/" + fileNow
 			if os.path.isdir(outputPath):
 				shutil.rmtree(outputPath)
@@ -116,13 +111,12 @@ def handle(conn):
 
 		elif data_split[-1] =="Reference":
 			file_path, file_name, sql_data, UpTask = data_split
-			server_name = "/library/References"
-			UploadFile().upload_reference(server_name, file_path, file_name, sql_data)
+			UploadFile().upload_reference(server_ref, file_path, file_name, sql_data)
 
 		elif data_split[-1] == 'clip1':  # 转码
 			xml_path, path, project_id, field_id, xml_id, command_id, UpTask = data_split
-			xml_path = '/All/' + xml_path
-			video_path = '/All/' + path
+			xml_path = server_all + '/' + xml_path
+			video_path = server_all + '/' + path
 			start_clip(xml_path, video_path, project_id, field_id, xml_id, UpTask)
 			to_php(1, 0, project_id, field_id, xml_id, UpTask)
 			# httpUrl.render_callback(command_id)
@@ -131,8 +125,8 @@ def handle(conn):
 
 		elif data_split[-1] == 'add_xml':
 			xml_path, path, project_id, field_id, xml_id, command_id, UpTask = data_split
-			xml_path = '/All/' + xml_path
-			video_path = '/All/' + path
+			xml_path = server_all + '/' + xml_path
+			video_path = server_all + '/' + path
 			start_clip(xml_path, video_path, project_id, field_id, xml_id, UpTask)
 			conn.send(path)
 			# httpUrl.render_callback(command_id)
@@ -152,7 +146,7 @@ def handle(conn):
 			if not os.path.exists(pack_path):
 				os.mkdir(pack_path)
 			out_path = os.path.join(pack_path, pro_name)  # /Users/wang/Pack/FUY
-			pro_scene = '/Volumes/All' + pro_scene
+			pro_scene = server_all + sep + pro_scene
 			Pack().pack(pro_scene, xml_path, out_path)
 			os.popen('open %s' % out_path).close()
 			# httpUrl.render_callback(command_id)
@@ -170,11 +164,9 @@ def handle(conn):
 			file_path = projectName + sep + seqName + sep + shotName + sep + 'Stuff' + \
 						sep + type_ + sep + 'publish' + sep + fileName
 			if type_ == "lgt" or type_ == "cmp":
-				server_name = "/Post"
-				os.popen('nautilus %s' % (server_name + file_path)).close()
+				os.popen('nautilus %s' % (server_post + file_path)).close()
 			else:
-				server_name = "/All"
-				os.popen('nautilus %s' % (server_name + file_path)).close()
+				os.popen('nautilus %s' % (server_all + file_path)).close()
 
 	conn.close()
 
