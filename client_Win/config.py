@@ -1,3 +1,3 @@
-ALL_WIN = ''
-ALL_MAC = ''
-ALL_LINUX = ''
+All = "X:"
+Post = "J:"
+Reference = "L:/References"

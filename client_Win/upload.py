@@ -111,7 +111,7 @@ class UploadFile:
             return
         sys.exit(app.exec_())
 
-    def insert_data(sql_data, file_type, thumbnail, fileType):
+    def insert_data(self, sql_data, file_type, thumbnail, fileType):
         # {"file_name":"1538217282",     string
         # "resource_type":"2",
         # "project_id":1,
