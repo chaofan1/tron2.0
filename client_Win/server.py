@@ -9,9 +9,7 @@ import os
 import shutil
 import platform
 import socket
-from multiprocessing import Process
 import createThumbnail
-from render import Render, Select
 from clipLine import start_clip
 from clipLine2 import Pack, insert
 from distribute_download import Download
@@ -143,7 +141,7 @@ def handle(conn):
 			print('clip3 end')
 
 		elif data_split[-1] == 'download':   # 分发外包下载
-			save_path = Select().select_dir('')
+			save_path = UploadFile().select_dir('')
 			load_path, UpTask = data_split
 			Download(save_path, load_path).putThread()
 			# httpUrl.render_callback(command_id)

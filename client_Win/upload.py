@@ -30,6 +30,11 @@ class UploadFile:
                                                                     options=QtGui.QFileDialog.ReadOnly)
         self.fileOld = fileOld.__str__()
 
+    def select_dir(self, inPathFile):
+        file_path = QtGui.QFileDialog.getExistingDirectory(self.mainWindow, 'open file', inPathFile)
+        return file_path
+        sys.exit(self.app.exec_())
+
     def upload_dailies(self, server_name, file_path, file_name, command_id):
         if self.fileOld:
             print self.fileOld
