@@ -95,16 +95,16 @@ class TronProject:
         daiPath2 = self.serverName + filePath + '/mov'
         print daiPath
         if not os.path.exists(daiPath):
-            os.mkdir(daiPath)
-            os.chmod(daiPath, 0777)
-            # TronFolder().CreateFolder(daiPath, "0777", "")
+            # os.mkdir(daiPath)
+            # os.chmod(daiPath, 0777)
+            TronFolder().CreateFolder(daiPath, "0777", "")
         # else:
         #     os.chmod(daiPath, 0777)
         #     print 'already chmod daiPath'
         if not os.path.exists(daiPath2):
-            os.mkdir(daiPath)
-            os.chmod(daiPath, 0777)
-            # TronFolder().CreateFolder(daiPath2, "0777", "")
+            # os.mkdir(daiPath)
+            # os.chmod(daiPath, 0777)
+            TronFolder().CreateFolder(daiPath2, "0777", "")
         # else:
         #     os.chmod(daiPath2, 0777)
 
