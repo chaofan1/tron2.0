@@ -118,7 +118,7 @@ def handle(conn):
 			# httpUrl.render_callback(command_id)
 
 		elif data_split[-1] == 'ShotTask':   # 提交发布弹框
-			# "ShotTask" "HAC" "01" "001" "rig" "liangcy" "fileName" "command_id"
+			# "HAC" "01" "001" "rig" "liangcy" "fileName" "ShotTask"
 			projectName,seqName,shotName,type_,userName,fileName,UpTask = data_split
 			file_path = projectName + sep + seqName + sep + shotName + sep + 'Stuff' + \
 						sep + type_ + sep + 'publish' + sep + fileName

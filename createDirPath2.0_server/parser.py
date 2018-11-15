@@ -108,7 +108,7 @@ def _init_():
 	elif len(args) == 9:
 		if args[0] == "ShotTask":   # "ShotTask" "HAC" "01" "001" "rig" "liangcy" "fileName" "command_id" "ip"
 			TronProject().CreateShot(args[1], args[2], args[3], args[4], args[5], args[6])
-			args = args[7] + '|' + args[1] + '|' + args[2] + '|' + args[3] + '|' + args[4] + '|' + args[5] + '|' + args[6]
+			args = args[8] + '|' + args[1] + '|' + args[2] + '|' + args[3] + '|' + args[4] + '|' + args[5] + '|' + args[6]
 			ShotTaskData = args + "|ShotTask"
 			clientLink(ShotTaskData)
 
