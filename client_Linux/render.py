@@ -13,12 +13,12 @@ class Select:
         self.mainWindow = QMainWindow()
 
     def select_one(self, inPathFile):
-        file_path = QFileDialog.getOpenFileName(self.mainWindow, 'open file', inPathFile)
+        file_path = QFileDialog.getOpenFileName(self.mainWindow, 'open file', inPathFile).toUtf8()
         return file_path
         sys.exit(self.app.exec_())
 
     def select_dir(self, inPathFile):
-        file_path = QFileDialog.getExistingDirectory(self.mainWindow, 'open file', inPathFile)
+        file_path = QFileDialog.getExistingDirectory(self.mainWindow, 'open file', inPathFile).toUtf8()
         return file_path
         sys.exit(self.app.exec_())
 

@@ -22,7 +22,7 @@ class UploadFile:
         self.fileOld = ''
 
     def select_one(self, inPathFile):
-        self.fileOld = QtGui.QFileDialog.getOpenFileName(self.mainWindow, 'open file', inPathFile)
+        self.fileOld = QtGui.QFileDialog.getOpenFileName(self.mainWindow, 'open file', inPathFile).toUtf8()
 
     def upload_dailies(self, server_name, file_path, file_name, command_id):
         self.select_one('')
@@ -148,7 +148,7 @@ class UploadFile:
             conn.commit()
             cursor.close()
             conn.close()
-            print 'succes sql'
+            print 'success ref sql'
 
 
 if __name__ == '__main__':

@@ -22,17 +22,16 @@ class UploadFile:
         self.fileOld = ''
 
     def select_one(self, inPathFile):
-        self.fileOld = QFileDialog.getOpenFileName(self.mainWindow, 'open file', inPathFile)
+        self.fileOld = QFileDialog.getOpenFileName(self.mainWindow, 'open file', inPathFile).toUtf8()
 
     def select_dir(self, inPathFile):
-        file_path = QFileDialog.getExistingDirectory(self.mainWindow, 'open file', inPathFile)
+        file_path = QFileDialog.getExistingDirectory(self.mainWindow, 'open file', inPathFile).toUtf8()
         return file_path
         sys.exit(self.app.exec_())
 
     def upload_dailies(self, server_name, file_path, file_name, command_id):
         self.select_one('')
         if self.fileOld:
-            # print self.fileOld
             fileType = str(self.fileOld.split(".")[-1]).lower()
             fileNow = file_name + "." + fileType
             # 重构filePath: /FUY/Stuff/dmt
