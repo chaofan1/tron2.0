@@ -37,6 +37,6 @@ class Remind:
 
 if __name__ == '__main__':
     Remind().remind_success('')
-    Remind().remind_fail('', '')
-    Remind().remind_start('')
-    Remind().remind_ask()
+    # Remind().remind_fail('', '')
+    # Remind().remind_start('')
+    # Remind().remind_ask()

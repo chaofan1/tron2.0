@@ -4,8 +4,10 @@
 
 import cv2
 
+
 class CreateThumbnail:
     pass
+
 
 def run(fileName, filePath):  # filename.mov, /Volumes/All/FUY/stuff/dmt/mov/filename
     thumbPicName = fileName.split(".")[0] + ".jpg"   # filename.jpg

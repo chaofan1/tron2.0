@@ -11,7 +11,6 @@ import socket
 import config
 from clipLine import start_clip
 from clipLine2 import Pack, insert
-from distribute_download import Download
 from clipLine import to_php
 from upload import UploadFile
 
@@ -110,12 +109,6 @@ def handle(conn):
 			os.popen('open %s' % out_path).close()
 			# httpUrl.render_callback(command_id)
 			print('clip3 end')
-
-		elif data_split[-1] == 'download':   # 分发外包下载
-			save_path = UploadFile().select_dir('')
-			load_path, UpTask = data_split
-			Download(save_path, load_path).putThread()
-			# httpUrl.render_callback(command_id)
 
 		elif data_split[-1] == 'ShotTask':   # 提交发布弹框
 			# "HAC" "01" "001" "rig" "liangcy" "fileName" "ShotTask"

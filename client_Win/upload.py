@@ -7,7 +7,8 @@ import platform
 import sys
 import cv2
 import pymysql
-from PyQt4 import QtCore, QtGui
+from PyQt4.QtGui import *
+from PyQt4.QtCore import *
 import createThumbnail
 from httpUrl import CallBack
 
@@ -18,20 +19,20 @@ class UploadFile:
         self.plat = platform.system()
         self.inPathFile = ''
         self.fileOld = ''
-        self.app = QtGui.QApplication(sys.argv)
-        self.mainWindow = QtGui.QMainWindow()
+        self.app = QApplication(sys.argv)
+        self.mainWindow = QMainWindow()
         self.select_file()
 
     def select_file(self):
-        (fileOld, ext) = QtGui.QFileDialog.getOpenFileNameAndFilter(self.mainWindow,
-                                                                    QtCore.QString('update a Dailies'),
+        (fileOld, ext) = QFileDialog.getOpenFileNameAndFilter(self.mainWindow,
+                                                                    QString('update a Dailies'),
                                                                     self.inPathFile,
                                                                     '*.* \n*.mov \n*.mp4 \n*.avi \n*.jpg *.jpeg \n%.png \n*.tiff \n*.tga *.dpx \n*.*',
-                                                                    options=QtGui.QFileDialog.ReadOnly)
+                                                                    options=QFileDialog.ReadOnly)
         self.fileOld = fileOld.__str__()
 
     def select_dir(self, inPathFile):
-        file_path = QtGui.QFileDialog.getExistingDirectory(self.mainWindow, 'open file', inPathFile)
+        file_path = QFileDialog.getExistingDirectory(self.mainWindow, 'open file', inPathFile)
         return file_path
         sys.exit(self.app.exec_())
 
@@ -62,16 +63,16 @@ class UploadFile:
                 if fileType == "mov" or fileType == "avi" or fileType == "mp4":
                     createThumbnail.run(fileNow, file_copy_path)
                     CallBack().dai_callback(command_id, filePath + "/" + file_name, fileNow, "")
-                    QtGui.QMessageBox.information(None, 'INFORMATION', u'提交成功！', QtCore.QString('OK'))
+                    QMessageBox.information(None, 'INFORMATION', u'提交成功！', QString('OK'))
                 elif fileType == "jpg" or fileType == "jpeg" or fileType == "png" or fileType == "tiff" or fileType == "tga":
                     img = cv2.imread(file_abspath)
                     thumbnail_img = file_copy_path + self.sep + '.' + fileNow
                     cv2.imwrite(thumbnail_img, img, [int(cv2.IMWRITE_JPEG_QUALITY), 1])
                     CallBack().dai_callback(command_id, filePath + "/" + file_name, fileNow, "")
-                    QtGui.QMessageBox.information(None, 'INFORMATION', u'提交成功！', QtCore.QString('OK'))
+                    QMessageBox.information(None, 'INFORMATION', u'提交成功！', QString('OK'))
                 return filePath + "/" + file_name  # /FUY/001/001/stuff/cmp/mov/filename
             else:
-                QtGui.QMessageBox.information(None, 'INFORMATION', u'提交失败，请检查上传文件！', QtCore.QString('OK'))
+                QMessageBox.information(None, 'INFORMATION', u'提交失败，请检查上传文件！', QString('OK'))
                 return filePath
         else:
             return file_path
@@ -93,7 +94,7 @@ class UploadFile:
                     thumbnail = '.' + file_name + ".jpg"  # 缩略图路径
                     print thumbnail
                     self.insert_data(sql_data, file_type, thumbnail, fileType)
-                    QtGui.QMessageBox.information(None, 'INFORMATION', u'提交成功！', QtCore.QString('OK'))
+                    QMessageBox.information(None, 'INFORMATION', u'提交成功！', QString('OK'))
                 elif fileType == "jpg" or fileType == "jpeg" or fileType == "png" or fileType == "tiff" or fileType == "tga":
                     img = cv2.imread(file_copy_path)
                     thumbnail_img = server_name + file_path + self.sep + '.' + fileNow
@@ -102,10 +103,10 @@ class UploadFile:
                     thumbnail = '.' + fileNow
                     print thumbnail
                     self.insert_data(sql_data, file_type, thumbnail, fileType)
-                    QtGui.QMessageBox.information(None, 'INFORMATION', u'提交成功！', QtCore.QString('OK'))
+                    QMessageBox.information(None, 'INFORMATION', u'提交成功！', QString('OK'))
                 return
             else:
-                QtGui.QMessageBox.information(None, 'INFORMATION', u'提交失败，请检查上传文件！', QtCore.QString('OK'))
+                QMessageBox.information(None, 'INFORMATION', u'提交失败，请检查上传文件！', QString('OK'))
                 return
         else:
             return
