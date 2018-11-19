@@ -84,7 +84,7 @@ class AliyunOss():
         else:
             pass
 
-
+    # 创建权限
     def CreatePolicy(self):
         request = CreatePolicyRequest.CreatePolicyRequest()
         policy = '{"Statement": [{"Action": ["oss:*"], "Effect": "Allow", "Resource": ["acs:oss:*:*:jg-testwww/test.py"]}],"Version": "1"}'
