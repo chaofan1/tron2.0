@@ -1,6 +1,5 @@
 # coding:utf8
 from PyQt4.QtGui import *
-from PyQt4.QtCore import *
 import sys
 import os
 
@@ -10,17 +9,17 @@ class Remind:
         self.app = QApplication(sys.argv)
 
     def remind_success(self,file_number):
-        QMessageBox.information(None, 'INFORMATION', file_number + u'上传成功，请查看Renderbus网站！', QString('OK'))
+        QMessageBox.information(None, 'INFORMATION', file_number + u'上传成功，请查看Renderbus网站！')
         return
         sys.exit(app.exec_())
 
     def remind_start(self,file_number):
-        QMessageBox.information(None, 'INFORMATION', file_number + u'开始上传，请稍后查看Renderbus网站！', QString('OK'))
+        QMessageBox.information(None, 'INFORMATION', file_number + u'开始上传，请稍后查看Renderbus网站！')
         return
         sys.exit(app.exec_())
 
     def remind_fail(self, fail_info, file_number):
-        QMessageBox.information(None, 'INFORMATION', file_number + u'上传失败,错误信息:' + fail_info, QString('OK'))
+        QMessageBox.information(None, 'INFORMATION', file_number + u'上传失败,错误信息:' + fail_info)
         return
         sys.exit(app.exec_())
 
