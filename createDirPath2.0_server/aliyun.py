@@ -6,7 +6,7 @@ import oss2
 from oss2 import SizedFileAdapter, determine_part_size
 from oss2.models import PartInfo
 from aliyunsdkcore import client
-from aliyunsdkram.request.v20150501 import CreateUserRequest,CreateAccessKeyRequest,ListUsersRequest
+from aliyunsdkram.request.v20150501 import CreateUserRequest,CreateAccessKeyRequest,ListUsersRequest,CreatePolicyRequest,AttachPolicyToUserRequest
 
 
 class AliyunOss():
@@ -58,31 +58,55 @@ class AliyunOss():
             print '创建用户ack失败'
 
     def uploadFile(self):
-        total_size = os.path.getsize(self.filePath)
-        # determine_part_size方法用来确定分片大小。
-        part_size = determine_part_size(total_size, preferred_size=100 * 1024)
+        if os.path.isfile(self.filePath):
+            total_size = os.path.getsize(self.filePath)
+            # determine_part_size方法用来确定分片大小。
+            part_size = determine_part_size(total_size, preferred_size=100 * 1024)
 
-        # 初始化分片。
-        upload_id = self.bucket.init_multipart_upload(key).upload_id
-        parts = []
+            # 初始化分片。
+            upload_id = self.bucket.init_multipart_upload(self.key).upload_id
+            parts = []
 
-        # 逐个上传分片。
-        with open(self.filePath, 'rb') as fileobj:
-            part_number = 1
-            offset = 0
-            while offset < total_size:
-                num_to_upload = min(part_size, total_size - offset)
-                # SizedFileAdapter(fileobj, size)方法会生成一个新的文件对象，重新计算起始追加位置。
-                result = self.bucket.upload_part(self.key, upload_id, part_number, SizedFileAdapter(fileobj, num_to_upload))
-                parts.append(PartInfo(part_number, result.etag))
-                offset += num_to_upload
-                part_number += 1
+            # 逐个上传分片。
+            with open(self.filePath, 'rb') as fileobj:
+                part_number = 1
+                offset = 0
+                while offset < total_size:
+                    num_to_upload = min(part_size, total_size - offset)
+                    # SizedFileAdapter(fileobj, size)方法会生成一个新的文件对象，重新计算起始追加位置。
+                    result = self.bucket.upload_part(self.key, upload_id, part_number, SizedFileAdapter(fileobj, num_to_upload))
+                    parts.append(PartInfo(part_number, result.etag))
+                    offset += num_to_upload
+                    part_number += 1
 
-        # 完成分片上传。
-        self.bucket.complete_multipart_upload(self.key, upload_id, parts)
+            # 完成分片上传。
+            self.bucket.complete_multipart_upload(self.key, upload_id, parts)
+        else:
+            pass
+
+    # 创建权限
+    def CreatePolicy(self):
+        request = CreatePolicyRequest.CreatePolicyRequest()
+        policy = '{"Statement": [{"Action": ["oss:*"], "Effect": "Allow", "Resource": ["acs:oss:*:*:jg-testwww/test.py"]}],"Version": "1"}'
+        policyParams = {"PolicyName": self.userName, "PolicyDocument": policy, "Description": "xxx"}
+        request.set_query_params(policyParams)
+        result = self.clt.get_response(request)
+        if result[0] == 200:
+            pass
+
+    def AttachToUser(self):
+        request = AttachPolicyToUserRequest.AttachPolicyToUserRequest()
+        attParams = {'PolicyName': self.userName, 'UserName': self.userName, 'PolicyType': 'Custom'}
+        request.set_query_params(attParams)
+        result = self.clt.get_response(request)
+        if result[0] == 200:
+            pass
+        else:
+            print '绑定权限失败'
+
 
     # 展示进度
-    def percentage(self,consumed_bytes, total_bytes):
+    def percentage(self, consumed_bytes, total_bytes):
             if total_bytes:
                 rate = int(100 * (float(consumed_bytes) / float(total_bytes)))
                 print rate
