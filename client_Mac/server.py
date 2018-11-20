@@ -13,7 +13,7 @@ from clipLine import start_clip
 from clipLine2 import Pack, insert
 from clipLine import to_php
 from upload import UploadFile
-
+from aliyun_client import AliyunDownload
 
 def myServer():
 	if platform.system() != 'Darwin':
@@ -65,6 +65,10 @@ def handle(conn):
 		elif data_split[-1] == "Dailies1":   # /FUY/001/001/stuff/cmp|file_name|command_id|Dailies1
 			file_path, file_name, command_id, UpTask = data_split
 			UploadFile().upload_dailies(server_all, file_path, file_name, command_id)
+
+		elif data_split[-1] == "download":  # huanyu_Fuy_1|download
+			dirname, UpTask = data_split
+			AliyunDownload(dirname).downLoad()
 
 		elif data_split[-1] =="Reference":
 			file_path, file_name, sql_data, UpTask = data_split

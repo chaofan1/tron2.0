@@ -30,7 +30,7 @@ import sys,os
 from createProject import TronProject
 from client import clientLink
 from server_callback import callback
-from distribution import TronDistribute
+from distribution import TronDistribute,transit
 
 
 def _init_():
@@ -95,7 +95,7 @@ def _init_():
 			TronProject().CreateSeq(args[1], args[2])
 			callback(args[3])
 		elif args[0] == "Transit":
-			TronDistribute().putThread('transit', args[1], args[2])
+			transit(args[1], args[2])
 			callback(args[3])
 	elif len(args) == 5:
 		if args[0] == "Shot":   # "Shot" "HAC" "001" "001" "command_id"

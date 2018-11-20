@@ -11,7 +11,7 @@ from render import Render, Select
 from httpUrl import CallBack
 from upload import UploadFile
 import config
-
+from aliyun_client import AliyunDownload
 
 def myServer():
 	if platform.system() != 'Linux':
@@ -81,6 +81,10 @@ def handle(conn):
 		elif data_split[-1] == "Dailies1":   # /FUY/001/001/stuff/cmp|file_name|command_id|Dailies1
 			file_path, file_name, command_id, UpTask = data_split
 			UploadFile().upload_dailies(server_all, file_path, file_name, command_id)
+
+		elif data_split[-1] == "download":  # huanyu_Fuy_1|download
+			dirname, UpTask = data_split
+			AliyunDownload(dirname).downLoad()
 
 		elif data_split[-1] == "Dailies2":
 			file_path, file_name, command_id, UpTask = data_split
