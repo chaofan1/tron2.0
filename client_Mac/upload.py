@@ -75,18 +75,12 @@ class UploadFile:
     def upload_reference(self, server_name, file_path, file_name, sql_data):
         self.select_one('')
         if self.fileOld:
-            # print type(self.fileOld)
-            # print str(self.fileOld)
-            # print type(self.fileOld)
             fileType = str(self.fileOld.split(".")[-1]).lower()
             if fileType == "jpg" or fileType == "jpeg" or fileType == "png" or fileType == "tiff" or fileType == "tga":
                 fileType = "jpg"
             file_copy_path = server_name + file_path + self.sep + file_name + "." + fileType
-            # shutil.copy(self.fileOld, file_copy_path)
-            shutil.copy(self.fileOld, '/Users/wang/Desktop/未命名文件夹/a.jpg')
-            # print file_copy_path
-            print self.fileOld
-            exit()
+            shutil.copy(self.fileOld, file_copy_path)
+            print file_copy_path
             fileNow = file_name + "." + fileType
             if os.path.exists(file_copy_path):
                 if fileType == "mov" or fileType == "avi" or fileType == "mp4":
