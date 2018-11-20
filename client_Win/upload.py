@@ -11,6 +11,8 @@ from PyQt4.QtGui import *
 from PyQt4.QtCore import *
 import createThumbnail
 from httpUrl import CallBack
+reload(sys)
+sys.setdefaultencoding('utf-8')
 
 
 class UploadFile:

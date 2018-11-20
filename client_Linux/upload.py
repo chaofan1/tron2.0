@@ -10,6 +10,8 @@ import pymysql
 from PyQt4.QtGui import *
 import createThumbnail
 from httpUrl import CallBack
+reload(sys)
+sys.setdefaultencoding('utf-8')
 
 
 class UploadFile:

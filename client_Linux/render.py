@@ -5,6 +5,8 @@ import os
 import subprocess
 from PyQt4.QtGui import *
 from remind import Remind
+reload(sys)
+sys.setdefaultencoding('utf-8')
 
 
 class Select:
@@ -71,6 +73,6 @@ class Render:
             if line == '' and popen_cmd.poll() != None:
                 break
 
-# 			cmd = 'export PATH=/Public/Support/Thinkbox/Deadline8/bin:$PATH && deadlinecommand -SubmitCommandLineJob -executable "/usr/bin/python" -arguments "%s -r -q <QUOTE>%s<QUOTE>" -chunksize 1 -priority 100 -name "%s" -prop MachineLimit=5' % (
-# 			cmd = 'export PATH=/Public/Support/Thinkbox/Deadline8/bin:$PATH && deadlinecommand -SubmitCommandLineJob -executable "/usr/bin/python" -arguments "%s -r <QUOTE>%s<QUOTE>" -chunksize 1 -priority 100 -name "%s" -prop MachineLimit=5' % (
+# cmd = 'export PATH=/Public/Support/Thinkbox/Deadline8/bin:$PATH && deadlinecommand -SubmitCommandLineJob -executable "/usr/bin/python" -arguments "%s -r -q <QUOTE>%s<QUOTE>" -chunksize 1 -priority 100 -name "%s" -prop MachineLimit=5' % (
+# cmd = 'export PATH=/Public/Support/Thinkbox/Deadline8/bin:$PATH && deadlinecommand -SubmitCommandLineJob -executable "/usr/bin/python" -arguments "%s -r <QUOTE>%s<QUOTE>" -chunksize 1 -priority 100 -name "%s" -prop MachineLimit=5' % (
 # cmd = 'export PATH=/Public/Support/Thinkbox/Deadline8/bin:$PATH && deadlinecommand -SubmitCommandLineJob -executable "/usr/bin/python" -arguments "%s -a -u -s <QUOTE>%s<QUOTE>" -chunksize 1 -pool upload_submit_pool -group upload_submit_group -priority 100 -name "%s" -prop MachineLimit=5' % (
