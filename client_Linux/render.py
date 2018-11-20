@@ -49,13 +49,13 @@ class Render:
         up_name = self.file_name.split('/')[-1]
         file_number = self.file_path.split('_')[0][-9:]
         if Uptask == 'Ready_render1' or Uptask == 'Ready_render2':
-            cmd = 'deadlinecommand -SubmitCommandLineJob -executable "/usr/bin/python" -arguments "%s -r -q <QUOTE>%s<QUOTE>" -chunksize 1 -pool upload_submit_pool -group upload_submit_group -priority 100 -name "%s" -prop MachineLimit=5' % (
+            cmd = 'export PATH=/Public/Support/Thinkbox/Deadline8/bin:$PATH && deadlinecommand -SubmitCommandLineJob -executable "/usr/bin/python" -arguments "%s -r -q <QUOTE>%s<QUOTE>" -chunksize 1 -priority 100 -name "%s" -prop MachineLimit=5' % (
                 self.ray_py_file, self.file_name, up_name)
         elif Uptask == 'Local_render1' or Uptask == 'Local_render2':
-            cmd = 'deadlinecommand -SubmitCommandLineJob -executable "/usr/bin/python" -arguments "%s -r <QUOTE>%s<QUOTE>" -chunksize 1 -pool upload_submit_pool -group upload_submit_group -priority 100 -name "%s" -prop MachineLimit=5' % (
+            cmd = 'export PATH=/Public/Support/Thinkbox/Deadline8/bin:$PATH && deadlinecommand -SubmitCommandLineJob -executable "/usr/bin/python" -arguments "%s -r <QUOTE>%s<QUOTE>" -chunksize 1 -priority 100 -name "%s" -prop MachineLimit=5' % (
                 self.ray_py_file, self.file_name, up_name)
         elif Uptask == 'Cloud_render1' or Uptask == 'Cloud_render2':
-            cmd = 'deadlinecommand -SubmitCommandLineJob -executable "/usr/bin/python" -arguments "%s -a -u -s <QUOTE>%s<QUOTE>" -chunksize 1 -pool upload_submit_pool -group upload_submit_group -priority 100 -name "%s" -prop MachineLimit=5' % (
+            cmd = 'export PATH=/Public/Support/Thinkbox/Deadline8/bin:$PATH && deadlinecommand -SubmitCommandLineJob -executable "/usr/bin/python" -arguments "%s -a -u -s <QUOTE>%s<QUOTE>" -chunksize 1 -pool upload_submit_pool -group upload_submit_group -priority 100 -name "%s" -prop MachineLimit=5' % (
                 self.ray_py_file, self.file_name, up_name)
         popen_cmd = subprocess.Popen(cmd, stdout=subprocess.PIPE, stderr=subprocess.STDOUT, shell=True)
         Remind().remind_start(file_number)
@@ -64,9 +64,13 @@ class Render:
             line = line.strip()
             if not line == '':
                 print line
-                if 'The job was submitted successfully' in line:
+                if 'successfully' in line:
                     Remind().remind_success(file_number)
                 else:
                     Remind().remind_fail(line, file_number)
             if line == '' and popen_cmd.poll() != None:
                 break
+
+# 			cmd = 'export PATH=/Public/Support/Thinkbox/Deadline8/bin:$PATH && deadlinecommand -SubmitCommandLineJob -executable "/usr/bin/python" -arguments "%s -r -q <QUOTE>%s<QUOTE>" -chunksize 1 -priority 100 -name "%s" -prop MachineLimit=5' % (
+# 			cmd = 'export PATH=/Public/Support/Thinkbox/Deadline8/bin:$PATH && deadlinecommand -SubmitCommandLineJob -executable "/usr/bin/python" -arguments "%s -r <QUOTE>%s<QUOTE>" -chunksize 1 -priority 100 -name "%s" -prop MachineLimit=5' % (
+# cmd = 'export PATH=/Public/Support/Thinkbox/Deadline8/bin:$PATH && deadlinecommand -SubmitCommandLineJob -executable "/usr/bin/python" -arguments "%s -a -u -s <QUOTE>%s<QUOTE>" -chunksize 1 -pool upload_submit_pool -group upload_submit_group -priority 100 -name "%s" -prop MachineLimit=5' % (
