@@ -71,7 +71,7 @@ def _init_():
 			TronDistribute().Deldir(args[1])
 	elif len(args) == 3:
 		if args[0] == "Project":
-			TronProject().CreatePro(args[1])  # createProject.CreatePro("Project","HAC","command_id")
+			TronProject().CreatePro(args[1].upper())  # createProject.CreatePro("HAC")
 			callback(args[2])
 		elif args[0] == "Dailies1":  # "Dailies1" "/FUY/001/001/Stuff/cmp/" "IP|/FUY/001/001/Stuff/cmp|filename|command_id"
 			TronProject().CreateDai(args[1])
@@ -86,26 +86,26 @@ def _init_():
 			callback(args[2])
 	elif len(args) == 4:
 		if args[0] == "Reference":    # "Reference" "HAC" "shots"  "192.168.1.85|x:/DHG/References/inner/fileName|373"
-			TronProject().CreateRef(args[1], args[2])
+			TronProject().CreateRef(args[1].upper(), args[2])
 			referencesData = args[3] + "|Reference"
 			clientLink(referencesData)
-		elif args[0] == "Seq":  # createProject.CreateSeq("Seq","HAC","01","command_id")
-			TronProject().CreateSeq(args[1], args[2])
+		elif args[0] == "Seq":  # createProject.CreateSeq(proName, seqName)
+			TronProject().CreateSeq(args[1].upper(), args[2])
 			callback(args[3])
 		elif args[0] == "Transit":
 			transit(args[1], args[2])
 			callback(args[3])
 	elif len(args) == 5:
 		if args[0] == "Shot":   # "Shot" "HAC" "001" "001" "command_id"
-			TronProject().CreateScene(args[1], args[2], args[3])
+			TronProject().CreateScene(args[1].upper(), args[2], args[3])
 			callback(args[4])
 	elif len(args) == 6:
 		if args[0] == "AssetTask":    # "AssetTask" "HAC" "rig" "liangcy" "fileName" "command_id"
-			TronProject().CreateAsset(args[1], args[2], args[3], args[4])
+			TronProject().CreateAsset(args[1].upper(), args[2], args[3], args[4])
 			callback(args[5])
 	elif len(args) == 9:
 		if args[0] == "ShotTask":   # "ShotTask" "HAC" "01" "001" "rig" "liangcy" "fileName" "command_id" "ip"
-			TronProject().CreateShot(args[1], args[2], args[3], args[4], args[5], args[6])
+			TronProject().CreateShot(args[1].upper(), args[2], args[3], args[4], args[5], args[6])
 			args = args[8] + '|' + args[1] + '|' + args[2] + '|' + args[3] + '|' + args[4] + '|' + args[5] + '|' + args[6]
 			ShotTaskData = args + "|ShotTask"
 			clientLink(ShotTaskData)

@@ -1,6 +1,5 @@
 #!/usr/bin/env python2.7
 #-*- coding: utf-8 -*-
-# Filename: server_callback.py
 # 将服务器执行成功的命令告诉数据库
 
 
@@ -9,7 +8,7 @@ import urllib2
 
 
 def callback(command_id):
-    url_update = 'http://192.168.100.87/tron/index.php/python/renewScriptStatus'
+    url_update = 'http://192.168.100.49/tron/index.php/python/renewScriptStatus'
     query_args = {'id': command_id}
     encoded_args = urllib.urlencode(query_args)
     try:

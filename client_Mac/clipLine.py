@@ -8,6 +8,7 @@ import pymysql
 import urllib, urllib2
 import time
 import re
+from createThumbnail import CreateThumbnail
 
 
 # ip = '192.168.1.117'
@@ -137,9 +138,11 @@ def getter(task_queue, queue_len, xml_id, task):
         # 2、创建缩略图文件夹,截取缩略图
         img_name = '.'.join(video_name.split('.')[:-1]) +'.jpg'
         img_path = os.path.join(dirname,img_name)
-        screenshot_command = 'ffmpeg -ss 1 -t 1 -i %s -loglevel -8 -y %s' % (video_path,img_path)
-        img_su = subprocess.Popen(screenshot_command, shell=True)
-        img_su.wait()
+
+        # screenshot_command = 'ffmpeg -ss 1 -t 1 -i %s -loglevel -8 -y %s' % (video_path,img_path)
+        # img_su = subprocess.Popen(screenshot_command, shell=True)
+        # img_su.wait()
+        CreateThumbnail().thum(video_path, img_path)
 
         # 002、写入数据库
         shot_number = info['shot_number']
@@ -277,7 +280,7 @@ def start_clip(xml_path, path, project_id, field_id, xml_id, task):
         data = handle_db(select_sql)
     queue_len = putter(queue, xml_path, project_id, field_id, data, path, task)
     if queue_len:
-        pool = Pool(processes=3)
+        pool = Pool(processes=1)
         for i in range(queue_len):
             pool.apply_async(getter, (queue, queue_len, xml_id, task))
         print('queue len:', queue_len)
