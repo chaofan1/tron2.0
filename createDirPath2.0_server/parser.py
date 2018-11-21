@@ -36,9 +36,7 @@ from distribution import TronDistribute,transit
 def _init_():
 	args = sys.argv[1:]
 	print args
-	if len(args) > 8:
-		print 'error: please check your create project'
-	elif len(args) == 2:
+	if len(args) == 2:
 		if args[0] == "Folder":
 			clientLink(args[1])
 		elif args[0] == "Ready_render" or args[0] == "Local_render" or args[0] == "Cloud_render":

@@ -1,7 +1,6 @@
 #-*- coding: utf-8 -*-
 import oss2
 import os
-import PyQt4.QtCore,PyQt4.QtGui
 from upload import UploadFile
 
 

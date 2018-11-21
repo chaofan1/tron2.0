@@ -58,7 +58,7 @@ class TronFolder:
             if len(seqName):
                 dirPath += seqName + self.sep
                 if len(shotName):
-                    dirPath += shotName + self.sep   # 分配镜头任务：/Tron/FUY/01/001/
+                    dirPath += shotName + self.sep   # 分配镜头任务：/Tron/FUY/001/001/
         stuffPath = dirPath + 'Stuff'    # 分配镜头任务：/Tron/FUY/01/001/Stuff
         if not os.path.exists(stuffPath):
             self.CreateFolder(stuffPath, "0555","")
