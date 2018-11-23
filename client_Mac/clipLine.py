@@ -117,11 +117,14 @@ def getter(task_queue, queue_len, xml_id, task):
         pathurl_split = pathurl.split('.')
         print pathurl_split
         p_be = '.'.join(pathurl_split[:-2])+'.'
+        user_file_path = ''
         if pathurl_split[-2].startswith('[') and pathurl_split[-2].endswith(']'):
             file_scope = pathurl_split[-2].lstrip('[').rstrip(']').split('-')
             range_num = int(float(file_scope[-1]) - float(file_scope[0])) + 1
             format_len = file_scope[-1].__len__()
-            user_file_path = os.environ['HOME'] + '/filepath.txt'
+            # 用多进程时，以进程号来命名要读取的txt文件
+            pid = os.getpid()
+            user_file_path = os.environ['HOME'] + '/%s.txt' % pid
             print 'filepath.txt', user_file_path
             with open(user_file_path,'w') as f:
                 for i in range(0, range_num):
@@ -134,6 +137,8 @@ def getter(task_queue, queue_len, xml_id, task):
             transcode_command = 'ffmpeg -i %s -loglevel -8 -c:v libx264 -y -g 2 -keyint_min 2 %s'%(pathurl,video_path)
         video_su = subprocess.Popen(transcode_command,shell=True)
         video_su.wait()
+        if user_file_path:
+            os.remove(user_file_path)
 
         # 2、创建缩略图文件夹,截取缩略图
         img_name = '.'.join(video_name.split('.')[:-1]) +'.jpg'
@@ -170,9 +175,16 @@ def putter(task_queue, xml_path, project_id, field_id, data, path, task):
                         pathurl = pathurl.replace('file://localhost', '')
                     elif pathurl.startswith('file:///Volumes'):
                         pathurl = pathurl.replace('file://', '')
+                    pathurl = unquote(pathurl)
 
-                    start = i.find('start').text
-                    end = i.find('end').text
+                    shot_pathurl = os.path.dirname(pathurl)
+                    if not os.path.exists(shot_pathurl):
+                        continue
+
+                    # start = i.find('start').text
+                    # end = i.find('end').text
+                    in_ = i.find('in').text
+                    out = i.find('out').text
 
                     width = height = rate = clip_frame_length = change_speed_info = ''
                     width_list = i.findall('.//width')
@@ -182,12 +194,11 @@ def putter(task_queue, xml_path, project_id, field_id, data, path, task):
                     if height_list:
                         height = height_list[0].text
 
-                    material_frame_length = int(end)-int(start)
-                    frame_range = start+','+end
+                    material_frame_length = int(out)-int(in_)
+                    frame_range = in_+','+out
                     material_number = ''
                     if '_' in pathurl:
                         material_number = pathurl.split('_')[1]
-                    pathurl = unquote(pathurl)
                     # 持续时间
                     rate_list = i.findall('.//timebase')
                     if rate_list:
@@ -195,7 +206,7 @@ def putter(task_queue, xml_path, project_id, field_id, data, path, task):
 
                     duration_list = i.findall('.//duration')
                     if duration_list:
-                        clip_frame_length = duration_list[0].text   # 镜头帧长=剪辑帧长
+                        clip_frame_length = duration_list[1].text   # 镜头帧长=剪辑帧长
 
                     speed_list = i.findall('.//parameter/value')
                     if speed_list:
@@ -280,7 +291,7 @@ def start_clip(xml_path, path, project_id, field_id, xml_id, task):
         data = handle_db(select_sql)
     queue_len = putter(queue, xml_path, project_id, field_id, data, path, task)
     if queue_len:
-        pool = Pool(processes=1)
+        pool = Pool(processes=3)
         for i in range(queue_len):
             pool.apply_async(getter, (queue, queue_len, xml_id, task))
         print('queue len:', queue_len)

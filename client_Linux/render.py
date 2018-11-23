@@ -3,7 +3,7 @@
 import sys
 import os
 import subprocess
-from PyQt4.QtGui import *
+from PyQt4 import QtGui
 from remind import Remind
 reload(sys)
 sys.setdefaultencoding('utf-8')
@@ -11,16 +11,16 @@ sys.setdefaultencoding('utf-8')
 
 class Select:
     def __init__(self):
-        self.app = QApplication(sys.argv)
-        self.mainWindow = QMainWindow()
+        self.app = QtGui.QApplication(sys.argv)
+        self.mainWindow = QtGui.QMainWindow()
 
     def select_one(self, inPathFile):
-        file_path = QFileDialog.getOpenFileName(self.mainWindow, 'open file', inPathFile).toUtf8()
+        file_path = QtGui.QFileDialog.getOpenFileName(self.mainWindow, 'open file', inPathFile).toUtf8()
         return file_path
         sys.exit(self.app.exec_())
 
     def select_dir(self, inPathFile):
-        file_path = QFileDialog.getExistingDirectory(self.mainWindow, 'open file', inPathFile).toUtf8()
+        file_path = QtGui.QFileDialog.getExistingDirectory(self.mainWindow, 'open file', inPathFile).toUtf8()
         return file_path
         sys.exit(self.app.exec_())
 
