@@ -13,7 +13,7 @@ from aliyunsdkcore import client
 
 class AliyunOss():
     def __init__(self,filePath,dirname):
-        logging.basicConfig(filename='/Users/user/Desktop/test/distribute_log/dis_' +
+        logging.basicConfig(filename='/Public/tronPipelineScript/tron2.0/distribute_log/dis_' +
                                      time.strftime("%Y%m%d") + '.log', level=logging.INFO,
                             format="%(asctime)s - %(levelname)s - %(message)s")
 

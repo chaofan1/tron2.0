@@ -195,7 +195,7 @@ class TronDistribute:
             raise Finish
 
 def transit(jsonPath, dirName):
-    outputPath = '/Users/user/Desktop/test/'
+    outputPath = '/Public/tronPipelineScript/tron2.0'
     with open(jsonPath, 'r') as f:
         response = json.load(f)
     user_name = response['user_name']
