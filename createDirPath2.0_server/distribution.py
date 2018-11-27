@@ -21,7 +21,7 @@ class Finish(SyntaxWarning):
 class TronDistribute:
     def __init__(self):
         self.pool = threadpool.ThreadPool(8)  # 创建线程池
-        self.outputPath = '/Public/tronPipelineScript/tron2.0'  # 存放外包公司目录的位置
+        self.outputPath = '/Public/tronPipelineScript/tron2.0/Outsource'  # 存放外包公司目录的位置
         # 日志位置
         logging.basicConfig(filename='/Public/tronPipelineScript/tron2.0/distribute_log/dis_' +
                                      time.strftime("%Y%m%d") + '.log', level=logging.INFO, format="%(asctime)s - %(levelname)s - %(message)s")
@@ -195,7 +195,7 @@ class TronDistribute:
             raise Finish
 
 def transit(jsonPath, dirName):
-    outputPath = '/Public/tronPipelineScript/tron2.0'
+    outputPath = '/Public/tronPipelineScript/tron2.0/Outsource'
     with open(jsonPath, 'r') as f:
         response = json.load(f)
     user_name = response['user_name']
