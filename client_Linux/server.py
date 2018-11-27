@@ -50,6 +50,7 @@ def handle(conn):
 		server_all = config.All
 		server_post = config.Post
 		server_ref = config.Reference
+		server_outcompany = config.OutCompany
 
 		if len(data_split) is 1:
 			file_path = data.strip()
@@ -61,7 +62,9 @@ def handle(conn):
 		# 		os.popen('nautilus %s' % (server_post + file_path)).close()
 		# 	else:
 		# 		os.popen('nautilus %s' % (server_all + file_path)).close()
-
+		elif data_split[-1] == "YunFolder":
+			file_path ,Uptask = data_split
+			os.popen('open %s' % (server_outcompany + file_path)).close()
 		elif data_split[-1] == "Ready_render1" or data_split[-1] == "Local_render1" or data_split[-1] == "Cloud_render1":
 			file_path, Uptask = data_split
 			inPathFile = server_post + sep + file_path[0:14]
