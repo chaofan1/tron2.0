@@ -55,12 +55,12 @@ def handle(conn):
 			file_path = data.strip()
 			os.popen('open %s' % (server_all + file_path)).close()
 
-		elif len(data_split) is 2:
-			file_path, Uptask = data_split
-			if Uptask == 'lgt' or Uptask == 'cmp':
-				os.popen('open %s' % (server_post + file_path)).close()
-			else:
-				os.popen('open %s' % (server_all + file_path)).close()
+		# elif len(data_split) is 2:
+		# 	file_path, Uptask = data_split
+		# 	if Uptask == 'lgt' or Uptask == 'cmp':
+		# 		os.popen('open %s' % (server_post + file_path)).close()
+		# 	else:
+		# 		os.popen('open %s' % (server_all + file_path)).close()
 
 		elif data_split[-1] == "Dailies1":   # /FUY/001/001/stuff/cmp|file_name|command_id|Dailies1
 			file_path, file_name, command_id, UpTask = data_split
@@ -96,7 +96,7 @@ def handle(conn):
 
 		elif data_split[-1] == 'clip2':   # 回插
 			video_path, img_path, frame, data_id, command_id, UpTask = data_split
-			insert(video_path, img_path, frame, data_id)
+			insert(video_path, img_path, frame)
 			# httpUrl.render_callback(command_id)
 			print('clip2 end')
 

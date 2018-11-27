@@ -55,12 +55,12 @@ def handle(conn):
 			file_path = data.strip()
 			os.popen('nautilus %s' % (server_all + file_path)).close()
 
-		elif len(data_split) is 2:
-			file_path, Uptask = data_split
-			if Uptask == 'lgt' or Uptask == 'cmp':
-				os.popen('nautilus %s' % (server_post + file_path)).close()
-			else:
-				os.popen('nautilus %s' % (server_all + file_path)).close()
+		# elif len(data_split) is 2:
+		# 	file_path, Uptask = data_split
+		# 	if Uptask == 'lgt' or Uptask == 'cmp':
+		# 		os.popen('nautilus %s' % (server_post + file_path)).close()
+		# 	else:
+		# 		os.popen('nautilus %s' % (server_all + file_path)).close()
 
 		elif data_split[-1] == "Ready_render1" or data_split[-1] == "Local_render1" or data_split[-1] == "Cloud_render1":
 			file_path, Uptask = data_split
