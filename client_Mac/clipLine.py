@@ -291,7 +291,7 @@ def start_clip(xml_path, path, project_id, field_id, xml_id, task):
         data = handle_db(select_sql)
     queue_len = putter(queue, xml_path, project_id, field_id, data, path, task)
     if queue_len:
-        pool = Pool(processes=3)
+        pool = Pool(processes=2)
         for i in range(queue_len):
             pool.apply_async(getter, (queue, queue_len, xml_id, task))
         print('queue len:', queue_len)

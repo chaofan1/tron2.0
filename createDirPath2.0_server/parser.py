@@ -12,6 +12,7 @@
 # 'Render' '192.168.100.44|/FUY/999/003/Stuff/lgt/publish/fuy999003_lgt_wangcf_yuanBao_master|Render2|command_id'
 # "Folder" "192.168.1.85|/DHG/Dailies/20161214"
 # "YunFolder" "192.168.1.85|/DHG/Dailies/20161214"
+# 'download' 'tron_TXT_7|ip'
 # 服务器与客户端
 # "Excel" "192.168.1.85" "文件路径" "目标路径"
 # old "Dailies2" "HAC" "fileName" "192.168.1.85|x:/DHG/Dailies/20161214|dhg01001_prd_liangcy_HFG_v0103|373"
@@ -67,11 +68,11 @@ def _init_():
 				os.chmod(all_path+i, 0777)
 			clipData = args[1]+'|add_xml'
 			clientLink(clipData)
-        elif args[0] == "download":
-            key, ip = args[1].split('|')
-            clipData = ip + '|' + key+'|download'
-            clientLink(clipData)
-        elif args[0] == "Del":
+		elif args[0] == "download":   # 'download' 'tron_TXT_7|ip'
+			key, ip = args[1].split('|')
+			clipData = ip + '|' + key+'|download'
+			clientLink(clipData)
+		elif args[0] == "Del":
 			TronDistribute().Deldir(args[1])
 	elif len(args) == 3:
 		if args[0] == "Project":

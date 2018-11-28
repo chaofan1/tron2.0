@@ -52,4 +52,4 @@ def clientLink(data):
 
 
 if __name__ == '__main__':
-    clientLink('')
+    clientLink('ip|tron_TXT_7|download')
