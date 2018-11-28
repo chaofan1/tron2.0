@@ -186,10 +186,15 @@ class TronDistribute:
 
 
     def Deldir(self, dirname):
-        cpname, proname, user_id = dirname.split('_')
-        os.chmod(self.outputPath + os.sep + cpname + os.sep + dirname, 0777)
-        shutil.rmtree(self.outputPath + os.sep + cpname + os.sep + dirname)
-        os.chmod(self.outputPath + os.sep + cpname + os.sep + dirname, 0755)
+        try:
+            cpname, proname, user_id = dirname.split('_')
+            os.chmod(self.outputPath + os.sep + cpname + os.sep + dirname, 0777)
+            shutil.rmtree(self.outputPath + os.sep + cpname + os.sep + dirname)
+            os.chmod(self.outputPath + os.sep + cpname + os.sep + dirname, 0755)
+        except Exception as e:
+            logging.info('删除文件出错')
+            logging.error(e)
+
 
     def result(self, req, res):
         res1, res2 = res
