@@ -68,7 +68,7 @@ def _init_():
 			clipData = args[1]+'|add_xml'
 			clientLink(clipData)
         elif args[0] == "download":
-            ip, key = args[1].split('|')
+            key, ip = args[1].split('|')
             clipData = ip + '|' + key+'|download'
             clientLink(clipData)
         elif args[0] == "Del":
