@@ -199,7 +199,7 @@ def transit(jsonPath, dirName):
     with open(jsonPath, 'r') as f:
         response = json.load(f)
     user_name = response['user_name']
-    outuser_name = response['outuser_name']
+    # outuser_name = response['outuser_name']
     cpname = response['company_name']
     email = response['email']
     remark = response['remark']
