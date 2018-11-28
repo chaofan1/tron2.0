@@ -187,14 +187,18 @@ class TronDistribute:
 
     def Deldir(self, dirname):
         cpname, proname, user_id = dirname.split('_')
+        os.chmod(self.outputPath + os.sep + cpname + os.sep + dirname, 0777)
         shutil.rmtree(self.outputPath + os.sep + cpname + os.sep + dirname)
+        os.chmod(self.outputPath + os.sep + cpname + os.sep + dirname, 0755)
 
     def result(self, req, res):
         res1, res2 = res
         if res1:
             raise Finish
 
+
 def transit(jsonPath, dirName):
+    sep = os.sep
     outputPath = '/Public/tronPipelineScript/tron2.0/Outsource'
     with open(jsonPath, 'r') as f:
         response = json.load(f)
@@ -203,9 +207,12 @@ def transit(jsonPath, dirName):
     cpname = response['company_name']
     email = response['email']
     remark = response['remark']
-    tranfilePath = outputPath + os.sep + cpname + os.sep + dirName
+    tranfilePath = outputPath + sep + cpname + sep + dirName
     AliyunOss(tranfilePath, dirName).uploadFile()
     sendMail(cpname, email, user_name, remark)
+    os.chmod(outputPath + sep + cpname + sep + dirName, 0777)
+    shutil.rmtree(outputPath + sep + cpname + sep + dirName)
+
 
 def sendMail(cpname, email, user_name, remark):
     if email:
