@@ -35,7 +35,17 @@ class UploadFile:
 
     def select_dir(self, inPathFile):
         file_path = QFileDialog.getExistingDirectory(self.mainWindow, 'open file', inPathFile).toUtf8()
-        return file_path
+        return str(file_path)
+        sys.exit(self.app.exec_())
+
+    def download_success(self):
+        QMessageBox.information(None, 'INFORMATION', u'下载成功！')
+        return
+        sys.exit(self.app.exec_())
+
+    def download_fail(self):
+        QMessageBox.information(None, 'INFORMATION', u'下载失败！')
+        return
         sys.exit(self.app.exec_())
 
     def upload_dailies(self, server_name, file_path, file_name, command_id):

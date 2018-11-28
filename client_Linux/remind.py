@@ -24,6 +24,16 @@ class Remind:
         return
         sys.exit(app.exec_())
 
+    def download_success(self):
+        QMessageBox.information(None, 'INFORMATION', u'下载成功！')
+        return
+        sys.exit(self.app.exec_())
+
+    def download_fail(self):
+        QMessageBox.information(None, 'INFORMATION', u'下载失败！')
+        return
+        sys.exit(self.app.exec_())
+
     def remind_ask(self):
         re = QMessageBox.question(None, "INFORMATION", u"相同文件已上传,确定重新上传?", QMessageBox.Yes, QMessageBox.No)  ## 弹出询问框
         if re == QMessageBox.No:
