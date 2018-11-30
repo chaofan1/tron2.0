@@ -10,7 +10,9 @@
 #"Del" "公司_项目_主键id"
 # 客户端
 # 'Render' '192.168.100.44|/FUY/999/003/Stuff/lgt/publish/fuy999003_lgt_wangcf_yuanBao_master|Render2|command_id'
-# "Folder" "192.168.1.85|/DHG/Dailies/20161214"
+# "open_dai" "192.168.1.85|/DHG/Dailies/20161214"
+# "open_ref" "192.168.1.85|/DHG/Dailies/20161214"
+# "open_post" "192.168.1.85|/DHG/Dailies/20161214"
 # "YunFolder" "192.168.1.85|/DHG/Dailies/20161214"
 # 'download' 'tron_TXT_7|ip'
 # 服务器与客户端
@@ -32,7 +34,7 @@
 import sys,os
 from createProject import TronProject
 from client import clientLink
-from server_callback import callback, callback_pack, callback_transit
+from server_callback import CallBack
 from distribution import TronDistribute,transit
 
 
@@ -40,8 +42,12 @@ def _init_():
 	args = sys.argv[1:]
 	print args
 	if len(args) == 2:
-		if args[0] == "Folder":
-			clientLink(args[1]+'|Folder')
+		if args[0] == "open_dai":
+			clientLink(args[1]+'|open_dai')
+		elif args[0] == "open_ref":
+			clientLink(args[1]+'|open_ref')
+		elif args[0] == "open_post":
+			clientLink(args[1]+'|open_post')
 		elif args[0] == "YunFolder":
 			clientLink(args[1] + '|YunFolder')
 		elif args[0] == "Ready_render" or args[0] == "Local_render" or args[0] == "Cloud_render":
@@ -78,7 +84,7 @@ def _init_():
 	elif len(args) == 3:
 		if args[0] == "Project":
 			TronProject().CreatePro(args[1].upper())  # createProject.CreatePro("HAC")
-			callback(args[2])
+			CallBack().callback(args[2])
 		elif args[0] == "Dailies1":  # "Dailies1" "/FUY/001/001/Stuff/cmp/" "IP|/FUY/001/001/Stuff/cmp|filename|command_id"
 			TronProject().CreateDai(args[1])
 			dailiesData = args[2]+"|Dailies1"
@@ -94,23 +100,23 @@ def _init_():
 			clientLink(referencesData)
 		elif args[0] == "Seq":  # createProject.CreateSeq(proName, seqName)
 			TronProject().CreateSeq(args[1].upper(), args[2])
-			callback(args[3])
+			CallBack().callback(args[3])
 		elif args[0] == "Pack":  # "Pack" "Json路径" "打包id" "command_id"
 			TronDistribute().argParse(args[1])
-			callback_pack(args[2])
-			callback(args[3])
+			CallBack().callback_pack(args[2])
+			CallBack().callback(args[3])
 	elif len(args) == 5:
 		if args[0] == "Shot":   # "Shot" "HAC" "001" "001" "command_id"
 			TronProject().CreateScene(args[1].upper(), args[2], args[3])
-			callback(args[4])
+			CallBack().callback(args[4])
 		elif args[0] == "Transit":  # "Transit" "json路径" “公司_项目_主键id” "transit_id" “command_id”
 			transit(args[1], args[2])
-			callback_transit(args[3])
-			callback(args[4])
+			CallBack().callback_transit(args[3])
+			CallBack().callback(args[4])
 	elif len(args) == 6:
 		if args[0] == "AssetTask":    # "AssetTask" "HAC" "rig" "liangcy" "fileName" "command_id"
 			TronProject().CreateAsset(args[1].upper(), args[2], args[3], args[4])
-			callback(args[5])
+			CallBack().callback(args[5])
 	elif len(args) == 9:
 		if args[0] == "ShotTask":   # "ShotTask" "HAC" "01" "001" "rig" "liangcy" "fileName" "command_id" "ip"
 			TronProject().CreateShot(args[1].upper(), args[2], args[3], args[4], args[5], args[6])
