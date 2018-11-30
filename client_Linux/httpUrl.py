@@ -13,7 +13,7 @@ class CallBack:
         self.query_args = {}
 
     def dai_callback(self, ID, path, file_name, img_size):
-        self.url = 'http://192.168.1.117/callback/dailies'
+        self.url = 'http://192.168.100.49/callback/dailies'
         if img_size:
             self.query_args = {'id': ID, 'path': path, 'filename': file_name, 'imgSize': img_size}
         else:
@@ -21,7 +21,7 @@ class CallBack:
         self.request()
 
     def render_callback(self, command_id):
-        self.url = 'http://192.168.100.87/tron/index.php/python/renewScriptStatus'
+        self.url = 'http://192.168.100.49/tron/index.php/python/renewScriptStatus'
         self.query_args = {'id': command_id}
         self.request()
 

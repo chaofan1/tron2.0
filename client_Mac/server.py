@@ -1,10 +1,6 @@
 # !/usr/bin/env python2.7
 # -*- coding: utf-8 -*-
 
-# 转码 'clip1' 'IP|xml_path|path|项目id|场id|xml_id|command_id|clip1'
-# 回插 'clip2' 'IP|video_path|img_path|frame|width|height|id|command_id|clip2'
-# 打包 'clip3'  'IP|FUY/001|xml_path|command_id|clip3'
-
 import os
 import platform
 import socket
@@ -14,6 +10,7 @@ from clipLine2 import Pack, insert
 from clipLine import to_php
 from upload import UploadFile
 from aliyun_client import AliyunDownload
+
 
 def myServer():
 	if platform.system() != 'Darwin':
@@ -93,8 +90,8 @@ def handle(conn):
 			video_path = server_all + sep + path
 			start_clip(xml_path, video_path, project_id, field_id, xml_id, UpTask)
 			conn.send(path)
+			to_php(1, 0, project_id, field_id, xml_id, UpTask)
 			# httpUrl.render_callback(command_id)
-			conn.send(path)
 			print('add_xml end')
 
 		elif data_split[-1] == 'clip2':   # 回插
@@ -114,7 +111,7 @@ def handle(conn):
 			pro_scene = server_all + sep + pro_scene
 			Pack().pack(pro_scene, xml_path, out_path)
 			os.popen('open %s' % out_path).close()
-			# httpUrl.render_callback(command_id)
+			# httpUrl().render_callback(command_id)
 			print('clip3 end')
 
 		elif data_split[-1] == 'ShotTask':   # 提交发布弹框

@@ -62,5 +62,8 @@
     #回插 'clip2' 'IP|video_path|img_path|time|rate|id|command_id'
     #打包 'clip3' 'IP|FUY/001|xml_path|command_id'
 
+    # 补充上传
+    'add_xml' '192.168.101.160|TXT/017/Work/note/5bffaf4e5c992.xml|TXT/017/|1|46|22'
+
 11. 分发
 # 'Pack' 'json路径' 'command_id'

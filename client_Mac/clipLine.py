@@ -177,9 +177,13 @@ def putter(task_queue, xml_path, project_id, field_id, data, path, task):
                         pathurl = pathurl.replace('file://', '')
                     pathurl = unquote(pathurl)
 
-                    shot_pathurl = os.path.dirname(pathurl)
-                    if not os.path.exists(shot_pathurl):
-                        continue
+                    if postfix == 'dpx':
+                        shot_pathurl = os.path.dirname(pathurl)
+                        if not os.path.exists(shot_pathurl):
+                            continue
+                    elif postfix == 'mov':
+                        if not os.path.exists(pathurl):
+                            continue
 
                     # start = i.find('start').text
                     # end = i.find('end').text
@@ -194,7 +198,7 @@ def putter(task_queue, xml_path, project_id, field_id, data, path, task):
                     if height_list:
                         height = height_list[0].text
 
-                    material_frame_length = int(out)-int(in_)
+                    material_frame_length = int(float(out))-int(float(in_))
                     frame_range = in_+','+out
                     material_number = ''
                     if '_' in pathurl:
@@ -210,7 +214,7 @@ def putter(task_queue, xml_path, project_id, field_id, data, path, task):
 
                     speed_list = i.findall('.//parameter/value')
                     if speed_list:
-                        change_speed_info = speed_list[0].text  # 变速信息
+                        change_speed_info = speed_list[0].text      # 变速信息
 
                     duration = int(round(float(clip_frame_length) / float(rate)))
                     time_start = time_node
@@ -236,7 +240,8 @@ def putter(task_queue, xml_path, project_id, field_id, data, path, task):
                     info['rate'] = rate
 
                     # 追加xml,根据镜头帧长和帧数范围判断视频是否经过修改,若涉及中间插入,文件夹依次加1,镜头号发生变化,数据库要相应更新
-                    if task == 'add_xml' and (clip_frame_length, frame_range) not in data:
+                    filter_data = (int(float(clip_frame_length)), frame_range)
+                    if task == 'add_xml' and filter_data not in data:
                         if os.path.exists(dirname) and os.listdir(dirname):
                             file_li = sorted([i for i in os.listdir(path) if not i.startswith('.')])
                             ind = file_li.index(shot_number)
@@ -246,29 +251,35 @@ def putter(task_queue, xml_path, project_id, field_id, data, path, task):
                             cursor = conn.cursor()
 
                             for x in range(len(rename_li)):
-                                i = rename_li.pop()
-                                shot_number_new = '%03d' % (int(i) + 1)
-                                dirname_new = os.path.join(path, shot_number_new)  # /Users/shids/Code/tron/uploads/Projects/FUY/001/003
-                                dirname_old = os.path.join(path, i)
+                                shot_number_old = rename_li.pop()
+                                try:
+                                    shot_number_new = '%03d' % (int(shot_number_old) + 1)
+                                except:
+                                    continue
+                                dirname_new = os.path.join(path, shot_number_new)  # /Volumes/All/TXT/019/009
+                                dirname_old = os.path.join(path, shot_number_old)
                                 video_img_li = os.listdir(dirname_old)
                                 os.rename(dirname_old, dirname_new)  # 为文件夹重命名
 
                                 # 文件夹依次加1以后,要更新的字段:镜头编号shot_number、镜头缩略图地址shot_image、视频路径shot_video_path
                                 video_name = [i for i in video_img_li if not i.endswith('jpg')][0]
-                                # video_name = m[0].split('/')[-1]
                                 img_name = video_name.split('.')[0] + '.jpg'
-                                video_path_new_all = os.path.join(dirname_new, video_name) # 新的视频路径
+                                video_path_new_all = os.path.join(dirname_new, video_name)  # 新的视频路径
                                 img_path_new_all = os.path.join(dirname_new, img_name)     # 新的缩略图路径
-                                shot_video_path_new = re.search(r'.*(uploads.*)', video_path_new_all).group(1)
-                                shot_image_new = re.search(r'.*(uploads.*)', img_path_new_all).group(1)
-                                update_sql = "update oa_shot set shot_number=%s,shot_video_path='%s',shot_image='%s' " \
-                                             "where project_id=%s and field_id=%s and shot_number=%s"\
-                                             %(shot_number_new,shot_video_path_new,shot_image_new,project_id,field_id,i)
+                                # shot_video_path_new = re.search(r'.*(/Volumes/All.*)', video_path_new_all).group(1)
+                                # shot_image_new = re.search(r'.*(/Volumes/All.*)', img_path_new_all).group(1)
+                                shot_video_path_new = video_path_new_all.replace('/Volumes/All','uploads/Projects')
+                                shot_image_new = img_path_new_all.replace('/Volumes/All','uploads/Projects')
+                                update_sql = "update oa_shot set shot_number='%s',shot_name='%s',shot_video_path='%s',shot_image='%s' where project_id=%s and field_id=%s and shot_number='%s'"\
+                                             %(shot_number_new,shot_number_new,shot_video_path_new,shot_image_new,project_id,field_id,shot_number_old)
+                                print update_sql
                                 try:
                                     cursor.execute(update_sql)
                                     conn.commit()
+                                    print 'update sql success'
                                 except:
                                     conn.rollback()
+                                    print 'update sql fail'
                             cursor.close()
                             conn.close()
                         task_queue.put(info)

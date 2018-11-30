@@ -24,6 +24,7 @@
 # 'clip1' '192.168.100.79|YLSL/009/Work/note/5bdff7943d5b3.xml|YLSL/009/|10|35|27|332'
 # 转码 'clip1' 'IP|user_id|path|项目id|场id|xml_id|command_id'
 # 追加 'add_xml' 'IP|xml_path|path|项目id|场id|xml_id|command_id'
+#              192.168.101.160|TXT/017/Work/note/5bffaf4e5c992.xml|TXT/017/|1|46|22
 # 回插 'clip2' 'IP|video_path|img_path|time|rate|id|command_id'
 # 打包 'clip3'  'IP|FUY/001|xml_path|command_id'
 
@@ -61,7 +62,7 @@ def _init_():
 		elif args[0] == "add_xml":
 			# 修改相应场以及场下镜头的权限
 			path = args[1].split('|')[2]
-			all_path = '/Tron'+'/'+path
+			all_path = '/Tron/'+path
 			os.chmod(all_path, 0777)
 			ch_li = os.listdir(all_path)
 			for i in ch_li:
