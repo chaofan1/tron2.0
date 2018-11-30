@@ -10,14 +10,15 @@ sys.setdefaultencoding('utf-8')
 class AliyunDownload():
     def __init__(self,dirname):
         self.localPath = UploadFile().select_dir('')
-        self.auth = oss2.Auth('LTAIwpOv4aA4PQUS', '4cDyqy3lXuiSRtqR9xjUYmMdikEFxG')
-        self.bucket = oss2.Bucket(self.auth, 'http://oss-cn-shanghai.aliyuncs.com', 'jg-testwww')
-        self.keylist = []
-        for obj in oss2.ObjectIterator(self.bucket, prefix=dirname+'/'):
-            self.keylist.append(obj.key)
+        self.dirname = dirname
 
     def downLoad(self):
         try:
+            self.auth = oss2.Auth('LTAIwpOv4aA4PQUS', '4cDyqy3lXuiSRtqR9xjUYmMdikEFxG')
+            self.bucket = oss2.Bucket(self.auth, 'http://oss-cn-shanghai.aliyuncs.com', 'jg-testwww')
+            self.keylist = []
+            for obj in oss2.ObjectIterator(self.bucket, prefix=self.dirname + '/'):
+                self.keylist.append(obj.key)
             for ObjectName in self.keylist:
                 localDir = '/'.join(ObjectName.split('/')[:-1])
                 if not os.path.exists(self.localPath + os.sep + localDir):
@@ -26,6 +27,7 @@ class AliyunDownload():
                 self.bucket.get_object_to_file(ObjectName, self.localPath+os.sep+ObjectName)
             UploadFile().download_success()
         except:
+            print('下载失败，请检查网络')
             UploadFile().download_fail()
 
 

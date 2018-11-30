@@ -5,7 +5,7 @@
 #"Seq" "HAC" "01" "command_id"
 #"Shot" "HAC" "01" "001" "command_id"
 #"AssetTask" "HAC" "rig" "liangcy" "fileName" "command_id"
-#"Pack" "Json路径" "command_id"
+#"Pack" "Json路径" "pack_id" "command_id"
 #"Transit" "json路径" “公司_项目_主键id”“command_id”
 #"Del" "公司_项目_主键id"
 # 客户端
@@ -32,7 +32,7 @@
 import sys,os
 from createProject import TronProject
 from client import clientLink
-from server_callback import callback
+from server_callback import callback, callback_pack, callback_transit
 from distribution import TronDistribute,transit
 
 
@@ -87,9 +87,6 @@ def _init_():
 			TronProject().CreateDai(args[1])
 			dailiesData = args[2]+"|Dailies2"
 			clientLink(dailiesData)
-		elif args[0] == "Pack":  # "Pack" "Json路径" "command_id"
-			TronDistribute().argParse(args[1])
-			callback(args[2])
 	elif len(args) == 4:
 		if args[0] == "Reference":    # "Reference" "HAC" "shots"  "192.168.1.85|x:/DHG/References/inner/fileName|373"
 			TronProject().CreateRef(args[1].upper(), args[2])
@@ -98,12 +95,17 @@ def _init_():
 		elif args[0] == "Seq":  # createProject.CreateSeq(proName, seqName)
 			TronProject().CreateSeq(args[1].upper(), args[2])
 			callback(args[3])
-		elif args[0] == "Transit":  # "Transit" "json路径" “公司_项目_主键id”“command_id”
-			transit(args[1], args[2])
+		elif args[0] == "Pack":  # "Pack" "Json路径" "打包id" "command_id"
+			TronDistribute().argParse(args[1])
+			callback_pack(args[2])
 			callback(args[3])
 	elif len(args) == 5:
 		if args[0] == "Shot":   # "Shot" "HAC" "001" "001" "command_id"
 			TronProject().CreateScene(args[1].upper(), args[2], args[3])
+			callback(args[4])
+		elif args[0] == "Transit":  # "Transit" "json路径" “公司_项目_主键id” "transit_id" “command_id”
+			transit(args[1], args[2])
+			callback_transit(args[3])
 			callback(args[4])
 	elif len(args) == 6:
 		if args[0] == "AssetTask":    # "AssetTask" "HAC" "rig" "liangcy" "fileName" "command_id"

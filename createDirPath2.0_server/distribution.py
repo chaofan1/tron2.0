@@ -1,12 +1,10 @@
 #-*- coding: utf-8 -*-
 import os
-import re
 import time
 import json
 import shutil
 import logging
 import smtplib
-import platform
 import threadpool
 import sys
 reload(sys)
@@ -84,7 +82,7 @@ class TronDistribute:
             [self.pool.putRequest(req) for req in requests]
             try:
                 self.pool.wait()
-                # os.remove(self.filePath) # 测试或上线打开，拷贝完，删除json文件
+                os.remove(self.filePath)  # 测试或上线打开，拷贝完，删除json文件
             except Exception as e:
                 pass
 
@@ -217,6 +215,7 @@ def transit(jsonPath, dirName):
     sendMail(cpname, email, user_name, remark)
     os.chmod(outputPath + sep + cpname + sep + dirName, 0777)
     shutil.rmtree(outputPath + sep + cpname + sep + dirName)
+    # os.remove(jsonPath) # 测试或上线打开，删除json文件
 
 
 def sendMail(cpname, email, user_name, remark):
@@ -228,14 +227,14 @@ def sendMail(cpname, email, user_name, remark):
             mailAdd = email  # 外包公司邮箱
             # cc_mail = ['lizhenliang@xxx.com']      # 抄送邮箱
             from_name = user_name  # 发送人姓名
-            subject = '您有一封来自' + user_name + '的邮件'  # 主题
+            subject = '您有一封来自Tron平台的邮件(请勿回复)'  # 主题
             mail = [
                 "From: %s <%s>" % (from_name, from_mail),
                 str("To: %s" % mailAdd),
                 "Subject: %s" % subject,
                 # "Cc: %s" % ','.join(cc_mail), "utf8"),
                 "",
-                remark + "(请勿回复此邮件)",
+                user_name +'通知您登录Tron下载最新分发内容.'+ remark + "(请勿回复此邮件)",
             ]
             msg = '\n'.join(mail)
             s = smtplib.SMTP()
