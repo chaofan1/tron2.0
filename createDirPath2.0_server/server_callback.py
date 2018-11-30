@@ -16,8 +16,6 @@ class CallBack:
 
     def callback(self, command_id):
         self.url = 'http://%s/tron/index.php/python/renewScriptStatus' % self.ip
-        print self.url
-        exit()
         self.query_args = {'id': command_id}
         self.request()
 
