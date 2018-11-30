@@ -53,15 +53,15 @@ def handle(conn):
 		server_outcompany = config.OutCompany
 
 		if data_split[-1] == "open_dai":
-			file_path = data.strip()
+			file_path = data_split
 			os.popen('nautilus %s' % (server_all + file_path)).close()
 
 		elif data_split[-1] == "open_ref":
-			file_path = data.strip()
+			file_path = data_split
 			os.popen('nautilus %s' % (server_ref + file_path)).close()
 
 		elif data_split[-1] == "open_post":
-			file_path = data.strip()
+			file_path = data_split
 			os.popen('nautilus %s' % (server_post + file_path)).close()
 
 		elif data_split[-1] == "YunFolder":

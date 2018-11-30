@@ -50,15 +50,15 @@ def handle(conn):
 		server_outcompany = config.OutCompany
 
 		if data_split[-1] == "open_dai":
-			file_path, Uptask = data.strip()
+			file_path, Uptask = data_split
 			os.popen('open %s' % (server_all + file_path)).close()
 
 		elif data_split[-1] == "open_ref":
-			file_path, Uptask = data.strip()
+			file_path, Uptask = data_split
 			os.popen('open %s' % (server_ref + file_path)).close()
 
 		elif data_split[-1] == "open_post":
-			file_path, Uptask = data.strip()
+			file_path, Uptask = data_split
 			os.popen('open %s' % (server_post + file_path)).close()
 
 		elif data_split[-1] == "YunFolder":

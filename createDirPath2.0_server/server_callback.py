@@ -5,25 +5,29 @@
 
 import urllib
 import urllib2
+import socket
 
 
 class CallBack:
     def __init__(self):
         self.url = ''
         self.query_args = {}
+        self.ip = socket.gethostbyname(socket.gethostname())
 
     def callback(self, command_id):
-        self.url = 'http://192.168.100.49/tron/index.php/python/renewScriptStatus'
+        self.url = 'http://%s/tron/index.php/python/renewScriptStatus' % self.ip
+        print self.url
+        exit()
         self.query_args = {'id': command_id}
         self.request()
 
     def callback_pack(self, pack_id):
-        self.url = 'http://192.168.100.49/tron/index.php/python/callback_pack_status'
+        self.url = 'http://%s/python/callback_pack_status' % self.ip
         self.query_args = {'id': pack_id}
         self.request()
 
     def callback_transit(self, transit_id):
-        self.url = 'http://192.168.100.49/tron/index.php/python/distribute/callback'
+        self.url = 'http://%s/python/distribute/callback' % self.ip
         self.query_args = {'command_id': transit_id}
         self.request()
 
@@ -38,3 +42,6 @@ class CallBack:
         else:
             print response.read()
 
+
+if __name__ == '__main__':
+    CallBack().callback('')

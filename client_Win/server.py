@@ -57,19 +57,19 @@ def handle(conn):
 		server_outcompany = config.OutCompany
 
 		if data_split[-1] == "open_dai":
-			file_path = data.strip()
+			file_path = data_split
 			file_path = file_path.replace("/", "\\")
 			os.popen('explorer.exe %s' % (server_all + file_path)).close()
 			print (server_all + file_path)
 
 		elif data_split[-1] == "open_ref":
-			file_path = data.strip()
+			file_path = data_split
 			file_path = file_path.replace("/", "\\")
 			os.popen('explorer.exe %s' % (server_ref + file_path)).close()
 			print (server_all + file_path)
 
 		elif data_split[-1] == "open_post":
-			file_path = data.strip()
+			file_path = data_split
 			file_path = file_path.replace("/", "\\")
 			os.popen('explorer.exe %s' % (server_post + file_path)).close()
 			print (server_all + file_path)
