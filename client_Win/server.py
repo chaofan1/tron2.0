@@ -72,6 +72,7 @@ def handle(conn):
 		# 		os.popen('explorer.exe %s' % (server_all + file_path)).close()
 		elif data_split[-1] == "YunFolder":
 			file_path ,Uptask = data_split
+			os.chmod(server_outcompany + file_path, 0777)
 			os.popen('explorer.exe %s' % (server_outcompany + file_path)).close()
 		elif data_split[-1] == "Dailies1":   # /FUY/001/001/stuff/cmp|file_name|command_id|Dailies1
 			file_path, file_name, command_id, UpTask = data_split
