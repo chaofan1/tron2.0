@@ -41,7 +41,7 @@ def _init_():
 	print args
 	if len(args) == 2:
 		if args[0] == "Folder":
-			clientLink(args[1])
+			clientLink(args[1]+'|Folder')
 		elif args[0] == "YunFolder":
 			clientLink(args[1] + '|YunFolder')
 		elif args[0] == "Ready_render" or args[0] == "Local_render" or args[0] == "Cloud_render":

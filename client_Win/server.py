@@ -56,23 +56,16 @@ def handle(conn):
 		server_ref = config.Reference
 		server_outcompany = config.OutCompany
 
-		if len(data_split) is 1:
+		if data_split[-1] == "Folder":
 			file_path = data.strip()
 			file_path = file_path.replace("/", "\\")
 			os.popen('explorer.exe %s' % (server_all + file_path)).close()
 			print (server_all + file_path)
 
-		# elif len(data_split) is 2:
-		# 	file_path, Uptask = data_split
-		# 	if Uptask == 'lgt' or Uptask == 'cmp':
-		# 		file_path = file_path.replace("/", "\\")
-		# 		os.popen('explorer.exe %s' % (server_post + file_path)).close()
-		# 	else:
-		# 		file_path = file_path.replace("/", "\\")
-		# 		os.popen('explorer.exe %s' % (server_all + file_path)).close()
 		elif data_split[-1] == "YunFolder":
 			file_path ,Uptask = data_split
 			os.popen('explorer.exe %s' % (server_outcompany + file_path)).close()
+
 		elif data_split[-1] == "Dailies1":   # /FUY/001/001/stuff/cmp|file_name|command_id|Dailies1
 			file_path, file_name, command_id, UpTask = data_split
 			UploadFile().upload_dailies(server_all, file_path, file_name, command_id)
