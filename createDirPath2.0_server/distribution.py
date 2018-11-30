@@ -186,9 +186,7 @@ class TronDistribute:
     def Deldir(self, dirname):
         try:
             cpname, proname, user_id = dirname.split('_')
-            os.chmod(self.outputPath + os.sep + cpname + os.sep + dirname, 0777)
             shutil.rmtree(self.outputPath + os.sep + cpname + os.sep + dirname)
-            os.chmod(self.outputPath + os.sep + cpname + os.sep + dirname, 0755)
         except Exception as e:
             logging.info('删除文件出错')
             logging.error(e)
@@ -213,7 +211,6 @@ def transit(jsonPath, dirName):
     tranfilePath = outputPath + sep + cpname + sep + dirName
     AliyunOss(tranfilePath, dirName).uploadFile()
     sendMail(cpname, email, user_name, remark)
-    os.chmod(outputPath + sep + cpname + sep + dirName, 0777)
     shutil.rmtree(outputPath + sep + cpname + sep + dirName)
     # os.remove(jsonPath) # 测试或上线打开，删除json文件
 
