@@ -1,9 +1,9 @@
 #!/usr/bin/env python
 #coding=utf-8
-import re
-import os,sys
+import os
 import oss2
 import time
+import smtplib
 import logging
 from oss2 import SizedFileAdapter, determine_part_size
 from oss2.models import PartInfo
@@ -12,7 +12,7 @@ from aliyunsdkcore import client
 
 
 class AliyunOss():
-    def __init__(self,filePath,dirname):
+    def __init__(self,filePath,dirname, cpname, email, user_name, remark):
         logging.basicConfig(filename='/Public/tronPipelineScript/tron2.0/distribute_log/dis_' +
                                      time.strftime("%Y%m%d") + '.log', level=logging.INFO,
                             format="%(asctime)s - %(levelname)s - %(message)s")
@@ -25,6 +25,10 @@ class AliyunOss():
         self.filePath = filePath
         self.dirname = dirname
         self.sep = os.sep
+        self.cpname = cpname
+        self.email = email
+        self.user_name = user_name
+        self.remark = remark
 
     # def userExit(self):
     #     request = ListUsersRequest.ListUsersRequest()
@@ -108,9 +112,43 @@ class AliyunOss():
 
                 # 完成分片上传。
                 self.bucket.complete_multipart_upload(key, upload_id, parts)
+            logging.info('upload file to yun ok')
+            self.sendMail()
         except Exception as e:
             logging.info('upload file to yun error')
             logging.error(e)
+
+    def sendMail(self):
+        if self.email:
+            try:
+                smtp_server = 'smtp.yeah.net'
+                from_mail = 'tron2018@yeah.net'  # 发送邮箱
+                mail_pass = 'liangcy880716'  # 邮箱密码
+                mailAdd = self.email  # 外包公司邮箱
+                # cc_mail = ['lizhenliang@xxx.com']      # 抄送邮箱
+                from_name = self.user_name  # 发送人姓名
+                subject = '您有一封来自Tron平台的邮件(请勿回复)'  # 主题
+                mail = [
+                    "From: %s <%s>" % (from_name, from_mail),
+                    str("To: %s" % mailAdd),
+                    "Subject: %s" % subject,
+                    # "Cc: %s" % ','.join(cc_mail), "utf8"),
+                    "",
+                    self.user_name + '通知您登录Tron下载最新分发内容.' + self.remark + "(请勿回复此邮件)",
+                ]
+                msg = '\n'.join(mail)
+                s = smtplib.SMTP()
+                s.connect(smtp_server, '25')
+                s.login(from_mail, mail_pass)
+                # s.sendmail(from_mail, to_mail+cc_mail, msg)
+                s.sendmail(from_mail, mailAdd, msg)
+                s.quit()
+                logging.info(u'发送邮件成功' + self.cpname + '|' + mailAdd)
+            except Exception as e:
+                logging.info('发送邮件失败')
+                logging.error(e)
+        else:
+            logging.info('邮箱为空')
 
     # def createPolicy(self):
     #     request = CreatePolicyRequest.CreatePolicyRequest()
