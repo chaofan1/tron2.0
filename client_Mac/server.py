@@ -63,8 +63,11 @@ def handle(conn):
 
 		elif data_split[-1] == "YunFolder":
 			file_path, Uptask = data_split
-			os.chmod(server_outcompany + file_path, 0777)
-			os.popen('open %s' % (server_outcompany + file_path)).close()
+			if os.path.exists(server_outcompany + file_path):
+				os.chmod(server_outcompany + file_path, 0777)
+				os.popen('open %s' % (server_outcompany + file_path)).close()
+			else:
+				print 'the directory not exit,maybe already uploaded to yun,dir has deleted'
 
 		elif data_split[-1] == "Dailies1":   # /FUY/001/001/stuff/cmp|file_name|command_id|Dailies1
 			file_path, file_name, command_id, UpTask = data_split

@@ -111,8 +111,8 @@ def _init_():
 			CallBack().callback(args[4])
 		elif args[0] == "Transit":  # "Transit" "json路径" “公司_项目_主键id” "transit_id" “command_id”
 			transit(args[1], args[2])
-			CallBack().callback_transit(args[3])
-			CallBack().callback(args[4])
+			CallBack().callback_transit(args[4])
+			CallBack().callback(args[3])
 	elif len(args) == 6:
 		if args[0] == "AssetTask":    # "AssetTask" "HAC" "rig" "liangcy" "fileName" "command_id"
 			TronProject().CreateAsset(args[1].upper(), args[2], args[3], args[4])

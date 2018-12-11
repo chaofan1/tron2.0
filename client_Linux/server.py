@@ -65,9 +65,12 @@ def handle(conn):
 			os.popen('nautilus %s' % (server_post + file_path)).close()
 
 		elif data_split[-1] == "YunFolder":
-			file_path ,Uptask = data_split
-			os.chmod(server_outcompany + file_path, 0777)
-			os.popen('open %s' % (server_outcompany + file_path)).close()
+			file_path, Uptask = data_split
+			if os.path.exists(server_outcompany + file_path):
+				os.chmod(server_outcompany + file_path, 0777)
+				os.popen('open %s' % (server_outcompany + file_path)).close()
+			else:
+				print 'the directory not exit,maybe already uploaded to yun,dir has deleted'
 
 		elif data_split[-1] == "Ready_render1" or data_split[-1] == "Local_render1" or data_split[-1] == "Cloud_render1":
 			file_path, Uptask = data_split
