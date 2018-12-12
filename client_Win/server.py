@@ -10,9 +10,6 @@ import shutil
 import platform
 import socket
 import createThumbnail
-from clipLine import start_clip
-from clipLine2 import Pack, insert
-from clipLine import to_php
 from httpUrl import CallBack
 from upload import UploadFile
 from aliyun_client import AliyunDownload
@@ -113,45 +110,6 @@ def handle(conn):
 		elif data_split[-1] =="Reference":
 			file_path, file_name, sql_data, UpTask = data_split
 			UploadFile().upload_reference(server_ref, file_path, file_name, sql_data)
-
-		elif data_split[-1] == 'clip1':  # 转码
-			xml_path, path, project_id, field_id, xml_id, command_id, UpTask = data_split
-			xml_path = server_all + sep + xml_path
-			video_path = server_all + sep + path
-			start_clip(xml_path, video_path, project_id, field_id, xml_id, UpTask)
-			to_php(1, 0, project_id, field_id, xml_id, UpTask)
-			# httpUrl.render_callback(command_id)
-			conn.send(path)
-			print('clip1 end')
-
-		elif data_split[-1] == 'add_xml':
-			xml_path, path, project_id, field_id, xml_id, command_id, UpTask = data_split
-			xml_path = server_all + sep + xml_path
-			video_path = server_all + sep + path
-			start_clip(xml_path, video_path, project_id, field_id, xml_id, UpTask)
-			conn.send(path)
-			# httpUrl.render_callback(command_id)
-			print('add_xml end')
-
-		elif data_split[-1] == 'clip2':   # 回插
-			video_path, img_path, frame, data_id, command_id, UpTask = data_split
-			insert(video_path, img_path, frame, data_id)
-			# httpUrl.render_callback(command_id)
-			print('clip2 end')
-
-		elif data_split[-1] == 'clip3':   # 打包
-			pro_scene, xml_path, command_id, UpTask = data_split
-			pro_name = pro_scene.strip('/').split('/')[-2]
-			user_path = os.environ['HOME']  # /Users/wang
-			pack_path = os.path.join(user_path, 'Pack')
-			if not os.path.exists(pack_path):
-				os.mkdir(pack_path)
-			out_path = os.path.join(pack_path, pro_name)  # /Users/wang/Pack/FUY
-			pro_scene = server_all + sep + pro_scene
-			Pack().pack(pro_scene, xml_path, out_path)
-			os.popen('open %s' % out_path).close()
-			# httpUrl.render_callback(command_id)
-			print('clip3 end')
 
 		elif data_split[-1] == 'ShotTask':   # 提交发布弹框
 			# "HAC" "01" "001" "rig" "liangcy" "fileName" "ShotTask"

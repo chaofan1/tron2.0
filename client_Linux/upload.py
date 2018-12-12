@@ -10,6 +10,7 @@ import pymysql
 from PyQt4 import QtGui
 import createThumbnail
 from httpUrl import CallBack
+import config
 reload(sys)
 sys.setdefaultencoding('utf-8')
 
@@ -114,10 +115,10 @@ class UploadFile:
         # "create_year":"2018",
         # "create_time":1538217282}
 
-        ip = '192.168.100.49'
-        user_name = 'root'
-        passwd = 'king9188YJQ@'
-        db_name = 'new_tron'
+        ip = config.ip
+        user_name = config.user_name
+        passwd = config.passwd
+        db_name = config.db_name
         table_name = 'oa_references'
 
         sql_data = eval(sql_data)
