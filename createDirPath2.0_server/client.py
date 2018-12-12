@@ -10,7 +10,6 @@ import os
 def clientLink(data):
     args = data.split("|")
     clientIP = args[0]
-    xml_path = args[1]
     task = args[-1]
     senStr = '|'.join(args[1:])
     serverName = "/Tron"
@@ -22,18 +21,24 @@ def clientLink(data):
     if senStr:
         s.sendall(senStr)
         print('already send info')
-        if task == 'clip1' or task == 'add_xml':
+        if task == 'clip1' or task == 'add_xml' or task == 'clip2':
             data = s.recv(1024)
-            recv_path = data.replace('\\', '/')
-            ser_recv_path = serverName+'/'+recv_path  # clip /Tron/FUY/001
-            if os.path.exists(ser_recv_path):
-                ch_li = os.listdir(ser_recv_path)
-                for i in ch_li:
-                    os.chmod(ser_recv_path+'/'+i, 0555)
-                os.chmod(ser_recv_path, 0555)
-                print 'already chmod 555'
-                xml_path = serverName+'/'+xml_path
-                os.remove(xml_path)
+            if task == 'clip2':
+                video_dir = os.path.dirname(args[1])
+                path = serverName + '/' + video_dir
+                os.chmod(path, 0555)
+            else:
+                xml_path = args[1]
+                recv_path = data.replace('\\', '/')
+                ser_recv_path = serverName+'/'+recv_path  # clip /Tron/FUY/001
+                if os.path.exists(ser_recv_path):
+                    ch_li = os.listdir(ser_recv_path)
+                    for i in ch_li:
+                        os.chmod(ser_recv_path+'/'+i, 0555)
+                    os.chmod(ser_recv_path, 0555)
+                    xml_path = serverName+'/'+xml_path
+                    os.remove(xml_path)
+            print 'already chmod 555'
         s.close()
         print('client close')
     return

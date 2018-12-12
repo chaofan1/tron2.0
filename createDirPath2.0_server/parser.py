@@ -27,7 +27,7 @@
 # 转码 'clip1' 'IP|user_id|path|项目id|场id|xml_id|command_id'
 # 追加 'add_xml' 'IP|xml_path|path|项目id|场id|xml_id|command_id'
 #              192.168.101.160|TXT/017/Work/note/5bffaf4e5c992.xml|TXT/017/|1|46|22
-# 回插 'clip2' 'IP|video_path|img_path|time|rate|id|command_id'
+# 回插 'clip2' 'IP|video_path|img_path|frame|id|command_id'
 # 打包 'clip3'  'IP|FUY/001|xml_path|command_id'
 
 
@@ -60,6 +60,10 @@ def _init_():
 			clipData = args[1]+'|clip1'
 			clientLink(clipData)
 		elif args[0] == "clip2":
+			path = args[1].split('|')[1]
+			video_dir = os.path.dirname(path)
+			all_path = '/Tron' + '/' + video_dir
+			os.chmod(all_path, 0777)
 			clipData = args[1]+'|clip2'
 			clientLink(clipData)
 		elif args[0] == "clip3":

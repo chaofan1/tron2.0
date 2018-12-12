@@ -103,7 +103,10 @@ def handle(conn):
 
 		elif data_split[-1] == 'clip2':   # 回插
 			video_path, img_path, frame, data_id, command_id, UpTask = data_split
+			video_path = server_all + sep + video_path
+			img_path = server_all + sep + img_path
 			insert(video_path, img_path, frame)
+			conn.send('path')
 			# httpUrl.render_callback(command_id)
 			print('clip2 end')
 

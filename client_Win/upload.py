@@ -24,7 +24,6 @@ class UploadFile:
         self.fileOld = ''
         self.app = QApplication(sys.argv)
         self.mainWindow = QMainWindow()
-        self.select_file()
 
     def select_file(self):
         (fileOld, ext) = QFileDialog.getOpenFileNameAndFilter(self.mainWindow,
@@ -50,6 +49,7 @@ class UploadFile:
         sys.exit(self.app.exec_())
 
     def upload_dailies(self, server_name, file_path, file_name, command_id):
+        self.select_file()
         if self.fileOld:
             print self.fileOld
             fileType = str(self.fileOld.split(".")[-1])
@@ -92,6 +92,7 @@ class UploadFile:
         sys.exit(app.exec_())
 
     def upload_reference(self, server_name, file_path, file_name, sql_data):
+        self.select_file()
         if self.fileOld:
             fileType = str(self.fileOld.split(".")[-1]).lower()
             if fileType == "jpg" or fileType == "jpeg" or fileType == "png" or fileType == "tiff" or fileType == "tga":
