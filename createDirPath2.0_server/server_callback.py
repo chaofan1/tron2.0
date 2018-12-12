@@ -15,7 +15,7 @@ class CallBack:
         self.ip = socket.gethostbyname(socket.gethostname())
 
     def callback(self, command_id):
-        self.url = 'http://%s/tron/index.php/python/renewScriptStatus' % self.ip
+        self.url = 'http://%s/python/renewScriptStatus' % self.ip
         self.query_args = {'id': command_id}
         self.request_post()
 
