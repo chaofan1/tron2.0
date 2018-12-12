@@ -9,7 +9,7 @@ import urllib, urllib2
 import time
 import re
 from createThumbnail import CreateThumbnail
-
+import config
 
 # ip = '192.168.1.117'
 # user_name = 'root'
@@ -18,12 +18,12 @@ from createThumbnail import CreateThumbnail
 # table_name = 'oa_shot'
 # to_php_url = 'http://192.168.1.117/clips/set_progress'
 
-ip = '192.168.100.49'
-user_name = 'root'
-passwd = 'king9188YJQ@'
-db_name = 'new_tron'
-table_name = 'oa_shot'
-to_php_url = 'http://192.168.100.49/clips/set_progress'
+ip = config.ip
+user_name = config.user_name
+passwd = config.passwd
+db_name = config.db_name
+table_name = config.clip_table_name
+to_php_url = config.to_php_url
 
 
 def write_sql(info, shot_video_path, shot_image, shot_number):
