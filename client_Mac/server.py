@@ -16,8 +16,8 @@ def myServer():
 	if platform.system() != 'Darwin':
 		print '这是Mac平台，请使用相应脚本!'
 		exit()
-	localIP = socket.gethostbyname(socket.gethostname())
-	HOST = localIP
+	HOST = socket.gethostbyname(socket.gethostname())
+	print 'localIP:', HOST
 	PORT = 29400
 	s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 	s.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)

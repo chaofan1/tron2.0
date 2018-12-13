@@ -27,6 +27,7 @@ def clientLink(data):
                 video_dir = os.path.dirname(args[1])
                 path = serverName + '/' + video_dir
                 os.chmod(path, 0555)
+                print 'already chmod 555'
             else:
                 xml_path = args[1]
                 recv_path = data.replace('\\', '/')
@@ -38,7 +39,7 @@ def clientLink(data):
                     os.chmod(ser_recv_path, 0555)
                     xml_path = serverName+'/'+xml_path
                     os.remove(xml_path)
-            print 'already chmod 555'
+                    print 'already chmod 555'
         s.close()
         print('client close')
     return
