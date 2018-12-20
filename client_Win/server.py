@@ -72,21 +72,23 @@ def handle(conn):
 			print (server_all + file_path)
 
 		elif data_split[-1] == "YunFolder":
-			file_path, Uptask = data_split
+			file_path, create_time, Uptask = data_split
 			file_path = file_path.replace("/", "\\")
-			if os.path.exists(server_outcompany + file_path):
+			projectName = file_path.split('\\')[1]
+			print create_time
+			if os.path.exists(server_outcompany %(projectName,create_time)+ file_path):
 				os.chmod(server_outcompany + file_path, 0777)
-				os.popen('explorer.exe %s' % (server_outcompany + file_path)).close()
+				os.popen('explorer.exe %s' % (server_outcompany %(projectName,create_time) + file_path)).close()
 			else:
-				print 'the directory not exit,maybe already uploaded to yun,dir has deleted'
+				print 'the directory not exit'
 
 		elif data_split[-1] == "Dailies1":   # /FUY/001/001/stuff/cmp|file_name|command_id|Dailies1
 			file_path, file_name, command_id, UpTask = data_split
 			UploadFile().upload_dailies(server_all, file_path, file_name, command_id)
 
 		elif data_split[-1] == "download":   # huanyu_Fuy_1|download
-			dirname, UpTask = data_split
-			AliyunDownload(dirname).downLoad()
+			downloadPath = UploadFile().select_dir('')
+			conn.sendall(downloadPath)
 
 		elif data_split[-1] == "Dailies2":
 			file_path, file_name, command_id, UpTask = data_split

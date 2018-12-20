@@ -6,7 +6,7 @@
 #"Shot" "HAC" "01" "001" "command_id"
 #"AssetTask" "HAC" "rig" "liangcy" "fileName" "command_id"
 #"Pack" "Json路径" "pack_id" "command_id"
-#"Transit" "json路径" “公司_项目_主键id”“command_id”
+#"Transit" "json路径" “公司_项目_主键id”"transit_id"“command_id”
 #"Del" "公司_项目_主键id"
 # 客户端
 # 'Render' '192.168.100.44|/FUY/999/003/Stuff/lgt/publish/fuy999003_lgt_wangcf_yuanBao_master|Render2|command_id'
@@ -36,6 +36,7 @@ from createProject import TronProject
 from client import clientLink
 from server_callback import CallBack
 from distribution import TronDistribute,transit
+from aliyun import AliyunOss
 
 
 def _init_():
@@ -48,8 +49,6 @@ def _init_():
 			clientLink(args[1]+'|open_ref')
 		elif args[0] == "open_post":
 			clientLink(args[1]+'|open_post')
-		elif args[0] == "YunFolder":
-			clientLink(args[1] + '|YunFolder')
 		elif args[0] == "Ready_render" or args[0] == "Local_render" or args[0] == "Cloud_render":
 			clientLink(args[1])
 		elif args[0] == "clip1":
@@ -79,11 +78,7 @@ def _init_():
 				os.chmod(all_path+i, 0777)
 			clipData = args[1]+'|add_xml'
 			clientLink(clipData)
-		elif args[0] == "download":   # 'download' 'tron_TXT_7|ip'
-			key, ip = args[1].split('|')
-			clipData = ip + '|' + key+'|download'
-			clientLink(clipData)
-		elif args[0] == "Del":
+		elif args[0] == "Del":  # "Del" "公司_项目_主键id"
 			TronDistribute().Deldir(args[1])
 	elif len(args) == 3:
 		if args[0] == "Project":
@@ -93,6 +88,8 @@ def _init_():
 			TronProject().CreateDai(args[1])
 			dailiesData = args[2]+"|Dailies1"
 			clientLink(dailiesData)
+		elif args[0] == 'YunFolder':
+			clientLink(args[1] + '|'+ args[2] + '|YunFolder')
 		elif args[0] == "Dailies2":  # "Dailies2" "/FUY/001/001/Stuff/cmp/" "IP|/FUY/001/001/Stuff/cmp|filename|command_id"
 			TronProject().CreateDai(args[1])
 			dailiesData = args[2]+"|Dailies2"
@@ -102,6 +99,12 @@ def _init_():
 			TronProject().CreateRef(args[1].upper(), args[2])
 			referencesData = args[3] + "|Reference"
 			clientLink(referencesData)
+		elif args[0] == "download":  # 'download' 'tron_TXT_7|ip' 'id' 'user_id'
+			key, ip = args[1].split('|')
+			clipData = ip + '|' + key + '|download'
+			downloadPath = clientLink(clipData)
+			AliyunOss('', key, '', '', '', '').download(downloadPath)
+			CallBack().callback_download(args[2],args[3])
 		elif args[0] == "Seq":  # createProject.CreateSeq(proName, seqName)
 			TronProject().CreateSeq(args[1].upper(), args[2])
 			CallBack().callback(args[3])

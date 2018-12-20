@@ -1,4 +1,5 @@
 ALL_WIN = ''
 ALL_MAC = ''
 ALL_LINUX = ''
-
+log_path = '/Public/tronPipelineScript/tron2.0/distribute_log/dis_'
+outputpath = '/All/%s/Vender/outgoing/%s'

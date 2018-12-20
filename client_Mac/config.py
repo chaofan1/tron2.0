@@ -1,7 +1,7 @@
 All = "/Volumes/All"
 Post = "/Volumes/Post"
 Reference = "/Volumes/library/References"
-OutCompany = "/Volumes/Public/tronPipelineScript/tron2.0/"
+OutCompany = "/Volumes/All/%s/Vender/outgoing/%s"
 
 user_name = 'root'
 db_name = 'new_tron'

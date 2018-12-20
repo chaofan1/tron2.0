@@ -18,6 +18,7 @@ def clientLink(data):
     PORT = 29400
     s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
     s.connect((HOST, PORT))
+    information = ''
     if senStr:
         s.sendall(senStr)
         print('already send info')
@@ -40,9 +41,10 @@ def clientLink(data):
                     xml_path = serverName+'/'+xml_path
                     os.remove(xml_path)
                     print 'already chmod 555'
+        information = s.recv(1024)
         s.close()
         print('client close')
-    return
+    return information
 
 
 if __name__ == '__main__':
