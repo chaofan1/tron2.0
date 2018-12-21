@@ -63,7 +63,7 @@ def handle(conn):
 
 		elif data_split[-1] == "YunFolder":
 			file_path, create_time, Uptask = data_split
-			projectName = file_path.split('/')[1]
+			projectName = file_path.split('_')[1]
 			print create_time
 			if os.path.exists(server_outcompany % (projectName, create_time) + file_path):
 				os.chmod(server_outcompany % (projectName, create_time) + file_path, 0777)

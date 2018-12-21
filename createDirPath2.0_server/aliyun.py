@@ -8,13 +8,13 @@ import logging
 from oss2 import SizedFileAdapter, determine_part_size
 from oss2.models import PartInfo
 from aliyunsdkcore import client
+from config import log_path
 # from aliyunsdkram.request.v20150501 import CreateUserRequest,CreateAccessKeyRequest,ListUsersRequest,AttachPolicyToUserRequest,CreatePolicyRequest
 
 
 class AliyunOss():
     def __init__(self,filePath,dirname, cpname, email, user_name, remark):
-        logging.basicConfig(filename='/Public/tronPipelineScript/tron2.0/distribute_log/dis_' +
-                                     time.strftime("%Y%m%d") + '.log', level=logging.INFO,
+        logging.basicConfig(filename=log_path + time.strftime("%Y%m%d") + '.log', level=logging.INFO,
                             format="%(asctime)s - %(levelname)s - %(message)s")
 
         # 管理验证
@@ -109,7 +109,7 @@ class AliyunOss():
         else:
             logging.info('邮箱为空')
 
-    def download(self, path):
+    def download(self, sysType, path):
         try:
             self.keylist = []
             for obj in oss2.ObjectIterator(self.bucket, prefix=self.dirname + '/'):

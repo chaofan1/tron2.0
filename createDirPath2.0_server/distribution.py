@@ -20,15 +20,17 @@ class Finish(SyntaxWarning):
 class TronDistribute:
     def __init__(self):
         self.pool = threadpool.ThreadPool(8)  # 创建线程池
-        self.outputPath = outputpath % (self.progectName, time.strftime('%Y%m%d', time.localtime(time.time())))  # 存放外包公司目录的位置
         # 日志位置
-        logging.basicConfig(filename='%s' + time.strftime("%Y%m%d") + '.log', level=logging.INFO,
-                            format="%(asctime)s - %(levelname)s - %(message)s") % log_path
+        logging.basicConfig(filename=log_path + time.strftime("%Y%m%d") + '.log', level=logging.INFO,
+                            format="%(asctime)s - %(levelname)s - %(message)s")
 
     # 解析php传来的json文件，filePath为json路径
-    def argParse(self, filePath):
+    def argParse(self, filePath, timeStamp):
         self.filePath = filePath
         self.progectName, self.userid, self.timeStamp = os.path.splitext(os.path.basename(filePath))[0].split('_')
+        create_time = time.strftime("%Y%m%d", time.localtime(eval(timeStamp)))
+        self.outputPath = outputpath % (self.progectName, create_time)  # 存放外包公司目录的位置
+        print self.outputPath
         try:
             with open(self.filePath, 'r') as f:
                 response = json.load(f)
@@ -46,6 +48,7 @@ class TronDistribute:
                     for cp in response['company_data']:
                         basePath = self.outputPath + os.sep + cp['pack_dir_name'] \
                                    + os.sep + self.progectName + os.sep + fieldName + os.sep + shotNum + os.sep
+                        print basePath
                         if not os.path.exists(basePath):
                             os.makedirs(basePath)
                         Paths.append(((basePath, material), None))
@@ -58,6 +61,7 @@ class TronDistribute:
                     for cp in response['company_data']:
                         asset_basepath = self.outputPath + os.sep + cp['pack_dir_name']\
                                          + os.sep + self.progectName + os.sep + "assets" + os.sep + tache_name
+                        print asset_basepath
                         if not os.path.exists(asset_basepath):
                             os.makedirs(asset_basepath)
                         Paths.append(((asset_basepath, linux_path), None))
@@ -65,6 +69,7 @@ class TronDistribute:
             for cp in response['company_data']:
                 referencesDir = self.outputPath + os.sep + cp['pack_dir_name'] \
                                 + os.sep + self.progectName + os.sep + "references"
+                print referencesDir
                 if not os.path.exists(referencesDir):
                     os.makedirs(referencesDir)
                 Paths.append(((referencesDir, referencesList), None))
@@ -183,10 +188,11 @@ class TronDistribute:
     #         logging.error(e)
     #         return 1, e
 
-    def Deldir(self, dirname):
+    def Deldir(self, dirname, timeStamp):
         try:
+            create_time = time.strftime("%Y%m%d", time.localtime(eval(timeStamp)))
             cpname, proname, user_id = dirname.split('_')
-            shutil.rmtree(self.outputPath + os.sep + cpname + os.sep + dirname)
+            shutil.rmtree(outputpath % (proname, create_time) + os.sep + dirname)
         except Exception as e:
             logging.info('删除文件出错')
             logging.error(e)
@@ -207,7 +213,7 @@ def transit(jsonPath, dirName):
     email = response['email']
     remark = response['remark']
     create_time = response['create_time']
-    print create_time
+    create_time = time.strftime("%Y%m%d", time.localtime(eval(create_time)))
     projectName = dirName.split('_')[1]
     outputPath = outputpath % (projectName, create_time)
     tranfilePath = outputPath + sep + dirName

@@ -6,13 +6,13 @@
 # 打包 'clip3'  'IP|FUY/001|xml_path|command_id|clip3'
 
 import os
+import time
 import shutil
 import platform
 import socket
 import createThumbnail
 from httpUrl import CallBack
 from upload import UploadFile
-from aliyun_client import AliyunDownload
 import config
 
 
@@ -74,10 +74,10 @@ def handle(conn):
 		elif data_split[-1] == "YunFolder":
 			file_path, create_time, Uptask = data_split
 			file_path = file_path.replace("/", "\\")
-			projectName = file_path.split('\\')[1]
-			print create_time
+			projectName = file_path.split('_')[1]
+			create_time = time.strftime("%Y%m%d",time.localtime(eval(create_time)))
 			if os.path.exists(server_outcompany %(projectName,create_time)+ file_path):
-				os.chmod(server_outcompany + file_path, 0777)
+				os.chmod(server_outcompany %(projectName,create_time)+ file_path, 0777)
 				os.popen('explorer.exe %s' % (server_outcompany %(projectName,create_time) + file_path)).close()
 			else:
 				print 'the directory not exit'
@@ -88,6 +88,7 @@ def handle(conn):
 
 		elif data_split[-1] == "download":   # huanyu_Fuy_1|download
 			downloadPath = UploadFile().select_dir('')
+			print 'Do not choose local disk'
 			conn.sendall(downloadPath)
 
 		elif data_split[-1] == "Dailies2":
