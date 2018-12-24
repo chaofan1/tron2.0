@@ -8,12 +8,6 @@ from shutil import copy
 from clipLine import to_php
 import re
 
-ip = '192.168.100.49'
-user_name = 'root'
-passwd = 'king9188YJQ@'
-db_name = 'new_tron'
-table_name = 'oa_approvals'
-
 
 def insert(output_mov, input_img, frame):
     # 为回插的视频重命名
