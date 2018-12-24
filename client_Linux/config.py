@@ -1,7 +1,7 @@
 All = "/All"
 Post = "/Post"
 Reference = "/Library/References"
-OutCompany = "/Public/tronPipelineScript/tron2.0/"
+OutCompany = "/All/%s/Vender/outgoing/%s"
 
 user_name = 'root'
 db_name = 'new_tron'

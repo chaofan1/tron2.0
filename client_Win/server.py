@@ -87,8 +87,33 @@ def handle(conn):
 			UploadFile().upload_dailies(server_all, file_path, file_name, command_id)
 
 		elif data_split[-1] == "download":   # huanyu_Fuy_1|download
-			downloadPath = UploadFile().select_dir('')
 			print 'Do not choose local disk'
+			downloadPath = UploadFile().select_dir('')
+			if downloadPath.startswith('L'):
+				pathList = downloadPath.split('\\')
+				pathList[0] = 'Library'
+				downloadPath ='/' + '/'.join(pathList)
+			elif downloadPath.startswith('X'):
+				pathList = downloadPath.split('\\')
+				pathList[0] = 'Tron'
+				downloadPath = '/' + '/'.join(pathList)
+			elif downloadPath.startswith('J'):
+				pathList = downloadPath.split('\\')
+				pathList[0] = 'Post'
+				downloadPath = '/' + '/'.join(pathList)
+			elif downloadPath.startswith('G'):
+				pathList = downloadPath.split('\\')
+				pathList[0] = 'Illuminafx'
+				downloadPath = '/' + '/'.join(pathList)
+			elif downloadPath.startswith('W'):
+				pathList = downloadPath.split('\\')
+				pathList[0] = 'Public'
+				downloadPath = '/' + '/'.join(pathList)
+			elif downloadPath.startswith('Y'):
+				pathList = downloadPath.split('\\')
+				pathList[0] = 'Dailies'
+				downloadPath = '/' + '/'.join(pathList)
+			print downloadPath
 			conn.sendall(downloadPath)
 
 		elif data_split[-1] == "Dailies2":

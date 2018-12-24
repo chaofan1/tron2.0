@@ -102,8 +102,8 @@ def _init_():
 		elif args[0] == "download":  # 'download' 'tron_TXT_7|ip' 'id' 'user_id'
 			key, ip = args[1].split('|')
 			clipData = ip + '|' + key + '|download'
-			system, downloadPath = clientLink(clipData).split('|')
-			AliyunOss('', key, '', '', '', '').download(system, downloadPath)
+			downloadPath = clientLink(clipData)
+			AliyunOss('', key, '', '', '', '').download(downloadPath)
 			CallBack().callback_download(args[2], args[3])
 		elif args[0] == "Seq":  # createProject.CreateSeq(proName, seqName)
 			TronProject().CreateSeq(args[1].upper(), args[2])
