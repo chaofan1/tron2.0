@@ -6,13 +6,13 @@
 # 打包 'clip3'  'IP|FUY/001|xml_path|command_id|clip3'
 
 import os
+import time
 import shutil
 import platform
 import socket
 import createThumbnail
 from httpUrl import CallBack
 from upload import UploadFile
-from aliyun_client import AliyunDownload
 import config
 
 
@@ -72,21 +72,24 @@ def handle(conn):
 			print (server_all + file_path)
 
 		elif data_split[-1] == "YunFolder":
-			file_path, Uptask = data_split
+			file_path, create_time, Uptask = data_split
 			file_path = file_path.replace("/", "\\")
-			if os.path.exists(server_outcompany + file_path):
-				os.chmod(server_outcompany + file_path, 0777)
-				os.popen('explorer.exe %s' % (server_outcompany + file_path)).close()
+			projectName = file_path.split('_')[1]
+			create_time = time.strftime("%Y%m%d",time.localtime(eval(create_time)))
+			if os.path.exists(server_outcompany %(projectName,create_time)+ file_path):
+				os.chmod(server_outcompany %(projectName,create_time)+ file_path, 0777)
+				os.popen('explorer.exe %s' % (server_outcompany %(projectName,create_time) + file_path)).close()
 			else:
-				print 'the directory not exit,maybe already uploaded to yun,dir has deleted'
+				print 'the directory not exit'
 
 		elif data_split[-1] == "Dailies1":   # /FUY/001/001/stuff/cmp|file_name|command_id|Dailies1
 			file_path, file_name, command_id, UpTask = data_split
 			UploadFile().upload_dailies(server_all, file_path, file_name, command_id)
 
 		elif data_split[-1] == "download":   # huanyu_Fuy_1|download
-			dirname, UpTask = data_split
-			AliyunDownload(dirname).downLoad()
+			downloadPath = UploadFile().select_dir('')
+			print 'Do not choose local disk'
+			conn.sendall(downloadPath)
 
 		elif data_split[-1] == "Dailies2":
 			file_path, file_name, command_id, UpTask = data_split

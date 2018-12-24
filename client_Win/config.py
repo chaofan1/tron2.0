@@ -1,7 +1,7 @@
 All = "X:"
 Post = "J:"
-Reference = "L:/References"
-OutCompany = "W:\\tronPipelineScript\\tron2.0\\"
+Reference = "L:\\References"
+OutCompany = "X:\\%s\\Vender\\outgoing\\%s"
 
 user_name = 'root'
 db_name = 'new_tron'

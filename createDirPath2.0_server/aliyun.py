@@ -8,13 +8,13 @@ import logging
 from oss2 import SizedFileAdapter, determine_part_size
 from oss2.models import PartInfo
 from aliyunsdkcore import client
+from config import log_path
 # from aliyunsdkram.request.v20150501 import CreateUserRequest,CreateAccessKeyRequest,ListUsersRequest,AttachPolicyToUserRequest,CreatePolicyRequest
 
 
 class AliyunOss():
     def __init__(self,filePath,dirname, cpname, email, user_name, remark):
-        logging.basicConfig(filename='/Public/tronPipelineScript/tron2.0/distribute_log/dis_' +
-                                     time.strftime("%Y%m%d") + '.log', level=logging.INFO,
+        logging.basicConfig(filename=log_path + time.strftime("%Y%m%d") + '.log', level=logging.INFO,
                             format="%(asctime)s - %(levelname)s - %(message)s")
 
         # 管理验证
@@ -29,47 +29,6 @@ class AliyunOss():
         self.email = email
         self.user_name = user_name
         self.remark = remark
-
-    # def userExit(self):
-    #     request = ListUsersRequest.ListUsersRequest()
-    #     result = self.clt.get_response(request)
-    #
-    #     if result[0] == 200:
-    #         res = result[2]
-    #         userList = re.findall(r'<UserName>(.*?)</UserName>', res)
-    #         if self.userName not in userList:
-    #             self.createUser()
-    #         else:
-    #             pass
-    #         self.uploadFile()
-    #         logging.info('userList ok')
-    #     else:
-    #         logging.info('userList error')
-    #
-    # def createUser(self):
-    #     request = CreateUserRequest.CreateUserRequest()
-    #     request.set_UserName(self.userName)
-    #     if self.email:
-    #         request.set_Email(self.email)
-    #     # 发起请求，并得到response
-    #     result = self.clt.get_response(request)
-    #
-    #     if result[0] == 200:
-    #         logging.info('create yun user ok')
-    #         self.createAccess()
-    #     else:
-    #         logging.info('create yun user error')
-    #         print '创建用户失败'
-    #
-    # def createAccess(self):
-    #     request = CreateAccessKeyRequest.CreateAccessKeyRequest()
-    #     request.set_UserName(self.userName)
-    #     result = self.clt.get_response(request)
-    #     print result
-    #     if result[0] == 200:
-    #         logging.info('create userAccess ok')
-    #     else:
-    #         logging.info('create userAccess error')
 
     def file_name(self):
         try:
@@ -150,6 +109,22 @@ class AliyunOss():
         else:
             logging.info('邮箱为空')
 
+    def download(self, sysType, path):
+        try:
+            self.keylist = []
+            for obj in oss2.ObjectIterator(self.bucket, prefix=self.dirname + '/'):
+                self.keylist.append(obj.key)
+            for ObjectName in self.keylist:
+                localDir = '/'.join(ObjectName.split('/')[:-1])
+                if not os.path.exists(path + os.sep + localDir):
+                    os.makedirs(path + os.sep + localDir)
+                # 下载OSS文件到本地文件。如果指定的本地文件存在会覆盖，不存在则新建。
+                self.bucket.get_object_to_file(ObjectName, path+os.sep+ObjectName)
+        except:
+            print('下载失败，请检查网络')
+
+
+
     # def createPolicy(self):
     #     request = CreatePolicyRequest.CreatePolicyRequest()
     #     policy = '{"Version": "1","Statement": [{"Effect": "Allow","Action": ["oss:GetObject", "oss:GetObjectAcl"],"Resource": ["acs:oss:*:*:jg-testwww/'+self.dirname+'/*"]}, {"Effect": "Allow","Action": ["oss:ListObjects","oss:ListObjectsAcl"],"Resource": ["acs:oss:*:*:jg-testwww"],"Condition": {"StringLike": {"oss:Delimiter": "/","oss:Prefix":["", "'+self.dirname+'/*"]}}}, {"Effect": "Allow","Action": ["oss:ListBuckets", "oss:ListBucketsAcl"],"Resource": ["acs:oss:*:*:*"],"Condition": {"StringLike": {"oss:Delimiter": "/","oss:Prefix": ["", "jg-testwww/*"]}}}]}'
@@ -171,3 +146,43 @@ class AliyunOss():
     #         logging.info('attach policy to user ok')
     #     else:
     #         logging.info('attach policy to user error')
+    # def userExit(self):
+    #     request = ListUsersRequest.ListUsersRequest()
+    #     result = self.clt.get_response(request)
+    #
+    #     if result[0] == 200:
+    #         res = result[2]
+    #         userList = re.findall(r'<UserName>(.*?)</UserName>', res)
+    #         if self.userName not in userList:
+    #             self.createUser()
+    #         else:
+    #             pass
+    #         self.uploadFile()
+    #         logging.info('userList ok')
+    #     else:
+    #         logging.info('userList error')
+    #
+    # def createUser(self):
+    #     request = CreateUserRequest.CreateUserRequest()
+    #     request.set_UserName(self.userName)
+    #     if self.email:
+    #         request.set_Email(self.email)
+    #     # 发起请求，并得到response
+    #     result = self.clt.get_response(request)
+    #
+    #     if result[0] == 200:
+    #         logging.info('create yun user ok')
+    #         self.createAccess()
+    #     else:
+    #         logging.info('create yun user error')
+    #         print '创建用户失败'
+    #
+    # def createAccess(self):
+    #     request = CreateAccessKeyRequest.CreateAccessKeyRequest()
+    #     request.set_UserName(self.userName)
+    #     result = self.clt.get_response(request)
+    #     print result
+    #     if result[0] == 200:
+    #         logging.info('create userAccess ok')
+    #     else:
+    #         logging.info('create userAccess error')

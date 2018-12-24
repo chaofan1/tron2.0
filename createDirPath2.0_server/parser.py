@@ -6,7 +6,7 @@
 #"Shot" "HAC" "01" "001" "command_id"
 #"AssetTask" "HAC" "rig" "liangcy" "fileName" "command_id"
 #"Pack" "Json路径" "pack_id" "command_id"
-#"Transit" "json路径" “公司_项目_主键id”“command_id”
+#"Transit" "json路径" “公司_项目_主键id”"transit_id"“command_id”
 #"Del" "公司_项目_主键id"
 # 客户端
 # 'Render' '192.168.100.44|/FUY/999/003/Stuff/lgt/publish/fuy999003_lgt_wangcf_yuanBao_master|Render2|command_id'
@@ -36,6 +36,7 @@ from createProject import TronProject
 from client import clientLink
 from server_callback import CallBack
 from distribution import TronDistribute,transit
+from aliyun import AliyunOss
 
 
 def _init_():
@@ -48,8 +49,6 @@ def _init_():
 			clientLink(args[1]+'|open_ref')
 		elif args[0] == "open_post":
 			clientLink(args[1]+'|open_post')
-		elif args[0] == "YunFolder":
-			clientLink(args[1] + '|YunFolder')
 		elif args[0] == "Ready_render" or args[0] == "Local_render" or args[0] == "Cloud_render":
 			clientLink(args[1])
 		elif args[0] == "clip1":
@@ -79,12 +78,6 @@ def _init_():
 				os.chmod(all_path+i, 0777)
 			clipData = args[1]+'|add_xml'
 			clientLink(clipData)
-		elif args[0] == "download":   # 'download' 'tron_TXT_7|ip'
-			key, ip = args[1].split('|')
-			clipData = ip + '|' + key+'|download'
-			clientLink(clipData)
-		elif args[0] == "Del":
-			TronDistribute().Deldir(args[1])
 	elif len(args) == 3:
 		if args[0] == "Project":
 			TronProject().CreatePro(args[1].upper())  # createProject.CreatePro("HAC")
@@ -93,21 +86,27 @@ def _init_():
 			TronProject().CreateDai(args[1])
 			dailiesData = args[2]+"|Dailies1"
 			clientLink(dailiesData)
+		elif args[0] == 'YunFolder':
+			clientLink(args[1] + '|'+ args[2] + '|YunFolder')
 		elif args[0] == "Dailies2":  # "Dailies2" "/FUY/001/001/Stuff/cmp/" "IP|/FUY/001/001/Stuff/cmp|filename|command_id"
 			TronProject().CreateDai(args[1])
 			dailiesData = args[2]+"|Dailies2"
 			clientLink(dailiesData)
+		elif args[0] == "Del":  # "Del" "公司_项目_主键id" "时间戳"
+			TronDistribute().Deldir(args[1], args[2])
 	elif len(args) == 4:
 		if args[0] == "Reference":    # "Reference" "HAC" "shots"  "192.168.1.85|x:/DHG/References/inner/fileName|373"
 			TronProject().CreateRef(args[1].upper(), args[2])
 			referencesData = args[3] + "|Reference"
 			clientLink(referencesData)
+		elif args[0] == "download":  # 'download' 'tron_TXT_7|ip' 'id' 'user_id'
+			key, ip = args[1].split('|')
+			clipData = ip + '|' + key + '|download'
+			system, downloadPath = clientLink(clipData).split('|')
+			AliyunOss('', key, '', '', '', '').download(system, downloadPath)
+			CallBack().callback_download(args[2], args[3])
 		elif args[0] == "Seq":  # createProject.CreateSeq(proName, seqName)
 			TronProject().CreateSeq(args[1].upper(), args[2])
-			CallBack().callback(args[3])
-		elif args[0] == "Pack":  # "Pack" "Json路径" "打包id" "command_id"
-			TronDistribute().argParse(args[1])
-			CallBack().callback_pack(args[2])
 			CallBack().callback(args[3])
 	elif len(args) == 5:
 		if args[0] == "Shot":   # "Shot" "HAC" "001" "001" "command_id"
@@ -117,6 +116,10 @@ def _init_():
 			transit(args[1], args[2])
 			CallBack().callback_transit(args[4])
 			CallBack().callback(args[3])
+		elif args[0] == "Pack":  # "Pack" "Json路径" "时间戳" "打包id" "command_id"
+			TronDistribute().argParse(args[1], args[2])
+			CallBack().callback_pack(args[3])
+			CallBack().callback(args[4])
 	elif len(args) == 6:
 		if args[0] == "AssetTask":    # "AssetTask" "HAC" "rig" "liangcy" "fileName" "command_id"
 			TronProject().CreateAsset(args[1].upper(), args[2], args[3], args[4])

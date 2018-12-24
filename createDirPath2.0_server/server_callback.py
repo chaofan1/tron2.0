@@ -29,6 +29,11 @@ class CallBack:
         self.query_args = {'command_id': transit_id}
         self.request_get()
 
+    def callback_download(self, id, user_id):
+        self.url = 'http://%s/python/download_complete' % self.ip
+        self.query_args = {'id': id, 'user_id': user_id}
+        self.request_get()
+
     def request_post(self):
         encoded_args = urllib.urlencode(self.query_args)
         try:
