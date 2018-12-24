@@ -109,7 +109,7 @@ class AliyunOss():
         else:
             logging.info('邮箱为空')
 
-    def download(self, sysType, path):
+    def download(self, path):
         try:
             self.keylist = []
             for obj in oss2.ObjectIterator(self.bucket, prefix=self.dirname + '/'):

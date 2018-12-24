@@ -2,6 +2,7 @@
 # -*- coding: utf-8 -*-
 
 import os
+import time
 import shutil
 import platform
 import socket
@@ -65,12 +66,14 @@ def handle(conn):
 			os.popen('nautilus %s' % (server_post + file_path)).close()
 
 		elif data_split[-1] == "YunFolder":
-			file_path, Uptask = data_split
-			if os.path.exists(server_outcompany + file_path):
-				os.chmod(server_outcompany + file_path, 0777)
-				os.popen('open %s' % (server_outcompany + file_path)).close()
+			file_path, create_time, Uptask = data_split
+			projectName = file_path.split('_')[1]
+			create_time = time.strftime("%Y%m%d", time.localtime(eval(create_time)))
+			if os.path.exists(server_outcompany % (projectName, create_time) + file_path):
+				os.chmod(server_outcompany % (projectName, create_time) + file_path, 0777)
+				os.popen('open %s' % (server_outcompany % (projectName, create_time) + file_path)).close()
 			else:
-				print 'the directory not exit,maybe already uploaded to yun,dir has deleted'
+				print 'the directory not exit'
 
 		elif data_split[-1] == "Ready_render1" or data_split[-1] == "Local_render1" or data_split[-1] == "Cloud_render1":
 			file_path, Uptask = data_split
@@ -93,8 +96,12 @@ def handle(conn):
 			UploadFile().upload_dailies(server_all, file_path, file_name, command_id)
 
 		elif data_split[-1] == "download":  # huanyu_Fuy_1|download
-			dirname, UpTask = data_split
-			AliyunDownload(dirname).downLoad()
+			print 'Do not choose local disk'
+			downloadPath = Select().select_dir('')
+			if downloadPath.startswith('/All'):
+				downloadPath = downloadPath.replace('All', 'Tron')
+			print downloadPath
+			conn.sendall(downloadPath)
 
 		elif data_split[-1] == "Dailies2":
 			file_path, file_name, command_id, UpTask = data_split

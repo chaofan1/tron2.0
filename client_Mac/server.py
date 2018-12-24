@@ -2,6 +2,7 @@
 # -*- coding: utf-8 -*-
 
 import os
+import time
 import platform
 import socket
 import config
@@ -65,6 +66,7 @@ def handle(conn):
 			file_path, create_time, Uptask = data_split
 			projectName = file_path.split('_')[1]
 			print create_time
+			create_time = time.strftime("%Y%m%d",time.localtime(eval(create_time)))
 			if os.path.exists(server_outcompany % (projectName, create_time) + file_path):
 				os.chmod(server_outcompany % (projectName, create_time) + file_path, 0777)
 				os.popen('open %s' % (server_outcompany % (projectName, create_time) + file_path)).close()
@@ -76,7 +78,13 @@ def handle(conn):
 			UploadFile().upload_dailies(server_all, file_path, file_name, command_id)
 
 		elif data_split[-1] == "download":  # huanyu_Fuy_1|download
+			print 'Do not choose local disk'
 			downloadPath = UploadFile().select_dir('')
+			if downloadPath.startswith('/Volumes/All/'):
+				downloadPath = downloadPath.split('/Volumes')[1].replace('All', 'Tron')
+			else:
+				downloadPath = downloadPath.split('/Volumes')[1]
+			print downloadPath
 			conn.sendall(downloadPath)
 
 		elif data_split[-1] =="Reference":
