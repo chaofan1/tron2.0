@@ -28,7 +28,7 @@ class UploadFile:
         self.fileOld = QFileDialog.getOpenFileName(self.mainWindow, 'open file', inPathFile).toUtf8()
 
     def select_dir(self, inPathFile):
-        file_path = QFileDialog.getExistingDirectory(self.mainWindow, 'open file', inPathFile).toUtf8()
+        file_path = QFileDialog.getExistingDirectory(self.mainWindow, 'select your dir', inPathFile).toUtf8()
         return str(file_path)
         sys.exit(self.app.exec_())
 

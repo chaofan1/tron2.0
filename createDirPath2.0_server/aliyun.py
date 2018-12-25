@@ -47,7 +47,7 @@ class AliyunOss():
         filelist = self.file_name()
         try:
             for file in filelist:
-                key = self.dirname + file.split(self.dirname)[1]
+                key = self.dirname + '/' + os.path.basename(file)
                 total_size = os.path.getsize(file)
                 # determine_part_size方法用来确定分片大小。
                 part_size = determine_part_size(total_size, preferred_size=100 * 1024)
