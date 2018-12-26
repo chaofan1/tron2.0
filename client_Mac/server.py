@@ -10,6 +10,7 @@ from clipLine import start_clip
 from clipLine2 import Pack, insert
 from clipLine import to_php
 from upload import UploadFile
+from httpUrl import CallBack
 from aliyun_client import AliyunDownload
 
 
@@ -99,7 +100,7 @@ def handle(conn):
 			to_php(1, 0, project_id, field_id, xml_id, UpTask)
 			conn.send(path)
 			print('clip1 end')
-			# httpUrl.render_callback(command_id)
+			CallBack().common_callback(command_id)
 
 		elif data_split[-1] == 'add_xml':
 			xml_path, path, project_id, field_id, xml_id, command_id, UpTask = data_split
@@ -108,7 +109,7 @@ def handle(conn):
 			start_clip(xml_path, video_path, project_id, field_id, xml_id, UpTask)
 			conn.send(path)
 			to_php(1, 0, project_id, field_id, xml_id, UpTask)
-			# httpUrl.render_callback(command_id)
+			CallBack().common_callback(command_id)
 			print('add_xml end')
 
 		elif data_split[-1] == 'clip2':   # 回插
@@ -117,7 +118,7 @@ def handle(conn):
 			img_path = server_all + sep + img_path
 			insert(video_path, img_path, frame)
 			conn.send('path')
-			# httpUrl.render_callback(command_id)
+			CallBack().common_callback(command_id)
 			print('clip2 end')
 
 		elif data_split[-1] == 'clip3':   # 打包
@@ -131,7 +132,7 @@ def handle(conn):
 			pro_scene = server_all + sep + pro_scene
 			Pack().pack(pro_scene, xml_path, out_path)
 			os.popen('open %s' % out_path).close()
-			# httpUrl().render_callback(command_id)
+			CallBack().common_callback(command_id)
 			print('clip3 end')
 
 		elif data_split[-1] == 'ShotTask':   # 提交发布弹框

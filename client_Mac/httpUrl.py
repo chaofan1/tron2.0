@@ -21,8 +21,8 @@ class CallBack:
             self.query_args = {'id': ID, 'path': path, 'filename': file_name}
         self.request()
 
-    def render_callback(self, command_id):
-        self.url = config.render_url
+    def common_callback(self, command_id):
+        self.url = config.common_url
         self.query_args = {'id': command_id}
         self.request()
 

@@ -21,8 +21,8 @@ class CallBack:
             self.query_args = {'id': ID, 'path': path, 'filename': file_name}
         self.request()
 
-    def render_callback(self, command_id):
-        self.url = config.render_url
+    def common_callback(self, command_id):
+        self.url = config.common_url
         self.query_args = {'id': command_id}
         self.request()
 
@@ -41,4 +41,4 @@ class CallBack:
 if __name__ == '__main__':
     cd ="194","/ZML/Dailies/20161129", "whad", "References"
     CallBack().dai_callback(cd[0], cd[1], cd[2], cd[3])
-    CallBack().render_callback('23')
+    CallBack().common_callback('23')

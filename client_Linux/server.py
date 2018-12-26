@@ -81,7 +81,7 @@ def handle(conn):
 			file_name = Select().select_one(inPathFile)
 			if os.path.exists(file_name):
 				Render(file_name, file_path).submit(Uptask)
-			# CallBack().render_callback(command_id)
+			CallBack().common_callback(command_id)
 
 		elif data_split[-1] == "Ready_render2" or data_split[-1] == "Local_render2" or data_split[-1] == "Cloud_render2":
 			file_path, Uptask = data_split
@@ -89,7 +89,7 @@ def handle(conn):
 			file_name = Select().select_dir(inPathFile)
 			if os.path.exists(file_name):
 				Render(file_name, file_path).submit(Uptask)
-			# CallBack().render_callback(command_id)
+			CallBack().common_callback(command_id)
 
 		elif data_split[-1] == "Dailies1":   # /FUY/001/001/stuff/cmp|file_name|command_id|Dailies1
 			file_path, file_name, command_id, UpTask = data_split
