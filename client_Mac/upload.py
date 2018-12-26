@@ -7,6 +7,7 @@ import platform
 import cv2
 import pymysql
 from PyQt4.QtGui import *
+from PyQt4.QtCore import *
 from createThumbnail import CreateThumbnail
 from httpUrl import CallBack
 import config
@@ -26,6 +27,13 @@ class UploadFile:
 
     def select_one(self, inPathFile):
         self.fileOld = QFileDialog.getOpenFileName(self.mainWindow, 'open file', inPathFile).toUtf8()
+
+    def select_files(self):
+        fileList = QFileDialog.getOpenFileNames(self.mainWindow,
+                                                                    QString('select files'),
+                                                                    self.inPathFile,
+                                                                    options=QFileDialog.ReadOnly)
+        return fileList
 
     def select_dir(self, inPathFile):
         file_path = QFileDialog.getExistingDirectory(self.mainWindow, 'select your dir', inPathFile).toUtf8()

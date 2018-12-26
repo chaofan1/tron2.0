@@ -33,6 +33,13 @@ class UploadFile:
                                                                     options=QFileDialog.ReadOnly)
         self.fileOld = fileOld.__str__()
 
+    def select_files(self):
+        fileList = QFileDialog.getOpenFileNames(self.mainWindow,
+                                                                    QString('select files'),
+                                                                    self.inPathFile,
+                                                                    options=QFileDialog.ReadOnly)
+        return fileList
+
     def select_dir(self, inPathFile):
         """
 
@@ -182,4 +189,4 @@ class UploadFile:
 
 
 if __name__ == '__main__':
-    UploadFile().upload_dailies('','','','')
+    UploadFile().select_files()

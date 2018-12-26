@@ -31,7 +31,7 @@
 # 打包 'clip3'  'IP|FUY/001|xml_path|command_id'
 
 
-import sys,os
+import sys, os, re
 from createProject import TronProject
 from client import clientLink
 from server_callback import CallBack
@@ -100,9 +100,12 @@ def _init_():
 			referencesData = args[3] + "|Reference"
 			clientLink(referencesData)
 		elif args[0] == "download":  # 'download' 'tron_TXT_7|ip' 'id' 'user_id'
-			key, ip = args[1].split('|')
-			clipData = ip + '|' + key + '|download'
-			downloadPath = clientLink(clipData)
+			key, arg2 = args[1].split('|')
+			downloadPath = arg2
+			res = re.compile('^((25[0-5]|2[0-4]\d|[01]?\d\d?)\.){3}(25[0-5]|2[0-4]\d|[01]?\d\d?)$')
+			if res.match(arg2):
+				clipData = arg2 + '|' + key + '|download'
+				downloadPath = clientLink(clipData)
 			AliyunOss('', key, '', '', '', '').download(downloadPath)
 			CallBack().callback_download(args[2], args[3])
 		elif args[0] == "Seq":  # createProject.CreateSeq(proName, seqName)
@@ -130,6 +133,7 @@ def _init_():
 			args = args[8] + '|' + args[1] + '|' + args[2] + '|' + args[3] + '|' + args[4] + '|' + args[5] + '|' + args[6]
 			ShotTaskData = args + "|ShotTask"
 			clientLink(ShotTaskData)
+			CallBack().callback(args[7])
 
 
 if __name__ == '__main__':

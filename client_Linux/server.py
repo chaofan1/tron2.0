@@ -131,10 +131,13 @@ def handle(conn):
 			projectName,seqName,shotName,type_,userName,fileName,UpTask = data_split
 			file_path = projectName + sep + seqName + sep + shotName + sep + 'Stuff' + \
 						sep + type_ + sep + 'publish' + sep + fileName
-			if type_ == "lgt" or type_ == "cmp":
-				os.popen('nautilus %s' % (server_post + file_path)).close()
-			else:
-				os.popen('nautilus %s' % (server_all + file_path)).close()
+			fileList = Select().select_files()
+			for file in fileList:
+				shutil.copy(file, file_path)
+			# if type_ == "lgt" or type_ == "cmp":
+			# 	os.popen('nautilus %s' % (server_post + file_path)).close()
+			# else:
+			# 	os.popen('nautilus %s' % (server_all + file_path)).close()
 
 	conn.close()
 
