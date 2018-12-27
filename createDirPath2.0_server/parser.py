@@ -28,9 +28,10 @@
 # 追加 'add_xml' 'IP|xml_path|path|项目id|场id|xml_id|command_id'
 #              192.168.101.160|TXT/017/Work/note/5bffaf4e5c992.xml|TXT/017/|1|46|22
 # 回插 'clip2' 'IP|video_path|img_path|frame|id|command_id'
-# 打包 'clip3'  'IP|FUY/001|xml_path|command_id'
+# 打包 'clip3'  'IP|FUY/001|command_id'
 
 
+import shutil
 import sys, os, re
 from createProject import TronProject
 from client import clientLink
@@ -66,6 +67,13 @@ def _init_():
 			clipData = args[1]+'|clip2'
 			clientLink(clipData)
 		elif args[0] == "clip3":
+			post_path = '/Post/' + args[1].split('|')[1]
+			pack_path = post_path + '/Clip_Pack'
+			os.chmod(post_path, 0777)
+			if os.path.exists(pack_path):
+				shutil.rmtree(pack_path)
+			else:
+				os.mkdir(pack_path, 0755)
 			clipData = args[1]+'|clip3'
 			clientLink(clipData)
 		elif args[0] == "add_xml":

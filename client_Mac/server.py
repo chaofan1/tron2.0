@@ -123,16 +123,11 @@ def handle(conn):
 			print('clip2 end')
 
 		elif data_split[-1] == 'clip3':   # 打包
-			pro_scene, xml_path, command_id, UpTask = data_split
-			pro_name = pro_scene.strip('/').split('/')[-2]
-			user_path = os.environ['HOME']  # /Users/wang
-			pack_path = os.path.join(user_path, 'Pack')
-			if not os.path.exists(pack_path):
-				os.mkdir(pack_path)
-			out_path = os.path.join(pack_path, pro_name)  # /Users/wang/Pack/FUY
-			pro_scene = server_all + sep + pro_scene
-			Pack().pack(pro_scene, xml_path, out_path)
-			os.popen('open %s' % out_path).close()
+			pro_scene, command_id, UpTask = data_split
+			pro_path = server_post+'/'+pro_scene
+			pack_path = server_post + '/' + pro_scene + '/Clip_Pack'
+			Pack().pack(pro_path, pack_path)
+			os.popen('open %s' % pack_path).close()
 			CallBack().common_callback(command_id)
 			print('clip3 end')
 

@@ -1,12 +1,8 @@
 # coding:utf8
-import xml.etree.cElementTree as et
-from urllib import quote
 import os
 import subprocess
-import pymysql
-from shutil import copy
+import shutil
 from clipLine import to_php
-import re
 
 
 def insert(output_mov, input_img, frame):
@@ -30,48 +26,38 @@ def insert(output_mov, input_img, frame):
 
 
 class Pack(object):
-    def pack(self, pro_scene, xml_path, out_path):
-        if not os.path.exists(out_path):
-            os.makedirs(out_path)
+    def __init__(self):
+        self.task = 'pack'
+        self.ration1 = 'Stuff/cmp/publish'
+        self.ration2 = 'geo'
+
+    def pack(self, pro_scene, out_path):
         shot_li = os.listdir(pro_scene)
         if shot_li:
             shot_li = [i for i in shot_li if not i.startswith('.')]
             queue_len = len(shot_li)  # 任务总量
-            task = 'pack'
-            ration1 = 'Stuff/cmp/publish'
             for ind, shot in enumerate(shot_li):
-                pub = os.path.join(pro_scene, shot, ration1)
+                pub = os.path.join(pro_scene, shot, self.ration1)    # /Post/FUY/001/001/Stuff/cmp/publish
                 producer_paths = os.listdir(pub)
                 if producer_paths:
                     producer_paths = [i for i in producer_paths if not i.startswith('.')]
                     for producer_path in producer_paths:
-                        ration2 = 'geo'
-                        path = os.path.join(pub, producer_path, ration2)
+                        path = os.path.join(pub, producer_path, self.ration2)  # /Post/FUY/001/001/Stuff/cmp/publish/geo
                         files = os.listdir(path)
                         if files:
                             files = [i for i in files if not i.startswith('.')]
                             for file in files:
-                                mov_path = os.path.join(path, file)
+                                mov_path = os.path.join(path, file)  # /Post/FUY/001/001/Stuff/cmp/publish/geo/...mov
                                 if file.endswith('mov'):
-                                    copy(mov_path, out_path)
-                                    qsize = queue_len-ind-1  # 当前剩余任务数
-                                    to_php(queue_len, qsize, '', '', '', task)  # 将任务进行的百分比传给PHP
+                                    shutil.copy(mov_path, out_path)
+                                    # qsize = queue_len-ind-1  # 当前剩余任务数
+                                    # to_php(queue_len, qsize, '', '', '', self.task)  # 将任务进行的百分比传给PHP
+                                elif os.path.isdir(mov_path):
+                                    out_path = out_path+'/'+file
+                                    shutil.copytree(mov_path, out_path)
                         else:
                             print(path, "为空")
                 else:
                     print(pub, "为空")
-
-            self.edit_xml(xml_path, out_path)
-
-    def edit_xml(self, xml_path, out_path):
-        tree = et.ElementTree(file=xml_path)
-        paths_ele = tree.findall('.//pathurl')
-        paths_ele = filter(lambda x: x.text.endswith('mov'), paths_ele)
-        for pathurl in paths_ele:
-            filename = pathurl.text.split('/')[-1]
-            new_path = quote(os.path.join('file://localhost', out_path, filename))
-            print(new_path)
-            pathurl.text = new_path
-        xml_name = xml_path.split('/')[-1]
-        xml_path_new = os.path.join(out_path, xml_name)
-        tree.write(xml_path_new)
+                qsize = queue_len - ind - 1  # 当前剩余任务数
+                to_php(queue_len, qsize, '', '', '', self.task)
