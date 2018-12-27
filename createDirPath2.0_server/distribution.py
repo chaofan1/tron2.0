@@ -4,7 +4,6 @@ import time
 import json
 import shutil
 import logging
-import smtplib
 import threadpool
 import sys
 reload(sys)
@@ -21,7 +20,7 @@ class TronDistribute:
     def __init__(self):
         self.pool = threadpool.ThreadPool(8)  # 创建线程池
         # 日志位置
-        logging.basicConfig(filename=log_path + time.strftime("%Y%m%d") + '.log', level=logging.INFO,
+        logging.basicConfig(filename=log_path + 'distribute_log/' + time.strftime("%Y%m%d") + '.log', level=logging.INFO,
                             format="%(asctime)s - %(levelname)s - %(message)s")
 
     # 解析php传来的json文件，filePath为json路径

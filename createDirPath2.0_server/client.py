@@ -4,8 +4,12 @@
 # 192.168.1.85|x:/ZML/Dailies/20161129|zml01001_prd_liangcy_HVD_v0150|194|Dailies2
 
 import socket
-import os
+import os,time
+import logging
+from config import log_path
 
+logging.basicConfig(filename=log_path + 'server_log/' + time.strftime("%Y%m%d") + '.log', level=logging.INFO,
+					format="%(asctime)s - %(levelname)s - %(message)s")
 
 def clientLink(data):
     args = data.split("|")
@@ -21,14 +25,14 @@ def clientLink(data):
     information = ''
     if senStr:
         s.sendall(senStr)
-        print('already send info')
+        logging.info('already send info')
         if task == 'clip1' or task == 'add_xml' or task == 'clip2':
             data = s.recv(1024)
             if task == 'clip2':
                 video_dir = os.path.dirname(args[1])
                 path = serverName + '/' + video_dir
                 os.chmod(path, 0555)
-                print 'already chmod 555'
+                logging.info(path + ' already chmod 555')
             else:
                 xml_path = args[1]
                 recv_path = data.replace('\\', '/')
@@ -40,10 +44,12 @@ def clientLink(data):
                     os.chmod(ser_recv_path, 0555)
                     xml_path = serverName+'/'+xml_path
                     os.remove(xml_path)
-                    print 'already chmod 555'
+                    logging.info(ser_recv_path + ' already chmod 555')
+
         information = s.recv(1024)
         s.close()
-        print('client close')
+        logging.info('client close')
+
     return information
 
 

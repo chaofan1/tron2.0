@@ -31,18 +31,21 @@
 # 打包 'clip3'  'IP|FUY/001|command_id'
 
 
-import shutil
+import shutil,time
+import logging
 import sys, os, re
 from createProject import TronProject
 from client import clientLink
 from server_callback import CallBack
 from distribution import TronDistribute,transit
 from aliyun import AliyunOss
+from config import log_path
 
-
+logging.basicConfig(filename=log_path + 'server_log/' + time.strftime("%Y%m%d") + '.log', level=logging.INFO,
+					format="%(asctime)s - %(levelname)s - %(message)s")
 def _init_():
 	args = sys.argv[1:]
-	print args
+	logging.info(args)
 	if len(args) == 2:
 		if args[0] == "open_dai":
 			clientLink(args[1]+'|open_dai')
