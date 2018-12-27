@@ -46,13 +46,13 @@ class Pack(object):
                         files = os.listdir(path)
                         if files:
                             files = [i for i in files if not i.startswith('.')]
-                            for file in files:
-                                mov_path = os.path.join(path, file)  # /Post/FUY/001/001/Stuff/cmp/publish/geo/...mov
-                                if file.endswith('mov'):
+                            for file_ in files:
+                                mov_path = os.path.join(path, file_)  # /Post/FUY/001/001/Stuff/cmp/publish/geo/...mov
+                                if file_.endswith('mov'):
                                     shutil.copy(mov_path, out_path)
                                     print mov_path + '  >>  ' + out_path
                                 elif os.path.isdir(mov_path):
-                                    out_copy_path = out_path+'/'+file
+                                    out_copy_path = out_path+'/'+file_
                                     shutil.copytree(mov_path, out_copy_path)
                                     print mov_path + '  >>  ' + out_copy_path
                         else:
