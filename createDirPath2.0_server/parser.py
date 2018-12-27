@@ -110,7 +110,7 @@ def _init_():
 			TronProject().CreateRef(args[1].upper(), args[2])
 			referencesData = args[3] + "|Reference"
 			clientLink(referencesData)
-		elif args[0] == "download":  # 'download' 'tron_TXT_7|ip' 'id' 'user_id'
+		elif args[0] == "download":  # 'download' 'tron_TXT_7|ip' 'id' 'user_id' 或 'download' 'tron_TXT_7|路径' 'id' 'user_id'
 			key, arg2 = args[1].split('|')
 			downloadPath = arg2
 			res = re.compile('^((25[0-5]|2[0-4]\d|[01]?\d\d?)\.){3}(25[0-5]|2[0-4]\d|[01]?\d\d?)$')
@@ -126,7 +126,8 @@ def _init_():
 		if args[0] == "Shot":   # "Shot" "HAC" "001" "001" "command_id"
 			TronProject().CreateScene(args[1].upper(), args[2], args[3])
 			CallBack().callback(args[4])
-		elif args[0] == "Transit":  # "Transit" "json路径" “公司_项目_主键id” "transit_id" “command_id”
+		elif args[0] == "Transit":  # "Transit" "json路径" “公司_项目_id” "transit_id" “command_id”
+			# 或 "Transit" "路径" “文件名” "transit_id" “command_id”
 			transit(args[1], args[2])
 			CallBack().callback_transit(args[4])
 			CallBack().callback(args[3])
@@ -144,7 +145,6 @@ def _init_():
 			args = args[8] + '|' + args[1] + '|' + args[2] + '|' + args[3] + '|' + args[4] + '|' + args[5] + '|' + args[6]
 			ShotTaskData = args + "|ShotTask"
 			clientLink(ShotTaskData)
-			CallBack().callback(args[7])
 
 
 if __name__ == '__main__':

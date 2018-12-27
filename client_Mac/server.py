@@ -136,13 +136,13 @@ def handle(conn):
 			projectName,seqName,shotName,type_,userName,fileName,UpTask = data_split
 			file_path = projectName + sep + seqName + sep + shotName + sep + 'Stuff' + \
 						sep + type_ + sep + 'publish' + sep + fileName
-			fileList = UploadFile().select_files()
-			for file in fileList:
-				shutil.copy(file, file_path)
-			# if type_ == "lgt" or type_ == "cmp":
-			# 	os.popen('open %s' % (server_post + sep + file_path)).close()
-			# else:
-			# 	os.popen('open %s' % (server_all + sep + file_path)).close()
+			# fileList = UploadFile().select_files()
+			# for file in fileList:
+			# 	shutil.copy(file, file_path)
+			if type_ == "lgt" or type_ == "cmp":
+				os.popen('open %s' % (server_post + sep + file_path)).close()
+			else:
+				os.popen('open %s' % (server_all + sep + file_path)).close()
 	conn.close()
 
 
