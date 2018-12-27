@@ -34,7 +34,7 @@ class Pack(object):
     def pack(self, pro_scene, out_path):
         shot_li = os.listdir(pro_scene)
         if shot_li:
-            shot_li = [i for i in shot_li if not i.startswith('.')]
+            shot_li = [i for i in shot_li if not i.startswith('.') and i.isdigit()]
             queue_len = len(shot_li)  # 任务总量
             for ind, shot in enumerate(shot_li):
                 pub = os.path.join(pro_scene, shot, self.ration1)    # /Post/FUY/001/001/Stuff/cmp/publish
@@ -50,11 +50,11 @@ class Pack(object):
                                 mov_path = os.path.join(path, file)  # /Post/FUY/001/001/Stuff/cmp/publish/geo/...mov
                                 if file.endswith('mov'):
                                     shutil.copy(mov_path, out_path)
-                                    # qsize = queue_len-ind-1  # 当前剩余任务数
-                                    # to_php(queue_len, qsize, '', '', '', self.task)  # 将任务进行的百分比传给PHP
+                                    print mov_path + '  >>  ' + out_path
                                 elif os.path.isdir(mov_path):
-                                    out_path = out_path+'/'+file
-                                    shutil.copytree(mov_path, out_path)
+                                    out_copy_path = out_path+'/'+file
+                                    shutil.copytree(mov_path, out_copy_path)
+                                    print mov_path + '  >>  ' + out_copy_path
                         else:
                             print(path, "为空")
                 else:
