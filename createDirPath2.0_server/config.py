@@ -1,6 +1,6 @@
 ALL_WIN = ''
 ALL_MAC = ''
 ALL_LINUX = ''
-# log_path = '/Library/tron/distribute_log/dis_'
+# log_path = '/Library/tron/log/distribute_log/dis_'
 outputpath = '/Tron/%s/Vender/outgoing/%s'
-log_path = 'Public/tronPipelineScript/tron2.0/log/'
+log_path = '/Public/tronPipelineScript/tron2.0/log/'

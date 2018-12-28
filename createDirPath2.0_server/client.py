@@ -25,14 +25,14 @@ def clientLink(data):
     information = ''
     if senStr:
         s.sendall(senStr)
-        logging.info('already send info')
+        logging.info('already send info' + '\n')
         if task == 'clip1' or task == 'add_xml' or task == 'clip2':
             data = s.recv(1024)
             if task == 'clip2':
                 video_dir = os.path.dirname(args[1])
                 path = serverName + '/' + video_dir
                 os.chmod(path, 0555)
-                logging.info(path + ' already chmod 555')
+                logging.info(path + ' already chmod 555' + '\n')
             else:
                 xml_path = args[1]
                 recv_path = data.replace('\\', '/')
@@ -44,11 +44,11 @@ def clientLink(data):
                     os.chmod(ser_recv_path, 0555)
                     xml_path = serverName+'/'+xml_path
                     os.remove(xml_path)
-                    logging.info(ser_recv_path + ' already chmod 555')
+                    logging.info(ser_recv_path + ' already chmod 555' + '\n')
 
         information = s.recv(1024)
         s.close()
-        logging.info('client close')
+        logging.info('client close' + '\n')
 
     return information
 

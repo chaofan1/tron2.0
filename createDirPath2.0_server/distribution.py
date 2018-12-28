@@ -203,6 +203,7 @@ class TronDistribute:
 
 
 def transit(Path, dirName):
+    logging.info('transit:' + Path+'|' + dirName)
     sep = os.sep
     if '.json' in Path:
         with open(Path, 'r') as f:
