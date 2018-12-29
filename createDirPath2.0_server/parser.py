@@ -45,7 +45,7 @@ logging.basicConfig(filename=log_path + 'server_log/' + time.strftime("%Y%m%d") 
 					format="%(asctime)s - %(levelname)s - %(message)s")
 def _init_():
 	args = sys.argv[1:]
-	logging.info(args + '\n')
+	logging.info(args)
 	if len(args) == 2:
 		if args[0] == "open_dai":
 			clientLink(args[1]+'|open_dai')
