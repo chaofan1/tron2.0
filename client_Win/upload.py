@@ -62,7 +62,6 @@ class UploadFile:
     def upload_dailies(self, server_name, file_path, file_name, command_id):
         self.select_file()
         if self.fileOld:
-            print self.fileOld
             fileType = str(self.fileOld.split(".")[-1])
             fileNow = file_name + "." + fileType
 
@@ -81,6 +80,7 @@ class UploadFile:
                     os.makedirs(file_copy_path)
                 file_abspath = file_copy_path + self.sep + fileNow
                 shutil.copy(self.fileOld, file_abspath)
+                print self.fileOld+'>>>'+file_abspath
             except Exception as e:
                 print(e)
             if os.path.exists(file_abspath):
