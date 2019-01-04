@@ -11,6 +11,8 @@ def run(fileName, filePath):  # filename.mov, /Volumes/All/FUY/stuff/dmt/mov/fil
     thumbPicName = fileName.split(".")[0] + ".jpg"   # filename.jpg
     img_path = filePath+"/."+thumbPicName    # /Volumes/All/FUY/stuff/dmt/mov/filename/.filename.jpg
     video_path = filePath+"/"+fileName
+    print 'video_path', video_path
+    print 'img_path', img_path
     video = cv2.VideoCapture(video_path)
     if video.isOpened():
         rval, frame = video.read()
