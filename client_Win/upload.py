@@ -100,7 +100,7 @@ class UploadFile:
                 return filePath
         else:
             return file_path
-        sys.exit(app.exec_())
+        sys.exit(self.app.exec_())
 
     def upload_reference(self, server_name, file_path, file_name, sql_data):
         self.select_file()
@@ -110,7 +110,10 @@ class UploadFile:
                 fileType = "jpg"
             file_copy_path = server_name + file_path + self.sep + file_name + "." + fileType
             print self.fileOld + '>>>>' + file_copy_path
-            shutil.copy(self.fileOld, file_copy_path)
+            try:
+                shutil.copy(self.fileOld, file_copy_path)
+            except Exception as e:
+                print e
             fileNow = file_name + "." + fileType
             if os.path.exists(file_copy_path):
                 if fileType == "mov" or fileType == "avi" or fileType == "mp4":
@@ -135,7 +138,7 @@ class UploadFile:
                 return
         else:
             return
-        sys.exit(app.exec_())
+        sys.exit(self.app.exec_())
 
     def insert_data(self, sql_data, file_type, thumbnail, fileType):
         # {"file_name":"1538217282",     string
