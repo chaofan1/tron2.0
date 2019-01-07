@@ -4,13 +4,17 @@
 
 import cv2
 
+
 class CreateThumbnail:
     pass
 
-def run(fileName, filePath):  # filename.mov, /Volumes/All/FUY/stuff/dmt/mov/filename
+
+def run(video_path):  # filename.mov, /Volumes/All/FUY/stuff/dmt/mov/filename
+    fileName = video_path.split('\\')[-1]
+    filePath = '\\'.join(video_path.split('\\')[0:-1])
     thumbPicName = fileName.split(".")[0] + ".jpg"   # filename.jpg
     img_path = filePath+"/."+thumbPicName    # /Volumes/All/FUY/stuff/dmt/mov/filename/.filename.jpg
-    video_path = filePath+"/"+fileName
+    # video_path = filePath+"/"+fileName
     print 'video_path', video_path
     print 'img_path', img_path
     video = cv2.VideoCapture(video_path)
@@ -25,7 +29,7 @@ def run(fileName, filePath):  # filename.mov, /Volumes/All/FUY/stuff/dmt/mov/fil
 
 
 if __name__ == '__main__':
-    cd = "dhf001004_ani_lixue_wet_v0101.mp4", r"C:\Users\Public\Videos\Sample Videos"
+    cd = "bfb.mov", "/Users/wang/Desktop/work/剪辑线测试"
     run(cd[0], cd[1])
 
 

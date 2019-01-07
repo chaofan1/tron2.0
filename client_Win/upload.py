@@ -117,7 +117,7 @@ class UploadFile:
             fileNow = file_name + "." + fileType
             if os.path.exists(file_copy_path):
                 if fileType == "mov" or fileType == "avi" or fileType == "mp4":
-                    createThumbnail.run(fileNow, (server_name + file_path))
+                    createThumbnail.run(file_copy_path)
                     file_type = 1
                     thumbnail = '.' + file_name + ".jpg"  # 缩略图路径
                     # print thumbnail

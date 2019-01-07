@@ -49,18 +49,20 @@ def write_sql(info, shot_video_path, shot_image, shot_number):
         shot_image = re.search(r'.*(All.*)', shot_image).group(1)
         shot_video_path = shot_video_path.replace('All', 'uploads/Projects')
         shot_image = shot_image.replace('All', 'uploads/Projects')
+        plan_start_timestamp = int(time.time())
+        plan_end_timestamp = plan_start_timestamp
 
         width = info.get('width')  # char
         height = info.get('height')
 
         insert_sql = "insert ignore into oa_shot(project_id,field_id,shot_image,shot_number,shot_name," \
                      "shot_video_path,clip_frame_length,frame_range,change_speed_info,material_number," \
-                     "create_time,time_start,duration,material_frame_length,width,height) " \
-                     "VALUES(%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)"
+                     "create_time,time_start,duration,material_frame_length,width,height,plan_start_timestamp,plan_end_timestamp) " \
+                     "VALUES(%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)"
         cursor.execute(insert_sql, (project_id,field_id,shot_image,shot_number,shot_number,
                                     shot_video_path,clip_frame_length,frame_range,change_speed_info,
                                     material_number,create_time,time_start,duration,
-                                    material_frame_length,width,height))
+                                    material_frame_length,width,height,plan_start_timestamp,plan_end_timestamp))
         conn.commit()
         cursor.close()
         conn.close()
