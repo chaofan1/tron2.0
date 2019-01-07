@@ -6,10 +6,12 @@ import cv2
 
 
 class CreateThumbnail:
-    def run(self, fileName, filePath):  # filename.mov, /Volumes/All/FUY/stuff/dmt/mov/filename
+    def run(self, video_path):  # filename.mov, /Volumes/All/FUY/stuff/dmt/mov/filename
+        video_path_split = video_path.split('/')
+        fileName = video_path_split[-1]
+        filePath = '/'.join(video_path_split[0:-1])
         thumbPicName = fileName.split(".")[0] + ".jpg"   # filename.jpg
         img_path = filePath+"/."+thumbPicName    # /Volumes/All/FUY/stuff/dmt/mov/filename/.filename.jpg
-        video_path = filePath+"/"+fileName
         self.thum(video_path, img_path)
 
     def thum(self, video_path, img_path):
@@ -21,10 +23,3 @@ class CreateThumbnail:
             print 'Fail to open!'
         video.release()
         return img_path
-
-
-if __name__ == '__main__':
-    cd = "1.avi", r"C:\Users\wangcf\Desktop\job\job\job_test"
-    CreateThumbnail().run(cd[0], cd[1])
-
-

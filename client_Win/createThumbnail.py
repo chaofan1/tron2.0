@@ -5,16 +5,12 @@
 import cv2
 
 
-class CreateThumbnail:
-    pass
-
-
-def run(video_path):  # filename.mov, /Volumes/All/FUY/stuff/dmt/mov/filename
-    fileName = video_path.split('\\')[-1]
-    filePath = '\\'.join(video_path.split('\\')[0:-1])
-    thumbPicName = fileName.split(".")[0] + ".jpg"   # filename.jpg
+def run(video_path):
+    video_path_split = video_path.split('\\')
+    fileName = video_path_split[-1]
+    filePath = '\\'.join(video_path_split[0:-1])
+    thumbPicName = fileName.split(".")[0] + ".jpg"
     img_path = filePath+"/."+thumbPicName    # /Volumes/All/FUY/stuff/dmt/mov/filename/.filename.jpg
-    # video_path = filePath+"/"+fileName
     print 'video_path', video_path
     print 'img_path', img_path
     video = cv2.VideoCapture(video_path)
@@ -26,10 +22,3 @@ def run(video_path):  # filename.mov, /Volumes/All/FUY/stuff/dmt/mov/filename
         print 'Fail to open!'
     video.release()
     return img_path
-
-
-if __name__ == '__main__':
-    cd = "bfb.mov", "/Users/wang/Desktop/work/剪辑线测试"
-    run(cd[0], cd[1])
-
-

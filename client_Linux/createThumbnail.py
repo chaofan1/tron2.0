@@ -5,14 +5,12 @@
 import cv2
 
 
-class CreateThumbnail:
-    pass
-
-
-def run(fileName, filePath):  # filename.mov, /Volumes/All/FUY/stuff/dmt/mov/filename
+def run(video_path):  # filename.mov, /Volumes/All/FUY/stuff/dmt/mov/filename
+    video_path_split = video_path.split('/')
+    fileName = video_path_split[-1]
+    filePath = '/'.join(video_path_split[0:-1])
     thumbPicName = fileName.split(".")[0] + ".jpg"   # filename.jpg
     img_path = filePath+"/."+thumbPicName    # /Volumes/All/FUY/stuff/dmt/mov/filename/.filename.jpg
-    video_path = filePath+"/"+fileName
 
     video = cv2.VideoCapture(video_path)
     if video.isOpened():
@@ -22,10 +20,3 @@ def run(fileName, filePath):  # filename.mov, /Volumes/All/FUY/stuff/dmt/mov/fil
         print 'Fail to open!'
     video.release()
     return img_path
-
-
-if __name__ == '__main__':
-    cd = "1.avi", r"C:\Users\wangcf\Desktop\job\job\job_test"
-    run(cd[0], cd[1])
-
-

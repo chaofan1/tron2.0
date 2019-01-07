@@ -74,7 +74,7 @@ class UploadFile:
                 print(e)
             if os.path.exists(file_abspath):
                 if fileType == "mov" or fileType == "avi" or fileType == "mp4":
-                    CreateThumbnail().run(fileNow, file_copy_path)
+                    CreateThumbnail().run(file_abspath)
                     CallBack().dai_callback(command_id, filePath + "/" + file_name, fileNow, "")
                     QMessageBox.information(None, 'INFORMATION', u'提交成功！')
                 elif fileType == "jpg" or fileType == "jpeg" or fileType == "png" or fileType == "tiff" or fileType == "tga":
@@ -106,7 +106,7 @@ class UploadFile:
             fileNow = file_name + "." + fileType
             if os.path.exists(file_copy_path):
                 if fileType == "mov" or fileType == "avi" or fileType == "mp4":
-                    CreateThumbnail().run(fileNow, (server_name + file_path))
+                    CreateThumbnail().run(file_copy_path)
                     file_type = 1
                     thumbnail = '.' + file_name + ".jpg"  # 缩略图路径
                     self.insert_data(sql_data, file_type, thumbnail, fileType)
