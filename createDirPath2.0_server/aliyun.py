@@ -8,13 +8,13 @@ import logging
 from oss2 import SizedFileAdapter, determine_part_size
 from oss2.models import PartInfo
 from aliyunsdkcore import client
-from config import log_path
+from config import log_path_server
 # from aliyunsdkram.request.v20150501 import CreateUserRequest,CreateAccessKeyRequest,ListUsersRequest,AttachPolicyToUserRequest,CreatePolicyRequest
 
 
 class AliyunOss():
     def __init__(self,filePath,dirname, cpname, email, user_name, remark):
-        logging.basicConfig(filename=log_path + time.strftime("%Y%m%d") + '.log', level=logging.INFO,
+        logging.basicConfig(filename=log_path_server + time.strftime("%Y%m%d") + '.log', level=logging.INFO,
                             format="%(asctime)s - %(levelname)s - %(message)s")
 
         # 管理验证
@@ -47,7 +47,8 @@ class AliyunOss():
         filelist = self.file_name()
         try:
             for file in filelist:
-                key = self.dirname + '/' + os.path.basename(file)
+                fileDir = file.split(self.dirname)[1]
+                key = (self.dirname + fileDir).replace('\\', '/')
                 total_size = os.path.getsize(file)
                 # determine_part_size方法用来确定分片大小。
                 part_size = determine_part_size(total_size, preferred_size=100 * 1024)
@@ -188,3 +189,5 @@ class AliyunOss():
     #         logging.info('create userAccess ok')
     #     else:
     #         logging.info('create userAccess error')
+if __name__ == "__main__":
+    AliyunOss('X:\\DHF\\Vender\\outgoing\\20190107\\sg_DHF_90', 'sg_DHF_90', 'sg', '', '', '').uploadFile()

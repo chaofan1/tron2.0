@@ -6,9 +6,9 @@
 import socket
 import os,time
 import logging
-from config import log_path
+from config import log_path_server
 
-logging.basicConfig(filename=log_path + 'server_log/' + time.strftime("%Y%m%d") + '.log', level=logging.INFO,
+logging.basicConfig(filename=log_path_server + time.strftime("%Y%m%d") + '.log', level=logging.INFO,
 					format="%(asctime)s - %(levelname)s - %(message)s")
 
 def clientLink(data):

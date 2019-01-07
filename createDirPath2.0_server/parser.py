@@ -39,9 +39,9 @@ from client import clientLink
 from server_callback import CallBack
 from distribution import TronDistribute,transit
 from aliyun import AliyunOss
-from config import log_path
+from config import log_path_server
 
-logging.basicConfig(filename=log_path + 'server_log/' + time.strftime("%Y%m%d") + '.log', level=logging.INFO,
+logging.basicConfig(filename=log_path_server + time.strftime("%Y%m%d") + '.log', level=logging.INFO,
 					format="%(asctime)s - %(levelname)s - %(message)s")
 def _init_():
 	args = sys.argv[1:]

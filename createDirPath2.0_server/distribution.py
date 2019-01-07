@@ -9,7 +9,7 @@ import sys
 reload(sys)
 sys.setdefaultencoding('utf8')
 from aliyun import AliyunOss
-from config import log_path, outputpath
+from config import log_path_distribute, outputpath
 
 
 class Finish(SyntaxWarning):
@@ -20,7 +20,7 @@ class TronDistribute:
     def __init__(self):
         self.pool = threadpool.ThreadPool(8)  # 创建线程池
         # 日志位置
-        logging.basicConfig(filename=log_path + 'distribute_log/' + time.strftime("%Y%m%d") + '.log', level=logging.INFO,
+        logging.basicConfig(filename=log_path_distribute + time.strftime("%Y%m%d") + '.log', level=logging.INFO,
                             format="%(asctime)s - %(levelname)s - %(message)s")
 
     # 解析php传来的json文件，filePath为json路径
@@ -47,7 +47,6 @@ class TronDistribute:
                     for cp in response['company_data']:
                         basePath = self.outputPath + os.sep + cp['pack_dir_name'] \
                                    + os.sep + self.progectName + os.sep + fieldName + os.sep + shotNum + os.sep
-                        print basePath
                         if not os.path.exists(basePath):
                             os.makedirs(basePath)
                         Paths.append(((basePath, material), None))
@@ -60,7 +59,6 @@ class TronDistribute:
                     for cp in response['company_data']:
                         asset_basepath = self.outputPath + os.sep + cp['pack_dir_name']\
                                          + os.sep + self.progectName + os.sep + "assets" + os.sep + tache_name
-                        print asset_basepath
                         if not os.path.exists(asset_basepath):
                             os.makedirs(asset_basepath)
                         Paths.append(((asset_basepath, linux_path), None))
@@ -68,7 +66,6 @@ class TronDistribute:
             for cp in response['company_data']:
                 referencesDir = self.outputPath + os.sep + cp['pack_dir_name'] \
                                 + os.sep + self.progectName + os.sep + "references"
-                print referencesDir
                 if not os.path.exists(referencesDir):
                     os.makedirs(referencesDir)
                 Paths.append(((referencesDir, referencesList), None))
@@ -203,6 +200,7 @@ class TronDistribute:
 
 
 def transit(Path, dirName):
+    print Path + '\t' + dirName
     logging.info('transit:' + Path+'|' + dirName)
     sep = os.sep
     if '.json' in Path:
@@ -219,7 +217,8 @@ def transit(Path, dirName):
         outputPath = outputpath % (projectName, create_time)
         tranfilePath = outputPath + sep + dirName
         AliyunOss(tranfilePath, dirName, cpname, email, user_name, remark).uploadFile()
-        os.remove(Path)  # 测试或上线打开，删除json文件
+        print tranfilePath,dirName,cpname
+        # os.remove(Path)  # 测试或上线打开，删除json文件
     else:
         AliyunOss(Path, dirName, '', '', '', '').uploadFile()
 
