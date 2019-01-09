@@ -27,17 +27,25 @@ class TronProject:
         # daiPaths = os.path.join(self.daiName, proName)
         if not os.path.exists(proPath):
             os.mkdir(proPath)
-            os.mkdir(proPost)
+            # os.mkdir(proPost)
             # os.mkdir(daiPaths)
-            os.mkdir(refPaths)
+            # os.mkdir(refPaths)
             os.chown(proPath, self.userID, self.groupID)
-            os.chown(proPost, self.userID, self.groupID)
+            # os.chown(proPost, self.userID, self.groupID)
             # os.chown(daiPaths, self.userID, self.groupID)
-            os.chown(refPaths, self.userID, self.groupID)
+            # os.chown(refPaths, self.userID, self.groupID)
             os.chmod(proPath, 0555)
-            os.chmod(proPost, 0555)
+            # os.chmod(proPost, 0555)
             # os.chmod(daiPaths, 0555)
+            # os.chmod(refPaths, 0555)
+        if not os.path.exists(refPaths):
+            os.mkdir(refPaths)
+            os.chown(refPaths, self.userID, self.groupID)
             os.chmod(refPaths, 0555)
+        if not os.path.exists(proPost):
+            os.mkdir(proPost)
+            os.chown(proPost, self.userID, self.groupID)
+            os.chmod(proPost, 0555)
         projectChiName = projectChild.keys()
         for i in projectChiName:
             folderPath = proPath+os.sep+i
@@ -101,7 +109,7 @@ class TronProject:
 
     def CreateSeq(self, proName, seqName):
         dirPath = self.serverName + os.sep + proName  # /Tron/FUY
-        dirPost = os.path.join(self.postName, proName)  # /Post/FUY
+        dirPost = self.postName + os.sep + proName  # /Post/FUY
         seqPath = os.path.join(dirPath, seqName)  # /Tron/FUY/001
         seqPost = os.path.join(dirPost, seqName)  # /Post/FUY/01
         if not os.path.exists(seqPath):
