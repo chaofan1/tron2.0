@@ -80,7 +80,7 @@ class UploadFile:
                 elif fileType == "jpg" or fileType == "jpeg" or fileType == "png" or fileType == "tiff" or fileType == "tga":
                     img = cv2.imread(file_abspath)
                     thumbnail_img = file_copy_path + self.sep + '.' + fileNow
-                    cv2.imwrite(thumbnail_img, img, [int(cv2.IMWRITE_JPEG_QUALITY), 1])
+                    cv2.imwrite(thumbnail_img, img, [int(cv2.IMWRITE_JPEG_QUALITY), 40])
                     CallBack().dai_callback(command_id, filePath + "/" + file_name, fileNow, "")
                     QMessageBox.information(None, 'INFORMATION', u'提交成功！')
                 return  # /FUY/001/001/Stuff/cmp/mov/filename
