@@ -182,9 +182,11 @@ def putter(task_queue, xml_path, project_id, field_id, data, path, task):
                     if postfix == 'dpx':
                         shot_pathurl = os.path.dirname(pathurl)
                         if not os.path.exists(shot_pathurl):
+                            print shot_pathurl, '文件不存在'
                             continue
                     elif postfix == 'mov':
                         if not os.path.exists(pathurl):
+                            print pathurl, '文件不存在'
                             continue
 
                     # start = i.find('start').text
