@@ -117,7 +117,7 @@ def getter(task_queue, queue_len, xml_id, task):
 
         # 0030_B112C053_180329_R0TK.[0702252-0703320]_.[00702853-00703023].dpx
         pathurl_split = pathurl.split('.')
-        print pathurl_split
+        # print pathurl_split
         p_be = '.'.join(pathurl_split[:-2])+'.'
         user_file_path = ''
         if pathurl_split[-2].startswith('[') and pathurl_split[-2].endswith(']'):
@@ -127,14 +127,14 @@ def getter(task_queue, queue_len, xml_id, task):
             # 用多进程时，以进程号来命名要读取的txt文件
             pid = os.getpid()
             user_file_path = os.environ['HOME'] + '/%s.txt' % pid
-            print 'filepath.txt', user_file_path
+            # print 'filepath.txt', user_file_path
             with open(user_file_path,'w') as f:
                 for i in range(0, range_num):
                     a = format(int(file_scope[0]) + i, '0%d' % format_len)
                     collect_filepath = p_be + str(a) + '.' + pathurl_split[-1]
                     f.write('file' + '\t' + collect_filepath + '\r')
             transcode_command = 'ffmpeg -f concat -safe 0  -r %s -i %s -loglevel -8 -c:v libx264 -y -g 2 -keyint_min 2 %s' % ( rate, user_file_path, video_path)
-            print 'command',transcode_command
+            # print 'command',transcode_command
         else:
             transcode_command = 'ffmpeg -i %s -loglevel -8 -c:v libx264 -y -g 2 -keyint_min 2 %s'%(pathurl,video_path)
         video_su = subprocess.Popen(transcode_command,shell=True)
