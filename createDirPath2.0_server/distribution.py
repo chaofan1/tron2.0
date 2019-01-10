@@ -54,7 +54,7 @@ class TronDistribute:
             for asset in response['assets']:
                 for tache in asset['tache']:
                     tache_name = tache['tache_lower_name']
-                    extension_name = tache['extension_name']
+                    # extension_name = tache['extension_name']
                     linux_path = tache['linux_path']
                     for cp in response['company_data']:
                         asset_basepath = self.outputPath + os.sep + cp['pack_dir_name']\
@@ -63,12 +63,13 @@ class TronDistribute:
                             os.makedirs(asset_basepath)
                         Paths.append(((asset_basepath, linux_path), None))
             # 解析相关文件，将相关文件所在路径与相关文件目标路径放到列表
-            for cp in response['company_data']:
-                referencesDir = self.outputPath + os.sep + cp['pack_dir_name'] \
-                                + os.sep + self.progectName + os.sep + "references"
-                if not os.path.exists(referencesDir):
-                    os.makedirs(referencesDir)
-                Paths.append(((referencesDir, referencesList), None))
+            if referencesList:
+                for cp in response['company_data']:
+                    referencesDir = self.outputPath + os.sep + cp['pack_dir_name'] \
+                                    + os.sep + self.progectName + os.sep + "references"
+                    if not os.path.exists(referencesDir):
+                        os.makedirs(referencesDir)
+                    Paths.append(((referencesDir, referencesList), None))
             logging.info('打开文件，解析参数成功' + self.filePath )
             # 将列表放到线程池，去copy文件
             self.putThread('copy', Paths)
