@@ -39,7 +39,7 @@ class CallBack:
 
     def request_post(self):
         encoded_args = urllib.urlencode(self.query_args)
-        logging.info('URL:' + self.url, 'ARGS:' + encoded_args)
+        logging.info('URL:' + self.url, self.query_args)
         try:
             response = urllib2.urlopen(self.url, encoded_args)
         except urllib2.HTTPError, e:
@@ -72,4 +72,4 @@ class CallBack:
 
 
 if __name__ == '__main__':
-    CallBack().callback_pack(1)
+    CallBack().callback(1)

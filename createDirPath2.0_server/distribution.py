@@ -217,8 +217,7 @@ def transit(Path, dirName):
         outputPath = outputpath % (projectName, create_time)
         tranfilePath = outputPath + sep + dirName
         AliyunOss(tranfilePath, dirName, cpname, email, user_name, remark).uploadFile()
-        print tranfilePath,dirName,cpname
-        # os.remove(Path)  # 测试或上线打开，删除json文件
+        #os.remove(Path)  # 测试或上线打开，删除json文件
     else:
         AliyunOss(Path, dirName, '', '', '', '').uploadFile()
 
