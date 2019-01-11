@@ -2,6 +2,7 @@
 # -*- coding: utf-8 -*-
 # 创建视频的缩略图
 
+import os
 import cv2
 import sys
 reload(sys)
