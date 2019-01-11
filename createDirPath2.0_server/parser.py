@@ -126,11 +126,6 @@ def _init_():
 		if args[0] == "Shot":   # "Shot" "HAC" "001" "001" "command_id"
 			TronProject().CreateScene(args[1].upper(), args[2], args[3])
 			CallBack().callback(args[4])
-		elif args[0] == "Transit":  # "Transit" "json路径" “公司_项目_id” "transit_id" “command_id”
-			# 或 "Transit" "路径" “文件名” "transit_id" “command_id”
-			transit(args[1], args[2])
-			CallBack().callback_transit(args[4])
-			CallBack().callback(args[3])
 		elif args[0] == "Pack":  # "Pack" "Json路径" "时间戳" "打包id" "command_id"
 			TronDistribute().argParse(args[1], args[2])
 			CallBack().callback_pack(args[3])
@@ -139,6 +134,12 @@ def _init_():
 		if args[0] == "AssetTask":    # "AssetTask" "HAC" "rig" "liangcy" "fileName" "command_id"
 			TronProject().CreateAsset(args[1].upper(), args[2], args[3], args[4])
 			CallBack().callback(args[5])
+		elif args[0] == "Transit":  # "Transit" "json路径" “公司_项目_id” "transit_id" "user_id" “command_id”
+			# 或 "Transit" "路径" “文件名” "transit_id" 'user_id' “command_id”
+			transit(args[1], args[2])
+			CallBack().callback_transit(args[5])
+			CallBack().callback_transit_complete(args[3], args[4])
+			CallBack().callback(args[3])
 	elif len(args) == 9:
 		if args[0] == "ShotTask":   # "ShotTask" "HAC" "01" "001" "rig" "liangcy" "fileName" "command_id" "ip"
 			TronProject().CreateShot(args[1].upper(), args[2], args[3], args[4], args[5], args[6])
