@@ -81,7 +81,6 @@ def handle(conn):
 			create_time = time.strftime("%Y%m%d",time.localtime(eval(create_time)))
 			try:
 				if os.path.exists(server_outcompany %(projectName,create_time)+ file_path):
-					os.chmod(server_outcompany %(projectName,create_time)+ file_path, 0777)
 					os.popen('explorer.exe %s' % (server_outcompany %(projectName,create_time) + file_path)).close()
 				else:
 					print 'the directory not exit'
