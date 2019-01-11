@@ -182,7 +182,7 @@ class TronDistribute:
     #         return 0, None
     #     except Exception as e:
     #         logging.info(u'压缩出错')
-    #         logging.error(e)
+    #         logging.error(e)w
     #         return 1, e
 
     def Deldir(self, dirname, timeStamp):

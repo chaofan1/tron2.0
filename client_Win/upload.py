@@ -85,6 +85,7 @@ class UploadFile:
                 print(e)
             if os.path.exists(file_abspath):
                 if fileType == "mov" or fileType == "avi" or fileType == "mp4":
+                    print os.path.exists(file_abspath)
                     createThumbnail.run(file_abspath)
                     CallBack().dai_callback(command_id, filePath + "/" + file_name, fileNow, "")
                     QMessageBox.information(None, 'INFORMATION', u'提交成功！', QString('OK'))

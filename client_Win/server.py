@@ -14,6 +14,9 @@ import createThumbnail
 from httpUrl import CallBack
 from upload import UploadFile
 import config
+import sys
+reload(sys)
+sys.setdefaultencoding('utf-8')
 
 
 def myServer():
