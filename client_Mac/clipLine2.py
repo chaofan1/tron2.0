@@ -3,6 +3,9 @@ import os
 import subprocess
 import shutil
 from clipLine import to_php
+import sys
+reload(sys)
+sys.setdefaultencoding('utf-8')
 
 
 def insert(output_mov, input_img, frame):

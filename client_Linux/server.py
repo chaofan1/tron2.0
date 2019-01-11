@@ -12,7 +12,10 @@ from render import Render, Select
 from httpUrl import CallBack
 from upload import UploadFile
 import config
-from aliyun_client import AliyunDownload
+import sys
+reload(sys)
+sys.setdefaultencoding('utf-8')
+
 
 def myServer():
 	if platform.system() != 'Linux':

@@ -3,14 +3,12 @@
 # 创建视频的缩略图
 
 import cv2
-import os
 import sys
 reload(sys)
 sys.setdefaultencoding('utf-8')
 
 
 def run(video_path):
-    print os.path.exists(video_path)
     video_path_split = video_path.split('\\')
     fileName = video_path_split[-1]
     filePath = '\\'.join(video_path_split[0:-1])

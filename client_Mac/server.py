@@ -3,7 +3,6 @@
 
 import os
 import time
-import shutil
 import platform
 import socket
 import config
@@ -12,7 +11,9 @@ from clipLine2 import Pack, insert
 from clipLine import to_php
 from upload import UploadFile
 from httpUrl import CallBack
-from aliyun_client import AliyunDownload
+import sys
+reload(sys)
+sys.setdefaultencoding('utf-8')
 
 
 def myServer():
