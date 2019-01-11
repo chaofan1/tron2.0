@@ -76,11 +76,14 @@ def handle(conn):
 			file_path = file_path.replace("/", "\\")
 			projectName = file_path.split('_')[1]
 			create_time = time.strftime("%Y%m%d",time.localtime(eval(create_time)))
-			if os.path.exists(server_outcompany %(projectName,create_time)+ file_path):
-				os.chmod(server_outcompany %(projectName,create_time)+ file_path, 0777)
-				os.popen('explorer.exe %s' % (server_outcompany %(projectName,create_time) + file_path)).close()
-			else:
-				print 'the directory not exit'
+			try:
+				if os.path.exists(server_outcompany %(projectName,create_time)+ file_path):
+					os.chmod(server_outcompany %(projectName,create_time)+ file_path, 0777)
+					os.popen('explorer.exe %s' % (server_outcompany %(projectName,create_time) + file_path)).close()
+				else:
+					print 'the directory not exit'
+			except Exception as e:
+				print e
 
 		elif data_split[-1] == "Dailies1":   # /FUY/001/001/stuff/cmp|file_name|command_id|Dailies1
 			file_path, file_name, command_id, UpTask = data_split

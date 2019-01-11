@@ -69,11 +69,14 @@ def handle(conn):
 			file_path, create_time, Uptask = data_split
 			projectName = file_path.split('_')[1]
 			create_time = time.strftime("%Y%m%d", time.localtime(eval(create_time)))
-			if os.path.exists(server_outcompany % (projectName, create_time) + file_path):
-				os.chmod(server_outcompany % (projectName, create_time) + file_path, 0777)
-				os.popen('open %s' % (server_outcompany % (projectName, create_time) + file_path)).close()
-			else:
-				print 'the directory not exit'
+			try:
+				if os.path.exists(server_outcompany % (projectName, create_time) + file_path):
+					os.chmod(server_outcompany % (projectName, create_time) + file_path, 0777)
+					os.popen('open %s' % (server_outcompany % (projectName, create_time) + file_path)).close()
+				else:
+					print 'the directory not exit'
+			except Exception as e:
+				print e
 
 		elif data_split[-1] == "Ready_render1" or data_split[-1] == "Local_render1" or data_split[-1] == "Cloud_render1":
 			file_path, Uptask = data_split
