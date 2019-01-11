@@ -3,6 +3,9 @@
 # 创建视频的缩略图
 
 import cv2
+import sys
+reload(sys)
+sys.setdefaultencoding('utf-8')
 
 
 def run(video_path):

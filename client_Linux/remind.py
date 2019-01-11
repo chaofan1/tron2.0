@@ -5,6 +5,7 @@ import os
 reload(sys)
 sys.setdefaultencoding('utf-8')
 
+
 class Remind:
     def __init__(self):
         self.app = QApplication(sys.argv)

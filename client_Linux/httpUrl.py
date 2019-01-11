@@ -6,6 +6,9 @@
 import urllib
 import urllib2
 import config
+import sys
+reload(sys)
+sys.setdefaultencoding('utf-8')
 
 
 class CallBack:

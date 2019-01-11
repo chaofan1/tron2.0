@@ -10,13 +10,10 @@ import time
 import re
 from createThumbnail import CreateThumbnail
 import config
+import sys
+reload(sys)
+sys.setdefaultencoding('utf-8')
 
-# ip = '192.168.1.117'
-# user_name = 'root'
-# passwd = '123456'
-# db_name = 'new_tron'
-# table_name = 'oa_shot'
-# to_php_url = 'http://192.168.1.117/clips/set_progress'
 
 ip = config.ip
 user_name = config.user_name
