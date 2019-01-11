@@ -44,8 +44,7 @@ class Render:
         file_size = os.path.getsize(self.file_name)
         file_mtime = os.path.getmtime(self.file_name)
         pro_name = self.file_path.split('/')[1]
-        pro_path = os.getcwd()
-        csv_path = os.path.join(pro_path, '%s.csv' % pro_name)
+        csv_path = os.path.join('/Public/tronPipelineScript/tron2.0/render_csv', '%s.csv' % pro_name)
         with open(csv_path, 'a+') as f:
             con_write = self.file_path, file_size, file_mtime
             con_read = set(f.readlines())

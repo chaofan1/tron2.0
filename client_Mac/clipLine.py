@@ -163,7 +163,6 @@ def putter(task_queue, xml_path, project_id, field_id, data, path, task):
     time_node = 0
     clipitems = tree.findall('.//clipitem')
     if clipitems:
-        # clipitems = tree.findall('.//clipitem')
         for i in clipitems:
             info = {}
             pathurl = i.findall('.//pathurl')
@@ -179,15 +178,22 @@ def putter(task_queue, xml_path, project_id, field_id, data, path, task):
                         pathurl = pathurl.replace('file://', '')
                     pathurl = unquote(pathurl)
 
+                    material_number = ''
                     if postfix == 'dpx':
                         shot_pathurl = os.path.dirname(pathurl)
                         if not os.path.exists(shot_pathurl):
                             print shot_pathurl, '文件不存在'
                             continue
+                        else:
+                            name = i.find('name').text
+                            if '_' in name:
+                                material_number = name.split('_')[1]
                     elif postfix == 'mov':
                         if not os.path.exists(pathurl):
                             print pathurl, '文件不存在'
                             continue
+                        else:
+                            material_number = ''
 
                     # start = i.find('start').text
                     # end = i.find('end').text
@@ -204,9 +210,9 @@ def putter(task_queue, xml_path, project_id, field_id, data, path, task):
 
                     material_frame_length = int(float(out))-int(float(in_))
                     frame_range = in_+','+out
-                    material_number = ''
-                    if '_' in pathurl:
-                        material_number = pathurl.split('_')[1]
+                    # material_number = ''
+                    # if '_' in pathurl:
+                    #     material_number = pathurl.split('_')[1]
                     # 持续时间
                     rate_list = i.findall('.//timebase')
                     if rate_list:
