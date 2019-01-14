@@ -61,9 +61,9 @@ def handle(conn):
 			file_path, Uptask = data_split
 			file_path = file_path.replace("/", "\\")
 			if os.path.exists(server_all+file_path):
-				os.popen('open %s' % (server_all + file_path)).close()
+				os.popen('explorer.exe %s' % (server_all + file_path)).close()
 			elif os.path.exists(server_dai+file_path):
-				os.popen('open %s' % (server_dai + file_path)).close()
+				os.popen('explorer.exe %s' % (server_dai + file_path)).close()
 
 		# elif data_split[-1] == "open_ref":
 		# 	file_path, Uptask = data_split
