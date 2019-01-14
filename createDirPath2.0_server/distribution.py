@@ -9,7 +9,7 @@ import sys
 reload(sys)
 sys.setdefaultencoding('utf8')
 from aliyun import AliyunOss
-from config import log_path_distribute, outputpath
+from config import log_path_server, outputpath
 
 
 class Finish(SyntaxWarning):
@@ -20,7 +20,7 @@ class TronDistribute:
     def __init__(self):
         self.pool = threadpool.ThreadPool(8)  # 创建线程池
         # 日志位置
-        logging.basicConfig(filename=log_path_distribute + time.strftime("%Y%m%d") + '.log', level=logging.INFO,
+        logging.basicConfig(filename=log_path_server + time.strftime("%Y%m%d") + '.log', level=logging.INFO,
                             format="%(asctime)s - %(levelname)s - %(message)s")
 
     # 解析php传来的json文件，filePath为json路径

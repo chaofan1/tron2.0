@@ -1,7 +1,5 @@
 ALL_WIN = ''
 ALL_MAC = ''
 ALL_LINUX = ''
-log_path_distribute = '/Public/tronPipelineScript/tron2.0/log/distribute_log/'
 log_path_server = '/Public/tronPipelineScript/tron2.0/log/server_log/'
-log_path_callback = '/Public/tronPipelineScript/tron2.0/log/callback_log/'
 outputpath = '/Tron/%s/Vender/outgoing/%s'

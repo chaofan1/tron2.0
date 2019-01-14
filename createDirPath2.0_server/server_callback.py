@@ -7,11 +7,11 @@ import urllib
 import urllib2
 import socket
 import logging
-from config import log_path_callback
+from config import log_path_server
 
 class CallBack:
     def __init__(self):
-        logging.basicConfig(filename=log_path_callback + time.strftime("%Y%m%d") + '.log', level=logging.INFO,
+        logging.basicConfig(filename=log_path_server + time.strftime("%Y%m%d") + '.log', level=logging.INFO,
                             format="%(asctime)s - %(levelname)s - %(message)s")
         self.url = ''
         self.query_args = {}
@@ -73,7 +73,6 @@ class CallBack:
         else:
             print response.read()
             logging.info(response.read())
-
 
 
 if __name__ == '__main__':
