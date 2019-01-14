@@ -54,25 +54,28 @@ def handle(conn):
 		server_all = config.All
 		server_post = config.Post
 		server_ref = config.Reference
+		server_dai = config.Dailies
 		server_outcompany = config.OutCompany
 
 		if data_split[-1] == "open_dai":
 			file_path, Uptask = data_split
 			file_path = file_path.replace("/", "\\")
-			os.popen('explorer.exe %s' % (server_all + file_path)).close()
-			print (server_all + file_path)
+			if os.path.exists(server_all+file_path):
+				os.popen('open %s' % (server_all + file_path)).close()
+			elif os.path.exists(server_dai+file_path):
+				os.popen('open %s' % (server_dai + file_path)).close()
 
-		elif data_split[-1] == "open_ref":
-			file_path, Uptask = data_split
-			file_path = file_path.replace("/", "\\")
-			os.popen('explorer.exe %s' % (server_ref + file_path)).close()
-			print (server_all + file_path)
-
-		elif data_split[-1] == "open_post":
-			file_path, Uptask = data_split
-			file_path = file_path.replace("/", "\\")
-			os.popen('explorer.exe %s' % (server_post + file_path)).close()
-			print (server_all + file_path)
+		# elif data_split[-1] == "open_ref":
+		# 	file_path, Uptask = data_split
+		# 	file_path = file_path.replace("/", "\\")
+		# 	os.popen('explorer.exe %s' % (server_ref + file_path)).close()
+		# 	print (server_all + file_path)
+		#
+		# elif data_split[-1] == "open_post":
+		# 	file_path, Uptask = data_split
+		# 	file_path = file_path.replace("/", "\\")
+		# 	os.popen('explorer.exe %s' % (server_post + file_path)).close()
+		# 	print (server_all + file_path)
 
 		elif data_split[-1] == "YunFolder":
 			file_path, create_time, Uptask = data_split

@@ -117,6 +117,7 @@ def getter(task_queue, queue_len, xml_id, task):
         # print pathurl_split
         p_be = '.'.join(pathurl_split[:-2])+'.'
         user_file_path = ''
+        ffmpeg = '/Public/tronPipelineScript/tron2.0/client_Mac/ffmpeg'
         if pathurl_split[-2].startswith('[') and pathurl_split[-2].endswith(']'):
             file_scope = pathurl_split[-2].lstrip('[').rstrip(']').split('-')
             range_num = int(float(file_scope[-1]) - float(file_scope[0])) + 1
@@ -125,16 +126,16 @@ def getter(task_queue, queue_len, xml_id, task):
             pid = os.getpid()
             user_file_path = os.environ['HOME'] + '/%s.txt' % pid
             # print 'filepath.txt', user_file_path
-            with open(user_file_path,'w') as f:
+            with open(user_file_path, 'w') as f:
                 for i in range(0, range_num):
                     a = format(int(file_scope[0]) + i, '0%d' % format_len)
                     collect_filepath = p_be + str(a) + '.' + pathurl_split[-1]
                     f.write('file' + '\t' + collect_filepath + '\r')
-            transcode_command = 'ffmpeg -f concat -safe 0  -r %s -i %s -loglevel -8 -c:v libx264 -y -g 2 -keyint_min 2 %s' % ( rate, user_file_path, video_path)
+            transcode_command = '%s -f concat -safe 0  -r %s -i %s -loglevel -8 -c:v libx264 -y -g 2 -keyint_min 2 %s' % (ffmpeg, rate, user_file_path, video_path)
             # print 'command',transcode_command
         else:
-            transcode_command = 'ffmpeg -i %s -loglevel -8 -c:v libx264 -y -g 2 -keyint_min 2 %s'%(pathurl,video_path)
-        video_su = subprocess.Popen(transcode_command,shell=True)
+            transcode_command = '%s -i %s -loglevel -8 -c:v libx264 -y -g 2 -keyint_min 2 %s' % (ffmpeg, pathurl, video_path)
+        video_su = subprocess.Popen(transcode_command, shell=True)
         video_su.wait()
         if user_file_path:
             os.remove(user_file_path)

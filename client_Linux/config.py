@@ -3,6 +3,7 @@ reload(sys)
 sys.setdefaultencoding('utf-8')
 
 All = "/All"
+Dailies = "/Dailies"
 Post = "/Post"
 Reference = "/Library/References"
 OutCompany = "/All/%s/Vender/outgoing/%s"
