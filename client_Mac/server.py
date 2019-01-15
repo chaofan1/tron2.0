@@ -22,7 +22,7 @@ def myServer():
 		exit()
 	HOST = socket.gethostbyname(socket.gethostname())
 	print 'localIP:', HOST
-	PORT = 29400
+	PORT = 29401
 	s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 	s.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
 	s.bind((HOST, PORT))
@@ -84,7 +84,11 @@ def handle(conn):
 
 		elif data_split[-1] == "Dailies1":   # /FUY/001/001/stuff/cmp|file_name|command_id|Dailies1
 			file_path, file_name, command_id, UpTask = data_split
-			UploadFile().upload_dailies(server_all, file_path, file_name, command_id)
+			UploadFile().upload_dailies(server_all, file_path, file_name, command_id, '', '', '')
+
+		elif data_split[-1] == "lgt_dai":
+			file_path, file_name, command_id, rate, frame, UpTask = data_split
+			UploadFile().upload_dailies(server_all, file_path, file_name, command_id, rate, frame, 'lgt')
 
 		elif data_split[-1] == "download":  # huanyu_Fuy_1|download
 			print 'Do not choose local disk'

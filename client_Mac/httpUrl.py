@@ -16,12 +16,9 @@ class CallBack:
         self.url = ''
         self.query_args = {}
 
-    def dai_callback(self, ID, path, file_name, img_size):
+    def dai_callback(self, ID, path, file_name, clip_filename):
         self.url = config.dai_url
-        if img_size:
-            self.query_args = {'id': ID, 'path': path, 'filename': file_name, 'imgSize': img_size}
-        else:
-            self.query_args = {'id': ID, 'path': path, 'filename': file_name}
+        self.query_args = {'id': ID, 'path': path, 'filename': file_name, 'clip_file': clip_filename}
         self.request()
 
     def common_callback(self, command_id):

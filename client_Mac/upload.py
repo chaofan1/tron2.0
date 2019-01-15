@@ -4,6 +4,7 @@
 import os
 import shutil
 import platform
+import subprocess
 import cv2
 import pymysql
 from PyQt4.QtGui import *
@@ -50,18 +51,29 @@ class UploadFile:
         return
         sys.exit(self.app.exec_())
 
-    def upload_dailies(self, server_name, file_path, file_name, command_id):
+    def upload_dailies(self, server_name, file_path, file_name, command_id, rate, frame, task):
         self.select_one('')
         if self.fileOld:
             fileType = str(self.fileOld.split(".")[-1]).lower()
             fileNow = file_name + "." + fileType
+            clip_video_callbackpath = ''
             # 重构filePath: /FUY/Stuff/dmt
             filePath = ''
             if fileType == "mov" or fileType == "avi" or fileType == "mp4":
-                filePath = os.path.join(file_path, 'mov')
+                filePath = file_path + '/mov'
             elif fileType == "jpg" or fileType == "jpeg" or fileType == "png" or fileType == "tiff" or fileType == "tga":
-                filePath = os.path.join(file_path, 'img')
+                filePath = file_path + '/img'
                 fileNow = file_name + ".jpg"
+                if task:
+                    clip_video_dirpath = server_name + file_path + '/mov' + self.sep + file_name
+                    if not os.path.exists(clip_video_dirpath):
+                        os.makedirs(clip_video_dirpath)
+                    clip_video_abspath = clip_video_dirpath + self.sep + file_name + '.mov'
+                    clip_video_callbackpath = file_path + '/mov' + self.sep + file_name + self.sep + file_name + '.mov'
+                    ffmpeg = ''
+                    command = '%s -i %s %s' % (ffmpeg, self.fileOld, clip_video_abspath)
+                    video_su = subprocess.Popen(command, shell=True)
+                    video_su.wait()
             file_copy_path = server_name + filePath + self.sep + file_name  # /Volumes/All/FUY/Stuff/dmt/mov/filename
             file_abspath = file_copy_path + self.sep + fileNow
             print file_copy_path
@@ -75,13 +87,13 @@ class UploadFile:
             if os.path.exists(file_abspath):
                 if fileType == "mov" or fileType == "avi" or fileType == "mp4":
                     CreateThumbnail().run(file_abspath)
-                    CallBack().dai_callback(command_id, filePath + "/" + file_name, fileNow, "")
+                    CallBack().dai_callback(command_id, filePath + "/" + file_name, fileNow, clip_video_callbackpath)
                     QMessageBox.information(None, 'INFORMATION', u'提交成功！')
                 elif fileType == "jpg" or fileType == "jpeg" or fileType == "png" or fileType == "tiff" or fileType == "tga":
                     img = cv2.imread(file_abspath)
                     thumbnail_img = file_copy_path + self.sep + '.' + fileNow
                     cv2.imwrite(thumbnail_img, img, [int(cv2.IMWRITE_JPEG_QUALITY), 40])
-                    CallBack().dai_callback(command_id, filePath + "/" + file_name, fileNow, "")
+                    CallBack().dai_callback(command_id, filePath + "/" + file_name, fileNow, clip_video_callbackpath)
                     QMessageBox.information(None, 'INFORMATION', u'提交成功！')
                 return  # /FUY/001/001/Stuff/cmp/mov/filename
             else:

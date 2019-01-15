@@ -19,7 +19,7 @@ def clientLink(data):
     serverName = "/Tron"
 
     HOST = clientIP
-    PORT = 29400
+    PORT = 29401
     s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
     s.connect((HOST, PORT))
     if senStr:
