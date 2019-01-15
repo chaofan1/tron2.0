@@ -65,12 +65,14 @@ def handle(conn):
 			elif os.path.exists(server_dai+file_path):
 				os.popen('explorer.exe %s' % (server_dai + file_path)).close()
 
-		# elif data_split[-1] == "open_ref":
-		# 	file_path, Uptask = data_split
-		# 	file_path = file_path.replace("/", "\\")
-		# 	os.popen('explorer.exe %s' % (server_ref + file_path)).close()
-		# 	print (server_all + file_path)
-		#
+		elif data_split[-1] == "Folder":
+			file_path, Uptask = data_split
+			file_path = file_path.replace("/", "\\")
+			if os.path.exists(server_all+file_path):
+				os.popen('explorer.exe %s' % (server_all + file_path)).close()
+			elif os.path.exists(server_dai+file_path):
+				os.popen('explorer.exe %s' % (server_dai + file_path)).close()
+
 		# elif data_split[-1] == "open_post":
 		# 	file_path, Uptask = data_split
 		# 	file_path = file_path.replace("/", "\\")

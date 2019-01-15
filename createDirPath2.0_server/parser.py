@@ -43,16 +43,20 @@ from config import log_path_server
 
 logging.basicConfig(filename=log_path_server + time.strftime("%Y%m%d") + '.log', level=logging.INFO,
 					format="%(asctime)s - %(levelname)s - %(message)s")
+
+
 def _init_():
 	args = sys.argv[1:]
 	logging.info(args)
 	if len(args) == 2:
 		if args[0] == "open_dai":
 			clientLink(args[1]+'|open_dai')
-		elif args[0] == "open_ref":
-			clientLink(args[1]+'|open_ref')
-		elif args[0] == "open_post":
-			clientLink(args[1]+'|open_post')
+		elif args[0] == "Folder":
+			clientLink(args[1]+'Folder')
+		# elif args[0] == "open_ref":
+		# 	clientLink(args[1]+'|open_ref')
+		# elif args[0] == "open_post":
+		# 	clientLink(args[1]+'|open_post')
 		elif args[0] == "Ready_render" or args[0] == "Local_render" or args[0] == "Cloud_render":
 			clientLink(args[1])
 		elif args[0] == "clip1":
