@@ -117,7 +117,7 @@ def getter(task_queue, queue_len, xml_id, task):
         # print pathurl_split
         p_be = '.'.join(pathurl_split[:-2])+'.'
         user_file_path = ''
-        ffmpeg = '/Public/tronPipelineScript/tron2.0/client_Mac/ffmpeg'
+        ffmpeg = config.ffmpeg
         if pathurl_split[-2].startswith('[') and pathurl_split[-2].endswith(']'):
             file_scope = pathurl_split[-2].lstrip('[').rstrip(']').split('-')
             range_num = int(float(file_scope[-1]) - float(file_scope[0])) + 1

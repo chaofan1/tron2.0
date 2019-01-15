@@ -8,6 +8,8 @@ Post = "J:"
 Reference = "L:\\References"
 OutCompany = "X:\\%s\\Vender\\outgoing\\%s"
 
+ffmpeg = r'W:\tronPipelineScript\IlluminaConverter_v002\ffmpeg_win_20130514\bin\ffmpeg.exe'
+
 user_name = 'root'
 db_name = 'new_tron'
 
