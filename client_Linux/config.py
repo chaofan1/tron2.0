@@ -8,6 +8,8 @@ Post = "/Post"
 Reference = "/Library/References"
 OutCompany = "/All/%s/Vender/outgoing/%s"
 
+ffmpeg = '/Public/tronPipelineScript/tron2.0/ffmpeg/linux/ffmpeg'
+
 user_name = 'root'
 db_name = 'new_tron'
 

@@ -8,6 +8,8 @@ Post = "/Volumes/Post"
 Reference = "/Volumes/library/References"
 OutCompany = "/Volumes/All/%s/Vender/outgoing/%s"
 
+ffmpeg = '/Volumes/Public/tronPipelineScript/tron2.0/ffmpeg/mac/ffmpeg'
+
 user_name = 'root'
 db_name = 'new_tron'
 clip_table_name = 'oa_shot'

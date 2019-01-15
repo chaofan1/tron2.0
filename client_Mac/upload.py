@@ -70,8 +70,8 @@ class UploadFile:
                         os.makedirs(clip_video_dirpath)
                     clip_video_abspath = clip_video_dirpath + self.sep + file_name + '.mov'
                     clip_video_callbackpath = file_path + '/mov' + self.sep + file_name + self.sep + file_name + '.mov'
-                    ffmpeg = ''
-                    command = '%s -i %s %s' % (ffmpeg, self.fileOld, clip_video_abspath)
+                    ffmpeg = config.ffmpeg
+                    command = '%s -loop 1 -i %s -r %s -loglevel -8 -y -g 2 -keyint_min 2 -vframes %s %s' % (ffmpeg, self.fileOld, rate, frame, clip_video_abspath)
                     video_su = subprocess.Popen(command, shell=True)
                     video_su.wait()
             file_copy_path = server_name + filePath + self.sep + file_name  # /Volumes/All/FUY/Stuff/dmt/mov/filename
