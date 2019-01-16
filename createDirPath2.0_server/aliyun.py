@@ -89,7 +89,7 @@ class AliyunOss():
                 from_name = self.user_name  # 发送人姓名
                 subject = '您有一封来自Tron平台的邮件(请勿回复)'  # 主题
                 mail = [
-                    "From: %s <%s>" % (from_name, from_mail),
+                    "From: %s <%s>" % ('Tron', from_mail),
                     str("To: %s" % mailAdd),
                     "Subject: %s" % subject,
                     # "Cc: %s" % ','.join(cc_mail), "utf8"),
