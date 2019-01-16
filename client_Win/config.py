@@ -13,7 +13,7 @@ ffmpeg = r'W:\tronPipelineScript\IlluminaConverter_v002\ffmpeg_win_20130514\bin\
 user_name = 'root'
 db_name = 'new_tron'
 
-ip = '192.168.100.49'
+ip = '192.168.100.247'
 passwd = 'king9188YJQ@'
-dai_url = 'http://192.168.100.49/callback/dailies'
-common_url = 'http://192.168.100.49/python/renewScriptStatus'
+dai_url = 'http://192.168.100.247/callback/dailies'
+common_url = 'http://192.168.100.247/python/renewScriptStatus'
