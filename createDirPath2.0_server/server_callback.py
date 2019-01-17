@@ -9,6 +9,7 @@ import socket
 import logging
 from config import log_path_server
 
+
 class CallBack:
     def __init__(self):
         logging.basicConfig(filename=log_path_server + time.strftime("%Y%m%d") + '.log', level=logging.INFO,
