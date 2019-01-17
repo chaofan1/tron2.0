@@ -25,7 +25,7 @@ def clientLink(data):
     try:
         s.connect((HOST, PORT))
     except:
-        logging.info(HOST,' can not connect')
+        logging.info(HOST, 'can not connect')
     else:
         if senStr:
             s.sendall(senStr)
