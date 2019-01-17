@@ -1,35 +1,5 @@
 # !/usr/bin/env python2.7
 # -*- coding: utf-8 -*-
-# 服务器
-# "Project" "HAC" "command_id"
-# "Seq" "HAC" "01" "command_id"
-# "Shot" "HAC" "01" "001" "command_id"
-# "AssetTask" "HAC" "rig" "liangcy" "fileName" "command_id"
-# "Pack" "Json路径" "pack_id" "command_id"
-# "Transit" "json路径" “公司_项目_主键id”"transit_id"“command_id”
-# "Del" "公司_项目_主键id"
-# 客户端
-# 'Render' '192.168.100.44|/FUY/999/003/Stuff/lgt/publish/fuy999003_lgt_wangcf_yuanBao_master|Render2|command_id'
-# "open_dai" "192.168.1.85|/DHG/Dailies/20161214"
-# "open_ref" "192.168.1.85|/DHG/Dailies/20161214"
-# "open_post" "192.168.1.85|/DHG/Dailies/20161214"
-# "YunFolder" "192.168.1.85|/DHG/Dailies/20161214"
-# 'download' 'tron_TXT_7|ip'
-# 服务器与客户端
-# "Excel" "192.168.1.85" "文件路径" "目标路径"
-# old "Dailies2" "HAC" "fileName" "192.168.1.85|x:/DHG/Dailies/20161214|dhg01001_prd_liangcy_HFG_v0103|373"
-# new "Dailies1" "/FUY/001/001/stuff/cmp" "192.168.1.85|/FUY/001/001/stuff/cmp|ruy001004_cmp_xiecy_weqw_v0101|command_id"
-# "Dailies2" "/FUY/001/001/stuff/cmp" "192.168.1.85|/FUY/001/001/stuff/cmp|filename|command_id"
-# "Reference" "HAC" "shots"  "192.168.1.85|/RUY/assets|1537848665|5"
-# "ShotTask" "HAC" "01" "001" "rig" "liangcy" "fileName" "command_id"
-# 剪辑线
-# 'clip1' '192.168.100.79|YLSL/009/Work/note/5bdff7943d5b3.xml|YLSL/009/|10|35|27|332'
-# 转码 'clip1' 'IP|user_id|path|项目id|场id|xml_id|command_id'
-# 追加 'add_xml' 'IP|xml_path|path|项目id|场id|xml_id|command_id'
-#              192.168.101.160|TXT/017/Work/note/5bffaf4e5c992.xml|TXT/017/|1|46|22
-# 回插 'clip2' 'IP|video_path|img_path|frame|id|command_id'
-# 打包 'clip3'  'IP|FUY/001|command_id'
-
 
 import shutil,time
 import logging
@@ -52,7 +22,7 @@ def _init_():
 		if args[0] == "open_dai":
 			clientLink(args[1]+'|open_dai')
 		elif args[0] == "Folder":
-			clientLink(args[1]+'Folder')
+			clientLink(args[1]+'|Folder')
 		# elif args[0] == "open_ref":
 		# 	clientLink(args[1]+'|open_ref')
 		# elif args[0] == "open_post":
