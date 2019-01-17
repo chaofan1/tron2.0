@@ -1,5 +1,5 @@
 #!/usr/bin/env python2.7
-#-*- coding: utf-8 -*-
+# -*- coding: utf-8 -*-
 # 将服务器执行成功的命令告诉数据库
 
 import time
