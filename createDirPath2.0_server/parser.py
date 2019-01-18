@@ -71,12 +71,12 @@ def _init_():
 			TronProject().CreateDai(args[1])
 			dailiesData = args[2]+"|Dailies1"
 			clientLink(dailiesData)
-		elif args[0] == "lgt_dai":  # "lgt_dai" "/FUY/001/001/Stuff/cmp/" "IP|/FUY/001/001/Stuff/cmp|filename|command_id|rate|帧长"
+		elif args[0] == "lgt_dai":   # "lgt_dai" "/FUY/001/001/Stuff/cmp/" "IP|/FUY/001/001/Stuff/cmp|filename|command_id|rate|帧长"
 			TronProject().CreateDai(args[1])
 			dailiesData = args[2]+"|lgt_dai"
 			clientLink(dailiesData)
-		elif args[0] == 'YunFolder': # "YunFolder" "filePath" "时间戳"
-			clientLink(args[1] + '|'+ args[2] + '|YunFolder')
+		elif args[0] == 'YunFolder':  # "YunFolder" "ip" "filepath|时间戳"
+			clientLink(args[1] + '|' + args[2] + '|YunFolder')
 		elif args[0] == "Dailies2":  # "Dailies2" "/FUY/001/001/Stuff/cmp/" "IP|/FUY/001/001/Stuff/cmp|filename|command_id"
 			TronProject().CreateDai(args[1])
 			dailiesData = args[2]+"|Dailies2"
