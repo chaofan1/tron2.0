@@ -6,14 +6,14 @@
 
 import os
 from createFolder import TronFolder
+import config
 
 
 class TronProject:
     def __init__(self):
-        self.serverName = "/Tron"
-        self.postName = "/Post"
-        # self.daiName = '/Dailies'
-        self.refName = '/Library/References'
+        self.serverName = config.All
+        self.postName = config.Post
+        self.refName = config.Reference
         self.userID = 11004
         self.groupID = 11000
         self.sep = os.sep
