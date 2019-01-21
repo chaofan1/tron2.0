@@ -116,10 +116,10 @@ def _init_():
 			CallBack().callback_transit_complete(args[3], args[4])
 			CallBack().callback(args[3])
 	elif len(args) == 7:
-		if args[0] == "AssetTask":    # "AssetTask" "HAC" "rig" "liangcy" "fileName" "command_id"
+		if args[0] == "AssetTask":    # "AssetTask" "HAC" "rig" "liangcy" "fileName" "command_id" "IP"
 			TronProject().CreateAsset(args[1].upper(), args[2], args[3], args[4])
 			CallBack().callback(args[5])
-			args = args[5] + '|' + args[1] + '|' + args[2] + '|' + args[3] + '|' + args[4] + "|AssetTask"
+			args = args[6] + '|' + args[1] + '|' + args[2] + '|' + args[3] + '|' + args[4] + "|AssetTask"
 			clientLink(args)
 	elif len(args) == 9:
 		if args[0] == "ShotTask":   # "ShotTask" "HAC" "01" "001" "rig" "liangcy" "fileName" "command_id" "ip"
