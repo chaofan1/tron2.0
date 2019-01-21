@@ -6,9 +6,9 @@
 import socket
 import os,time
 import logging
-from config import log_path_server
+import config
 
-logging.basicConfig(filename=log_path_server + time.strftime("%Y%m%d") + '.log', level=logging.INFO,
+logging.basicConfig(filename=config.log_path_server + time.strftime("%Y%m%d") + '.log', level=logging.INFO,
 					format="%(asctime)s - %(levelname)s - %(message)s")
 
 
@@ -17,7 +17,7 @@ def clientLink(data):
     clientIP = args[0]
     task = args[-1]
     senStr = '|'.join(args[1:])
-    serverName = "/Tron"
+    serverName = config.All
 
     HOST = clientIP
     PORT = 29401
@@ -51,8 +51,8 @@ def clientLink(data):
                         xml_path = serverName+'/'+xml_path
                         os.remove(xml_path)
                         logging.info(ser_recv_path + ' already chmod 555' + '\n')
-            s.close()
-            logging.info('client close' + '\n')
+        s.close()
+        logging.info('client close' + '\n')
 
 
 if __name__ == '__main__':

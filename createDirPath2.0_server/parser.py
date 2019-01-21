@@ -109,18 +109,18 @@ def _init_():
 			CallBack().callback_pack(args[3])
 			CallBack().callback(args[4])
 	elif len(args) == 6:
-		if args[0] == "AssetTask":    # "AssetTask" "HAC" "rig" "liangcy" "fileName" "command_id"
-			TronProject().CreateAsset(args[1].upper(), args[2], args[3], args[4])
-			CallBack().callback(args[5])
-			args = args[5] + '|' + args[1] + '|' + args[2] + '|' + args[3] + '|' + args[4] + "|AssetTask"
-			clientLink(args)
-
-		elif args[0] == "Transit":  # "Transit" "json路径" “公司_项目_id” "transit_id" "user_id" “command_id”
+		if args[0] == "Transit":  # "Transit" "json路径" “公司_项目_id” "transit_id" "user_id" “command_id”
 			# 或 "Transit" "路径" “文件名” "transit_id" 'user_id' “command_id”
 			transit(args[1], args[2])
 			CallBack().callback_transit(args[5])
 			CallBack().callback_transit_complete(args[3], args[4])
 			CallBack().callback(args[3])
+	elif len(args) == 7:
+		if args[0] == "AssetTask":    # "AssetTask" "HAC" "rig" "liangcy" "fileName" "command_id"
+			TronProject().CreateAsset(args[1].upper(), args[2], args[3], args[4])
+			CallBack().callback(args[5])
+			args = args[5] + '|' + args[1] + '|' + args[2] + '|' + args[3] + '|' + args[4] + "|AssetTask"
+			clientLink(args)
 	elif len(args) == 9:
 		if args[0] == "ShotTask":   # "ShotTask" "HAC" "01" "001" "rig" "liangcy" "fileName" "command_id" "ip"
 			TronProject().CreateShot(args[1].upper(), args[2], args[3], args[4], args[5], args[6])
