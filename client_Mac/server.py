@@ -148,14 +148,14 @@ def handle(conn):
 			CallBack().common_callback(command_id)
 			print('clip3 end')
 
-		elif data_split[-1] == 'ShotTask':   # 提交发布弹框
+		elif data_split[-1] == 'ShotTask' or data_split[-1] == 'AssetTask':  # 提交发布弹框
 			# "HAC" "01" "001" "rig" "liangcy" "fileName" "ShotTask"
-			projectName,seqName,shotName,type_,userName,fileName,UpTask = data_split
-			file_path = projectName + sep + seqName + sep + shotName + sep + 'Stuff' + \
-						sep + type_ + sep + 'publish' + sep + fileName
-			# fileList = UploadFile().select_files()
-			# for file in fileList:
-			# 	shutil.copy(file, file_path)
+			if data_split[-1] == 'ShotTask':
+				projectName, seqName, shotName, type_, userName, fileName, UpTask = data_split
+				file_path = projectName + sep + seqName + sep + shotName + sep + 'Stuff' + sep + type_ + sep + 'publish' + sep + fileName
+			else:
+				projectName, type_, userName, fileName, UpTask = data_split
+				file_path = projectName + sep + 'Stuff' + sep + type_ + sep + 'publish' + sep + fileName
 			if type_ == "lgt" or type_ == "cmp":
 				os.popen('open %s' % (server_post + sep + file_path)).close()
 			else:

@@ -112,6 +112,9 @@ def _init_():
 		if args[0] == "AssetTask":    # "AssetTask" "HAC" "rig" "liangcy" "fileName" "command_id"
 			TronProject().CreateAsset(args[1].upper(), args[2], args[3], args[4])
 			CallBack().callback(args[5])
+			args = args[5] + '|' + args[1] + '|' + args[2] + '|' + args[3] + '|' + args[4] + "|AssetTask"
+			clientLink(args)
+
 		elif args[0] == "Transit":  # "Transit" "json路径" “公司_项目_id” "transit_id" "user_id" “command_id”
 			# 或 "Transit" "路径" “文件名” "transit_id" 'user_id' “command_id”
 			transit(args[1], args[2])

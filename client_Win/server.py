@@ -153,14 +153,17 @@ def handle(conn):
 			file_path, file_name, sql_data, UpTask = data_split
 			UploadFile().upload_reference(server_ref, file_path, file_name, sql_data)
 
-		elif data_split[-1] == 'ShotTask':   # 提交发布弹框
+		elif data_split[-1] == 'ShotTask' or data_split[-1] == 'AssetTask':   # 提交发布弹框
 			# "HAC" "01" "001" "rig" "liangcy" "fileName" "ShotTask"
-			projectName,seqName,shotName,type_,userName,fileName,UpTask = data_split
-			file_path = projectName + sep + seqName + sep + shotName + sep + 'Stuff' + \
-						sep + type_ + sep + 'publish' + sep + fileName
+			if data_split[-1] == 'ShotTask':
+				projectName,seqName,shotName,type_,userName,fileName,UpTask = data_split
+				file_path = projectName + sep + seqName + sep + shotName + sep + 'Stuff' + sep + type_ + sep + 'publish' + sep + fileName
 			# fileList = UploadFile().select_files()
 			# for file in fileList:
 			# 	shutil.copy(file, file_path)
+			else:
+				projectName, type_, userName, fileName, UpTask = data_split
+				file_path = projectName + sep + 'Stuff' + sep + type_ + sep + 'publish' + sep + fileName
 			if type_ == "lgt" or type_ == "cmp":
 				os.popen('explorer.exe %s' % (server_post + sep + file_path)).close()
 				print (server_post + file_path)
