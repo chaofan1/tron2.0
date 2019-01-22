@@ -21,6 +21,7 @@ passwd = config.passwd
 db_name = config.db_name
 table_name = config.clip_table_name
 to_php_url = config.to_php_url
+server_all = config.All
 
 
 def write_sql(info, shot_video_path, shot_image, shot_number):
@@ -42,10 +43,10 @@ def write_sql(info, shot_video_path, shot_image, shot_number):
         material_frame_length = info.get('material_frame_length')   # 素材帧长
         time_start = info.get('time_start')  # 开始时间
         duration = info.get('duration')   # 持续时间
-        shot_video_path = re.search(r'.*(All.*)', shot_video_path).group(1)
-        shot_image = re.search(r'.*(All.*)', shot_image).group(1)
-        shot_video_path = shot_video_path.replace('All', 'uploads/Projects')
-        shot_image = shot_image.replace('All', 'uploads/Projects')
+        # shot_video_path = re.search(r'.*(All.*)', shot_video_path).group(1)
+        # shot_image = re.search(r'.*(All.*)', shot_image).group(1)
+        shot_video_path = shot_video_path.replace(server_all, 'uploads/Projects')
+        shot_image = shot_image.replace(server_all, 'uploads/Projects')
         plan_start_timestamp = int(time.time())
         plan_end_timestamp = plan_start_timestamp
 
@@ -272,8 +273,8 @@ def putter(task_queue, xml_path, project_id, field_id, data, path, task):
                                 img_path_new_all = os.path.join(dirname_new, img_name)     # 新的缩略图路径
                                 # shot_video_path_new = re.search(r'.*(/Volumes/All.*)', video_path_new_all).group(1)
                                 # shot_image_new = re.search(r'.*(/Volumes/All.*)', img_path_new_all).group(1)
-                                shot_video_path_new = video_path_new_all.replace('/Volumes/All','uploads/Projects')
-                                shot_image_new = img_path_new_all.replace('/Volumes/All','uploads/Projects')
+                                shot_video_path_new = video_path_new_all.replace(server_all,'uploads/Projects')
+                                shot_image_new = img_path_new_all.replace(server_all,'uploads/Projects')
                                 update_sql = "update oa_shot set shot_number='%s',shot_name='%s',shot_video_path='%s',shot_image='%s' where project_id=%s and field_id=%s and shot_number='%s'"\
                                              %(shot_number_new,shot_number_new,shot_video_path_new,shot_image_new,project_id,field_id,shot_number_old)
                                 print update_sql
