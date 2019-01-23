@@ -4,6 +4,7 @@ import subprocess
 import shutil
 from clipLine import to_php
 import sys
+import config
 reload(sys)
 sys.setdefaultencoding('utf-8')
 
@@ -19,7 +20,7 @@ def insert(output_mov, input_img, frame):
         backup_mov = os.path.join(mov_path, mov_name_new)
     os.rename(output_mov, backup_mov)
     frame = str(int(round(float(frame))))  # str(int(float(tim) * float(rate))-1)  # 计算要替换第几帧
-    ffmpeg = 'ffmpeg'
+    ffmpeg = config.ffmpeg
     command = "%s -i %s -i %s -loglevel -8 -y -g 2 -keyint_min 2 -filter_complex " % (ffmpeg, backup_mov, input_img) + \
               repr("[0:v][1:v]overlay=enable='between(n,%s,%s)'") % (frame, frame) + " -acodec copy %s" % output_mov
     su = subprocess.Popen(command, shell=True)
