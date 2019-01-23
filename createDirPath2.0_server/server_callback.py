@@ -40,7 +40,7 @@ class CallBack:
 
     def callback_download(self, id, user_id):
         self.url = 'http://%s/python/download_complete' % self.ip
-        self.query_args = {'id': id, 'user_id': user_id}
+        self.query_args = {'ids': id, 'user_id': user_id}
         self.request_get()
 
     def request_post(self):

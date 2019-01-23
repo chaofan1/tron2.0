@@ -77,20 +77,21 @@ def _init_():
 		TronProject().CreateDai(args[1])
 		dailiesData = args[2]+"|Dailies2"
 		clientLink(dailiesData)
-	elif args[0] == "Del":  # "Del" "{公司_项目_主键id: 时间戳,  公司_项目_主键id: 时间戳"
+	elif args[0] == "Del":  # "Del" "{公司_项目_主键id: 时间戳,  公司_项目_主键id: 时间戳}"
 		TronDistribute().Deldir(args[1])
 	elif args[0] == "Reference":    # "Reference" "HAC" "shots"  "192.168.1.85|x:/DHG/References/inner/fileName|373"
 		TronProject().CreateRef(args[1].upper(), args[2])
 		referencesData = args[3] + "|Reference"
 		clientLink(referencesData)
-	elif args[0] == "download":  # 'download' 'tron_TXT_7|ip' 'id' 'user_id' 或 'download' 'tron_TXT_7|路径' 'id' 'user_id'
+	elif args[0] == "download":  # 'download' 'tron_TXT_7|路径' 'id' 'user_id'
 		key, arg2 = args[1].split('|')
-		downloadPath = arg2
-		res = re.compile('^((25[0-5]|2[0-4]\d|[01]?\d\d?)\.){3}(25[0-5]|2[0-4]\d|[01]?\d\d?)$')
-		if res.match(arg2):
-			clipData = arg2 + '|' + key + '|download'
-			downloadPath = clientLink(clipData)
-		AliyunOss('', key, '', '', '', '').download(downloadPath)
+		AliyunOss('', key, '', '', '', '').download(arg2)
+		CallBack().callback_download(args[2], args[3])
+	elif args[0] == "download_out":  # 'download_out' '[tron_TXT_7, tron_TXT_6]' 'ids' 'user_id' 'ip'
+		clipData = args[4] + '|' + args[1] + '|download'
+		downloadPath = clientLink(clipData)
+		for fileName in args[1]:
+			AliyunOss('', fileName, '', '', '', '').download(downloadPath)
 		CallBack().callback_download(args[2], args[3])
 	elif args[0] == "Seq":  # createProject.CreateSeq(proName, seqName)
 		TronProject().CreateSeq(args[1].upper(), args[2])
