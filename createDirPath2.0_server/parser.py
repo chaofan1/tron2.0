@@ -77,8 +77,8 @@ def _init_():
 		TronProject().CreateDai(args[1])
 		dailiesData = args[2]+"|Dailies2"
 		clientLink(dailiesData)
-	elif args[0] == "Del":  # "Del" "公司_项目_主键id" "时间戳"
-		TronDistribute().Deldir(args[1], args[2])
+	elif args[0] == "Del":  # "Del" "{公司_项目_主键id: 时间戳,  公司_项目_主键id: 时间戳"
+		TronDistribute().Deldir(args[1])
 	elif args[0] == "Reference":    # "Reference" "HAC" "shots"  "192.168.1.85|x:/DHG/References/inner/fileName|373"
 		TronProject().CreateRef(args[1].upper(), args[2])
 		referencesData = args[3] + "|Reference"

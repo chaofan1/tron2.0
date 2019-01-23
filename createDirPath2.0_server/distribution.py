@@ -185,14 +185,16 @@ class TronDistribute:
     #         logging.error(e)w
     #         return 1, e
 
-    def Deldir(self, dirname, timeStamp):
-        try:
-            create_time = time.strftime("%Y%m%d", time.localtime(eval(timeStamp)))
-            cpname, proname, user_id = dirname.split('_')
-            shutil.rmtree(outputpath % (proname, create_time) + os.sep + dirname)
-        except Exception as e:
-            logging.info('删除文件出错')
-            logging.error(e)
+    def Deldir(self, dir_time_str):
+        dir_time_dic = eval(dir_time_str)
+        for dirname, timeStamp in dir_time_dic.items():
+            try:
+                create_time = time.strftime("%Y%m%d", time.localtime(eval(timeStamp)))
+                cpname, proname, user_id = dirname.split('_')
+                shutil.rmtree(outputpath % (proname, create_time) + os.sep + dirname)
+            except Exception as e:
+                logging.info('删除文件出错')
+                logging.error(e)
 
     def result(self, req, res):
         res1, res2 = res
