@@ -38,9 +38,9 @@ class CallBack:
         self.query_args = {'ids': transit_ids, 'user_id': user_id}
         self.request_get()
 
-    def callback_download(self, id, user_id):
+    def callback_download(self, ids, user_id):
         self.url = 'http://%s/python/download_complete' % self.ip
-        self.query_args = {'ids': id, 'user_id': user_id}
+        self.query_args = {'ids': ids, 'user_id': user_id}
         self.request_get()
 
     def request_post(self):
