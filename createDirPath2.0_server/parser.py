@@ -102,12 +102,14 @@ def _init_():
 		TronDistribute().argParse(args[1], args[2])
 		CallBack().callback_pack(args[3])
 		CallBack().callback(args[4])
-	elif args[0] == "Transit":  # "Transit" "json路径" “公司_项目_id” "transit_id" "user_id" “command_id”
-		# 或 "Transit" "路径" “文件名” "transit_id" 'user_id' “command_id”
+	elif args[0] == "Transit_out":  # "Transit" "路径" “文件名” "transit_id" 'user_id' “command_id”
 		transit(args[1], args[2])
 		CallBack().callback_transit(args[5])
 		CallBack().callback_transit_complete(args[3], args[4])
-		CallBack().callback(args[3])
+	elif args[0] == "Transit":  # "Transit" "json路径" "[transit_id,transit_id1]" "user_id" “command_id”
+		transit(args[1])
+		CallBack().callback_transit(args[4])
+		CallBack().callback_transit_complete(args[2], args[3])
 	elif args[0] == "AssetTask":    # "AssetTask" "HAC" "rig" "liangcy" "fileName" "command_id" "IP"
 		TronProject().CreateAsset(args[1].upper(), args[2], args[3], args[4])
 		CallBack().callback(args[5])

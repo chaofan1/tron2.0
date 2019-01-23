@@ -28,14 +28,14 @@ class CallBack:
         self.query_args = {'id': pack_id}
         self.request_get()
 
-    def callback_transit(self, transit_id):
+    def callback_transit(self, command_id):
         self.url = 'http://%s/python/distribute/callback' % self.ip
-        self.query_args = {'command_id': transit_id}
+        self.query_args = {'command_id': command_id}
         self.request_get()
 
-    def callback_transit_complete(self, transit_id, user_id):
+    def callback_transit_complete(self, transit_ids, user_id):
         self.url = 'http://%s/python/send_complete' % self.ip
-        self.query_args = {'id': transit_id, 'user_id': user_id}
+        self.query_args = {'ids': transit_ids, 'user_id': user_id}
         self.request_get()
 
     def callback_download(self, id, user_id):

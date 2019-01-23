@@ -202,24 +202,23 @@ class TronDistribute:
             raise Finish
 
 
-def transit(Path, dirName):
-    print Path + '\t' + dirName
-    logging.info('transit:' + Path+'|' + dirName)
+def transit(Path, dirName=''):
+    logging.info('transit:' + Path)
     sep = os.sep
     if '.json' in Path:
         with open(Path, 'r') as f:
             response = json.load(f)
+        project_name = response['project_name']
         user_name = response['user_name']
-        # outuser_name = response['outuser_name']
-        cpname = response['company_name']
+        company_name = response['company_name']
         email = response['email']
-        remark = response['remark']
-        create_time = response['create_time']
-        create_time = time.strftime("%Y%m%d", time.localtime(eval(create_time)))
-        projectName = dirName.split('_')[1]
-        outputPath = outputpath % (projectName, create_time)
-        tranfilePath = outputPath + sep + dirName
-        AliyunOss(tranfilePath, dirName, cpname, email, user_name, remark).uploadFile()
+
+        for onefile in response['data']:
+            remark = onefile['remark']
+            create_time = time.strftime("%Y%m%d", time.localtime(onefile['create_time']))
+            file_name = onefile['file_name']
+            tranfilePath = outputpath % (project_name, create_time) + sep + file_name
+            AliyunOss(tranfilePath, file_name, company_name, email, user_name, remark).uploadFile()
         #os.remove(Path)  # 测试或上线打开，删除json文件
     else:
         AliyunOss(Path, dirName, '', '', '', '').uploadFile()
