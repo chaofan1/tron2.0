@@ -14,8 +14,6 @@ import createThumbnail
 from httpUrl import CallBack
 from upload import UploadFile
 import config
-from clipLine import start_clip,to_php
-from clipLine2 import Pack, insert
 import sys
 reload(sys)
 sys.setdefaultencoding('utf-8')
@@ -166,44 +164,6 @@ def handle(conn):
 			else:
 				os.popen('explorer.exe %s' % (server_all + sep + file_path)).close()
 				print (server_all + file_path)
-
-		elif data_split[-1] == 'clip1':  # 转码
-			xml_path, path, project_id, field_id, xml_id, command_id, UpTask = data_split
-			xml_path = server_all + sep + xml_path
-			video_path = server_all + sep + path
-			start_clip(xml_path, video_path, project_id, field_id, xml_id, UpTask)
-			to_php(1, 0, project_id, field_id, xml_id, UpTask)
-			conn.send(path)
-			print('clip1 end')
-			CallBack().common_callback(command_id)
-
-		elif data_split[-1] == 'add_xml':
-			xml_path, path, project_id, field_id, xml_id, command_id, UpTask = data_split
-			xml_path = server_all + sep + xml_path
-			video_path = server_all + sep + path
-			start_clip(xml_path, video_path, project_id, field_id, xml_id, UpTask)
-			conn.send(path)
-			to_php(1, 0, project_id, field_id, xml_id, UpTask)
-			CallBack().common_callback(command_id)
-			print('add_xml end')
-
-		elif data_split[-1] == 'clip2':   # 回插
-			video_path, img_path, frame, command_id, UpTask = data_split
-			video_path = server_all + sep + video_path
-			img_path = server_all + sep + img_path
-			insert(video_path, img_path, frame)
-			conn.send('path')
-			CallBack().common_callback(command_id)
-			print('clip2 end')
-
-		elif data_split[-1] == 'clip3':   # 打包
-			pro_scene, command_id, UpTask = data_split
-			pro_path = server_post+'/'+pro_scene
-			pack_path = server_post + '/' + pro_scene + '/Clip_Pack'
-			Pack().pack(pro_path, pack_path)
-			os.popen('open %s' % pack_path).close()
-			CallBack().common_callback(command_id)
-			print('clip3 end')
 
 	conn.close()
 
