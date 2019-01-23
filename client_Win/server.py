@@ -25,12 +25,12 @@ def myServer():
 	if platform.system() != 'Windows':
 		print '这是Windows平台，请使用相应脚本！'
 		exit()
-	localIP = socket.gethostbyname(socket.gethostname())
-	HOST = localIP
+	HOST = socket.gethostbyname(socket.gethostname())
 	PORT = 29401
 	s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 	s.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
 	s.bind((HOST, PORT))
+	print 'Local IP:', HOST
 	print "waiting for connection ......"
 	s.listen(5)
 	while 1:
