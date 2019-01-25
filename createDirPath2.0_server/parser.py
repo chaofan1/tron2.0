@@ -91,6 +91,8 @@ def _init_():
 	elif args[0] == "download_out":  # 'download_out' '[tron_TXT_7, tron_TXT_6]' 'ids' 'user_id' 'ip'
 		clipData = args[4] + '|' + args[1] + '|download'
 		downloadPath = clientLink(clipData)
+		logging.info(args[1],type(args[1]))
+		logging.info(eval(args[1]),type(eval(args[1])))
 		for fileName in eval(args[1]):
 			AliyunOss('', fileName, '', '', '', '').download(downloadPath)
 		CallBack().callback_download(args[2], args[3])
@@ -110,7 +112,7 @@ def _init_():
 		if res:
 			CallBack().callback_transit(args[5])
 			CallBack().callback_transit_complete(args[3], args[4])
-	elif args[0] == "Transit":  # "Transit" "json路径" "[transit_id,transit_id1]" "user_id" “command_id”
+	elif args[0] == "Transit":  # "Transit" "json路径" "transit_id,transit_id1" "user_id" “command_id”
 		res = transit(args[1])
 		if res:
 			CallBack().callback_transit(args[4])

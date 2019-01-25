@@ -32,51 +32,57 @@ class AliyunOss():
 
     def file_name(self):
         try:
-            L = []
-            for root, dirs, files in os.walk(self.filePath):
-                for file in files:
-                    L.append(os.path.join(root, file))
-            logging.info('get uploadFiles ok')
-            return L
-
+            if os.path.exists(self.filePath):
+                L = []
+                for root, dirs, files in os.walk(self.filePath):
+                    for file in files:
+                        L.append(os.path.join(root, file))
+                logging.info('get uploadFiles ok')
+                return L
+            else:
+                logging.error('filepath:'+self.filePath + ' not exist')
+                return False
         except Exception as e:
             logging.info('get uploadFiles error')
             logging.error(e)
+            return False
 
     def uploadFile(self):
         filelist = self.file_name()
-        try:
-            for file in filelist:
-                fileDir = file.split(self.dirname)[1]
-                key = (self.dirname + fileDir).replace('\\', '/')
-                total_size = os.path.getsize(file)
-                # determine_part_size方法用来确定分片大小。
-                part_size = determine_part_size(total_size, preferred_size=100 * 1024)
+        if filelist:
+            try:
+                for file in filelist:
+                    fileDir = file.split(self.dirname)[1]
+                    key = (self.dirname + fileDir).replace('\\', '/')
+                    total_size = os.path.getsize(file)
+                    # determine_part_size方法用来确定分片大小。
+                    part_size = determine_part_size(total_size, preferred_size=100 * 1024)
 
-                # 初始化分片。
-                upload_id = self.bucket.init_multipart_upload(key).upload_id
-                parts = []
+                    # 初始化分片。
+                    upload_id = self.bucket.init_multipart_upload(key).upload_id
+                    parts = []
 
-                # 逐个上传分片。
-                with open(file, 'rb') as fileobj:
-                    part_number = 1
-                    offset = 0
-                    while offset < total_size:
-                        num_to_upload = min(part_size, total_size - offset)
-                        # SizedFileAdapter(fileobj, size)方法会生成一个新的文件对象，重新计算起始追加位置。
-                        result = self.bucket.upload_part(key, upload_id, part_number,
-                                                         SizedFileAdapter(fileobj, num_to_upload))
-                        parts.append(PartInfo(part_number, result.etag))
-                        offset += num_to_upload
-                        part_number += 1
+                    # 逐个上传分片。
+                    with open(file, 'rb') as fileobj:
+                        part_number = 1
+                        offset = 0
+                        while offset < total_size:
+                            num_to_upload = min(part_size, total_size - offset)
+                            # SizedFileAdapter(fileobj, size)方法会生成一个新的文件对象，重新计算起始追加位置。
+                            result = self.bucket.upload_part(key, upload_id, part_number,
+                                                             SizedFileAdapter(fileobj, num_to_upload))
+                            parts.append(PartInfo(part_number, result.etag))
+                            offset += num_to_upload
+                            part_number += 1
 
-                # 完成分片上传。
-                self.bucket.complete_multipart_upload(key, upload_id, parts)
-            logging.info('upload file to yun ok')
-            self.sendMail()
-        except Exception as e:
-            logging.info('upload file to yun error')
-            logging.error(e)
+                    # 完成分片上传。
+                    self.bucket.complete_multipart_upload(key, upload_id, parts)
+                logging.info('upload file to yun ok')
+                self.sendMail()
+            except Exception as e:
+                logging.info('upload file to yun error')
+                logging.error(e)
+
 
     def sendMail(self):
         if self.email:
@@ -194,4 +200,4 @@ class AliyunOss():
     #     else:
     #         logging.info('create userAccess error')
 if __name__ == "__main__":
-    AliyunOss('X:\\DHF\\Vender\\outgoing\\20190107\\sg_DHF_90', 'sg_DHF_90', 'sg', '', '', '').uploadFile()
+    AliyunOss('T:\\All2.0\\TTT\\Vender\\outgoing\\20190125\\DSN_TTT_23', 'sg_DHF_90', 'sg', '', '', '').uploadFile()
