@@ -78,9 +78,11 @@ def handle(conn):
 			file_path = file_path.replace("/", "\\")
 			projectName = file_path.split('_')[1]
 			create_time = time.strftime("%Y%m%d",time.localtime(eval(create_time)))
+			path = server_outcompany %(projectName,create_time)+ file_path
+			print path
 			try:
-				if os.path.exists(server_outcompany %(projectName,create_time)+ file_path):
-					os.popen('explorer.exe %s' % (server_outcompany %(projectName,create_time) + file_path)).close()
+				if os.path.exists(path):
+					os.popen('explorer.exe %s' % path).close()
 				else:
 					print 'the directory not exit'
 			except Exception as e:
@@ -99,6 +101,7 @@ def handle(conn):
 			downloadPath = UploadFile().select_dir('')
 			if downloadPath.startswith('L'):
 				pathList = downloadPath.split('\\')
+
 				pathList[0] = 'Library'
 				downloadPath ='/' + '/'.join(pathList)
 			elif downloadPath.startswith('X'):

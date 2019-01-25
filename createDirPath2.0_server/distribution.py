@@ -73,9 +73,11 @@ class TronDistribute:
             logging.info('打开文件，解析参数成功' + self.filePath )
             # 将列表放到线程池，去copy文件
             self.putThread('copy', Paths)
+            return True
         except Exception as e:
             logging.info('打开文件,解析参数出错')
             logging.error(e)
+            return False
 
     def putThread(self, task, publicArg=None):
         # 接受到argParse函数传递的大列表，用线程池去拷贝
@@ -205,23 +207,30 @@ class TronDistribute:
 def transit(Path, dirName=''):
     logging.info('transit:' + Path)
     sep = os.sep
-    if '.json' in Path:
-        with open(Path, 'r') as f:
-            response = json.load(f)
-        project_name = response['project_name']
-        user_name = response['user_name']
-        company_name = response['company_name']
-        email = response['email']
+    try:
+        if '.json' in Path:
+            with open(Path, 'r') as f:
+                response = json.load(f)
+            project_name = response['project_name']
+            user_name = response['user_name']
+            company_name = response['company_name']
+            email = response['email']
 
-        for onefile in response['data']:
-            remark = onefile['remark']
-            create_time = time.strftime("%Y%m%d", time.localtime(onefile['create_time']))
-            file_name = onefile['file_name']
-            tranfilePath = outputpath % (project_name, create_time) + sep + file_name
-            AliyunOss(tranfilePath, file_name, company_name, email, user_name, remark).uploadFile()
-        #os.remove(Path)  # 测试或上线打开，删除json文件
-    else:
-        AliyunOss(Path, dirName, '', '', '', '').uploadFile()
+            for onefile in response['data']:
+                remark = onefile['remark']
+                create_time = time.strftime("%Y%m%d", time.localtime(eval(onefile['create_time'])))
+                file_name = onefile['file_name']
+                tranfilePath = outputpath % (project_name, create_time) + sep + file_name
+                AliyunOss(tranfilePath, file_name, company_name, email, user_name, remark).uploadFile()
+            #os.remove(Path)  # 测试或上线打开，删除json文件
+        else:
+            AliyunOss(Path, dirName, '', '', '', '').uploadFile()
+        return True
+    except Exception as e:
+        logging.info("fail to transit")
+        logging.error(e)
+        return False
+
 
 
 if __name__ == "__main__":

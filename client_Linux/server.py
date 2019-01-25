@@ -82,9 +82,11 @@ def handle(conn):
 			file_path, create_time, Uptask = data_split
 			projectName = file_path.split('_')[1]
 			create_time = time.strftime("%Y%m%d", time.localtime(eval(create_time)))
+			path = server_outcompany % (projectName, create_time) + file_path
+			print path
 			try:
-				if os.path.exists(server_outcompany % (projectName, create_time) + file_path):
-					os.popen('open %s' % (server_outcompany % (projectName, create_time) + file_path)).close()
+				if os.path.exists(path):
+					os.popen('open %s' % path).close()
 				else:
 					print 'the directory not exit'
 			except Exception as e:

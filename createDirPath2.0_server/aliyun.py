@@ -123,8 +123,12 @@ class AliyunOss():
                     os.makedirs(path + os.sep + localDir)
                 # 下载OSS文件到本地文件。如果指定的本地文件存在会覆盖，不存在则新建。
                 self.bucket.get_object_to_file(ObjectName, path+os.sep+ObjectName)
-        except:
+            return True
+        except Exception as e:
+            logging.info("download fail" + self.dirname)
+            logging.error(e)
             print('下载失败，请检查网络')
+            return False
 
 
 

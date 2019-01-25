@@ -85,12 +85,13 @@ def _init_():
 		clientLink(referencesData)
 	elif args[0] == "download":  # 'download' 'tron_TXT_7|路径' 'id' 'user_id'
 		key, arg2 = args[1].split('|')
-		AliyunOss('', key, '', '', '', '').download(arg2)
-		CallBack().callback_download(args[2], args[3])
+		res = AliyunOss('', key, '', '', '', '').download(arg2)
+		if res:
+			CallBack().callback_download(args[2], args[3])
 	elif args[0] == "download_out":  # 'download_out' '[tron_TXT_7, tron_TXT_6]' 'ids' 'user_id' 'ip'
 		clipData = args[4] + '|' + args[1] + '|download'
 		downloadPath = clientLink(clipData)
-		for fileName in args[1]:
+		for fileName in eval(args[1]):
 			AliyunOss('', fileName, '', '', '', '').download(downloadPath)
 		CallBack().callback_download(args[2], args[3])
 	elif args[0] == "Seq":  # createProject.CreateSeq(proName, seqName)
@@ -100,17 +101,20 @@ def _init_():
 		TronProject().CreateScene(args[1].upper(), args[2], args[3])
 		CallBack().callback(args[4])
 	elif args[0] == "Pack":  # "Pack" "Json路径" "时间戳" "打包id" "command_id"
-		TronDistribute().argParse(args[1], args[2])
-		CallBack().callback_pack(args[3])
-		CallBack().callback(args[4])
+		res = TronDistribute().argParse(args[1], args[2])
+		if res:
+			CallBack().callback_pack(args[3])
+			CallBack().callback(args[4])
 	elif args[0] == "Transit_out":  # "Transit" "路径" “文件名” "transit_id" 'user_id' “command_id”
-		transit(args[1], args[2])
-		CallBack().callback_transit(args[5])
-		CallBack().callback_transit_complete(args[3], args[4])
+		res = transit(args[1], args[2])
+		if res:
+			CallBack().callback_transit(args[5])
+			CallBack().callback_transit_complete(args[3], args[4])
 	elif args[0] == "Transit":  # "Transit" "json路径" "[transit_id,transit_id1]" "user_id" “command_id”
-		transit(args[1])
-		CallBack().callback_transit(args[4])
-		CallBack().callback_transit_complete(args[2], args[3])
+		res = transit(args[1])
+		if res:
+			CallBack().callback_transit(args[4])
+			CallBack().callback_transit_complete(args[2], args[3])
 	elif args[0] == "AssetTask":    # "AssetTask" "HAC" "rig" "liangcy" "fileName" "command_id" "IP"
 		TronProject().CreateAsset(args[1].upper(), args[2], args[3], args[4])
 		CallBack().callback(args[5])
