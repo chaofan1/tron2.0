@@ -101,7 +101,6 @@ def handle(conn):
 			downloadPath = UploadFile().select_dir('')
 			if downloadPath.startswith('L'):
 				pathList = downloadPath.split('\\')
-
 				pathList[0] = 'Library'
 				downloadPath ='/' + '/'.join(pathList)
 			elif downloadPath.startswith('X'):
@@ -123,6 +122,10 @@ def handle(conn):
 			elif downloadPath.startswith('Y'):
 				pathList = downloadPath.split('\\')
 				pathList[0] = 'Dailies'
+				downloadPath = '/' + '/'.join(pathList)
+			elif downloadPath.startswith('T'):
+				pathList = downloadPath.split('\\')
+				pathList[0] = ''
 				downloadPath = '/' + '/'.join(pathList)
 			print downloadPath
 			conn.sendall(downloadPath)

@@ -91,8 +91,6 @@ def _init_():
 	elif args[0] == "download_out":  # 'download_out' '[tron_TXT_7, tron_TXT_6]' 'ids' 'user_id' 'ip'
 		clipData = args[4] + '|' + args[1] + '|download'
 		downloadPath = clientLink(clipData)
-		logging.info(args[1],type(args[1]))
-		logging.info(eval(args[1]),type(eval(args[1])))
 		for fileName in eval(args[1]):
 			AliyunOss('', fileName, '', '', '', '').download(downloadPath)
 		CallBack().callback_download(args[2], args[3])
