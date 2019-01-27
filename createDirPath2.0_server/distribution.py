@@ -45,8 +45,10 @@ class TronDistribute:
                     shotNum = shot['shot_number']
                     material = shot['material']
                     for cp in response['company_data']:
+                        # basePath = self.outputPath + os.sep + cp['pack_dir_name'] \
+                        #            + os.sep + self.progectName + os.sep + fieldName + os.sep + shotNum + os.sep
                         basePath = self.outputPath + os.sep + cp['pack_dir_name'] \
-                                   + os.sep + self.progectName + os.sep + fieldName + os.sep + shotNum + os.sep
+                                   + os.sep + fieldName + os.sep + shotNum + os.sep
                         if not os.path.exists(basePath):
                             os.makedirs(basePath)
                         Paths.append(((basePath, material), None))
@@ -57,16 +59,20 @@ class TronDistribute:
                     # extension_name = tache['extension_name']
                     linux_path = tache['linux_path']
                     for cp in response['company_data']:
-                        asset_basepath = self.outputPath + os.sep + cp['pack_dir_name']\
-                                         + os.sep + self.progectName + os.sep + "assets" + os.sep + tache_name
+                        # asset_basepath = self.outputPath + os.sep + cp['pack_dir_name']\
+                        #                  + os.sep + self.progectName + os.sep + "assets" + os.sep + tache_name
+                        asset_basepath = self.outputPath + os.sep + cp['pack_dir_name'] \
+                                         + os.sep + "assets" + os.sep + tache_name
                         if not os.path.exists(asset_basepath):
                             os.makedirs(asset_basepath)
                         Paths.append(((asset_basepath, linux_path), None))
             # 解析相关文件，将相关文件所在路径与相关文件目标路径放到列表
             if referencesList:
                 for cp in response['company_data']:
+                    # referencesDir = self.outputPath + os.sep + cp['pack_dir_name'] \
+                    #                 + os.sep + self.progectName + os.sep + "references"
                     referencesDir = self.outputPath + os.sep + cp['pack_dir_name'] \
-                                    + os.sep + self.progectName + os.sep + "references"
+                                    + os.sep + "references"
                     if not os.path.exists(referencesDir):
                         os.makedirs(referencesDir)
                     Paths.append(((referencesDir, referencesList), None))

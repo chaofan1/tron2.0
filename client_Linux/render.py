@@ -20,14 +20,6 @@ class Select:
         return file_path
         sys.exit(self.app.exec_())
 
-    def select_files(self):
-        fileList = QtGui.QFileDialog.getOpenFileNames(self.mainWindow,
-                                                QString('select files'),
-                                                self.inPathFile,
-                                                options=QtGui.QFileDialog.ReadOnly)
-        return fileList
-        sys.exit(self.app.exec_())
-
     def select_dir(self, inPathFile):
         file_path = QtGui.QFileDialog.getExistingDirectory(self.mainWindow, 'select your dir', inPathFile).toUtf8()
         return str(file_path)

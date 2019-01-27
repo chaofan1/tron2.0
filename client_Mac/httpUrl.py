@@ -41,4 +41,4 @@ class CallBack:
 if __name__ == '__main__':
     cd ="194","/ZML/Dailies/20161129", "whad", "References"
     CallBack().dai_callback(cd[0], cd[1], cd[2], cd[3])
-    CallBack().render_callback('23')
+

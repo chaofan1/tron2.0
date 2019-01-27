@@ -34,21 +34,10 @@ class UploadFile:
                                                                     options=QFileDialog.ReadOnly)
         self.fileOld = fileOld.__str__()
 
-    def select_files(self):
-        fileList = QFileDialog.getOpenFileNames(self.mainWindow,
-                                                                    QString('select files'),
-                                                                    self.inPathFile,
-                                                                    options=QFileDialog.ReadOnly)
-        return fileList
-
     def select_dir(self, inPathFile):
-        """
-
-        :rtype:
-        """
         file_path = QFileDialog.getExistingDirectory(self.mainWindow, 'select your dir', inPathFile).toUtf8()
         return str(file_path)
-        sys.exit(self.app.exec_())
+        # sys.exit(self.app.exec_())
 
     def download_success(self):
         QMessageBox.information(None, 'INFORMATION', u'下载成功！')
@@ -203,4 +192,4 @@ class UploadFile:
 
 
 if __name__ == '__main__':
-    UploadFile().select_files()
+    UploadFile().select_dir()
