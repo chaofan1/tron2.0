@@ -103,6 +103,8 @@ def handle(conn):
 			downloadPath = UploadFile().select_dir('')
 			if downloadPath.startswith('/Volumes/All/'):
 				downloadPath = downloadPath.split('/Volumes')[1].replace('All', 'Tron')
+			elif downloadPath.startswith('/Volumes/Tron/'):
+				downloadPath = downloadPath.split('/Volumes/Tron')[1]
 			else:
 				downloadPath = downloadPath.split('/Volumes')[1]
 			print downloadPath
