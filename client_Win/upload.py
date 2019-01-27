@@ -37,7 +37,7 @@ class UploadFile:
     def select_dir(self, inPathFile):
         file_path = QFileDialog.getExistingDirectory(self.mainWindow, 'select your dir', inPathFile).toUtf8()
         return str(file_path)
-        # sys.exit(self.app.exec_())
+        sys.exit(self.app.exec_())
 
     def download_success(self):
         QMessageBox.information(None, 'INFORMATION', u'下载成功！')

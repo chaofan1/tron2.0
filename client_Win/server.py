@@ -99,7 +99,9 @@ def handle(conn):
 		elif data_split[-1] == "download":   # huanyu_Fuy_1|download
 			print 'Do not choose local disk'
 			downloadPath = UploadFile().select_dir('')
-			if downloadPath.startswith('L'):
+			if downloadPath == '':
+				downloadPath = 'nothing selected'
+			elif downloadPath.startswith('L'):
 				pathList = downloadPath.split('\\')
 				pathList[0] = 'Library'
 				downloadPath ='/' + '/'.join(pathList)
@@ -127,8 +129,8 @@ def handle(conn):
 				pathList = downloadPath.split('\\')
 				pathList[0] = ''
 				downloadPath = '/' + '/'.join(pathList)
-			print downloadPath
-			conn.sendall(downloadPath)
+			print 'downloadPath:', downloadPath
+			conn.send(downloadPath)
 
 		elif data_split[-1] == "Dailies2":
 			file_path, file_name, command_id, UpTask = data_split

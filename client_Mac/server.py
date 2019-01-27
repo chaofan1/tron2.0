@@ -101,14 +101,16 @@ def handle(conn):
 		elif data_split[-1] == "download":  # huanyu_Fuy_1|download
 			print 'Do not choose local disk'
 			downloadPath = UploadFile().select_dir('')
-			if downloadPath.startswith('/Volumes/All/'):
+			if downloadPath == '':
+				downloadPath = 'nothing selected'
+			elif downloadPath.startswith('/Volumes/All/'):
 				downloadPath = downloadPath.split('/Volumes')[1].replace('All', 'Tron')
 			elif downloadPath.startswith('/Volumes/Tron/'):
 				downloadPath = downloadPath.split('/Volumes/Tron')[1]
 			else:
 				downloadPath = downloadPath.split('/Volumes')[1]
-			print downloadPath
-			conn.sendall(downloadPath)
+			print 'downloadPath:', downloadPath
+			conn.send(downloadPath)
 
 		elif data_split[-1] =="Reference":
 			file_path, file_name, sql_data, UpTask = data_split

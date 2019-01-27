@@ -119,9 +119,11 @@ def handle(conn):
 		elif data_split[-1] == "download":  # huanyu_Fuy_1|download
 			print 'Do not choose local disk'
 			downloadPath = Select().select_dir('')
-			if downloadPath.startswith('/All'):
+			if downloadPath == '':
+				downloadPath = 'nothing selected'
+			elif downloadPath.startswith('/All'):
 				downloadPath = downloadPath.replace('All', 'Tron')
-			print downloadPath
+			print 'downloadPath:', downloadPath
 			conn.sendall(downloadPath)
 
 		elif data_split[-1] == "Dailies2":
