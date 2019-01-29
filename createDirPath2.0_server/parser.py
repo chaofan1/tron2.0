@@ -64,11 +64,13 @@ def _init_():
 		TronProject().CreatePro(args[1].upper())  # createProject.CreatePro("HAC")
 		CallBack().callback(args[2])
 	elif args[0] == "Dailies1":  # "Dailies1" "/FUY/001/001/Stuff/cmp/" "IP|/FUY/001/001/Stuff/cmp|filename|command_id"
-		TronProject().CreateDai(args[1])
+		dai_filename = args[2].split("|")[2]
+		TronProject().CreateDai(args[1], dai_filename)
 		dailiesData = args[2]+"|Dailies1"
 		clientLink(dailiesData)
 	elif args[0] == "lgt_dai":   # "lgt_dai" "/FUY/001/001/Stuff/cmp/" "IP|/FUY/001/001/Stuff/cmp|filename|command_id|rate|帧长"
-		TronProject().CreateDai(args[1])
+		dai_filename = args[2].split("|")[2]
+		TronProject().CreateDai(args[1], dai_filename)
 		dailiesData = args[2]+"|lgt_dai"
 		clientLink(dailiesData)
 	elif args[0] == 'YunFolder':  # "YunFolder" "ip" "filepath|时间戳"

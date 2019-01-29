@@ -14,12 +14,11 @@ logging.basicConfig(filename=config.log_path_server + time.strftime("%Y%m%d") + 
 
 def clientLink(data):
     args = data.split("|")
-    clientIP = args[0]
     task = args[-1]
     senStr = '|'.join(args[1:])
     serverName = config.All
 
-    HOST = clientIP
+    HOST = args[0]
     PORT = 29401
     s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
     try:
@@ -30,7 +29,7 @@ def clientLink(data):
         if senStr:
             s.sendall(senStr)
             logging.info('already send info' + '\n')
-            task_set = {'clip1','add_xml','clip2','download','Dailies1'}
+            task_set = {'clip1','add_xml','clip2','download','Dailies1','lgt_dai'}
             if task in task_set:
                 data = s.recv(1024)
                 if data:
@@ -40,8 +39,25 @@ def clientLink(data):
                         path = serverName + '/' + video_dir
                         os.chmod(path, 0555)
                         logging.info(path + ' already chmod 555' + '\n')
-                    elif task == 'Dailies1':
-                        pass
+                    elif task == 'Dailies1' or task == 'lgt_dai':
+                        filePath = args[1]
+                        filename = args[2]
+                        daiPath = serverName + filePath + '/img'  # /Tron/FUY/001/001/stuff/cmp/img
+                        daiPath2 = serverName + filePath + '/mov'
+                        dai_file_path = daiPath + '/' + filename
+                        dai_file_path2 = daiPath2 + '/' + filename
+                        if not os.listdir(dai_file_path):
+                            os.chmod(daiPath, 0777)
+                            os.rmdir(dai_file_path)
+                        if not os.listdir(dai_file_path2):
+                            os.chmod(daiPath2, 0777)
+                            os.rmdir(dai_file_path2)
+                        if os.path.exists(dai_file_path):
+                            os.chmod(dai_file_path, 0755)
+                        if os.path.exists(dai_file_path2):
+                            os.chmod(dai_file_path2, 0755)
+                        os.chmod(daiPath, 0555)
+                        os.chmod(daiPath2, 0555)
                     elif task == 'download':
                         s.close()
                         return data

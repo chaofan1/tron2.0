@@ -93,10 +93,12 @@ def handle(conn):
 		elif data_split[-1] == "Dailies1":   # /FUY/001/001/stuff/cmp|file_name|command_id|Dailies1
 			file_path, file_name, command_id, UpTask = data_split
 			UploadFile().upload_dailies(server_all, file_path, file_name, command_id, '', '', '')
+			conn.send('dailies')
 
 		elif data_split[-1] == "lgt_dai":
 			file_path, file_name, command_id, rate, frame, UpTask = data_split
 			UploadFile().upload_dailies(server_all, file_path, file_name, command_id, rate, frame, UpTask)
+			conn.send('lgt_dai')
 
 		elif data_split[-1] == "download":  # huanyu_Fuy_1|download
 			print 'Do not choose local disk'

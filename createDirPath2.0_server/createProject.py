@@ -24,20 +24,10 @@ class TronProject:
         proPath = os.path.join(self.serverName, proName)  # /Tron/FUY
         proPost = os.path.join(self.postName, proName)  # /Post/FUY
         refPaths = os.path.join(self.refName, proName)  # /Library/References/FUY
-        # daiPaths = os.path.join(self.daiName, proName)
         if not os.path.exists(proPath):
             os.mkdir(proPath)
-            # os.mkdir(proPost)
-            # os.mkdir(daiPaths)
-            # os.mkdir(refPaths)
             os.chown(proPath, self.userID, self.groupID)
-            # os.chown(proPost, self.userID, self.groupID)
-            # os.chown(daiPaths, self.userID, self.groupID)
-            # os.chown(refPaths, self.userID, self.groupID)
             os.chmod(proPath, 0555)
-            # os.chmod(proPost, 0555)
-            # os.chmod(daiPaths, 0555)
-            # os.chmod(refPaths, 0555)
         if not os.path.exists(refPaths):
             os.mkdir(refPaths)
             os.chown(refPaths, self.userID, self.groupID)
@@ -50,7 +40,6 @@ class TronProject:
         for i in projectChiName:
             folderPath = proPath+os.sep+i
             refFolPath = refPaths
-            # daiFolPath = daiPaths
             if i == "Client":
                 if not os.path.exists(folderPath):
                     TronFolder().CreateFolder(folderPath, int(projectChild[i]), "prdleader")
@@ -71,9 +60,6 @@ class TronProject:
                 if os.path.exists(refFolPath):
                     TronFolder().CreateFolder((refFolPath + os.sep + "shots"), "0775", "prdleader")
                     TronFolder().CreateFolder((refFolPath + os.sep + "assets"), "0775", "prdleader")
-            # elif i == "Dailies":
-            #     if not os.path.exists(daiFolPath):
-            #         TronFolder().CreateFolder(daiFolPath, int(projectChild[i]), "prdleader")
             else:
                 if not os.path.exists(folderPath):
                     if projectChild[i] == "0555":
@@ -98,16 +84,19 @@ class TronProject:
                     else:
                         os.chmod(refPath, 0777)
 
-    def CreateDai(self, filePath):
+    def CreateDai(self, filePath, filename):
         daiPath = self.serverName + filePath + '/img'   # /Tron/FUY/001/001/stuff/cmp/img
         daiPath2 = self.serverName + filePath + '/mov'
-        print daiPath
         if not os.path.exists(daiPath):
             TronFolder().CreateFolder(daiPath, "0555", "")
         if not os.path.exists(daiPath2):
             TronFolder().CreateFolder(daiPath2, "0555", "")
-        os.chmod(daiPath, 0777)
-        os.chmod(daiPath2, 0777)
+        dai_file_path = daiPath + '/' + filename
+        dai_file_path2 = daiPath2 + '/' + filename
+        if not os.path.exists(daiPath):
+            TronFolder().CreateFolder(dai_file_path, "0777", "")
+        if not os.path.exists(daiPath2):
+            TronFolder().CreateFolder(dai_file_path2, "0777", "")
 
     def CreateSeq(self, proName, seqName):
         dirPath = self.serverName + os.sep + proName  # /Tron/FUY
