@@ -42,16 +42,16 @@ class UploadFile:
             elif fileType == "jpg" or fileType == "jpeg" or fileType == "png" or fileType == "tiff" or fileType == "tga":
                 filePath = file_path + '/img'
                 fileNow = file_name + ".jpg"
-                if task:
-                    clip_video_dirpath = server_name + file_path + '/mov' + self.sep + file_name
-                    if not os.path.exists(clip_video_dirpath):
-                        os.makedirs(clip_video_dirpath)
-                    clip_video_abspath = clip_video_dirpath + self.sep + file_name + '.mov'
-                    clip_video_callbackpath = file_path + '/mov' + self.sep + file_name + self.sep + file_name + '.mov'
-                    ffmpeg = config.ffmpeg
-                    command = '%s -loop 1 -i %s -r %s -loglevel -8 -y -g 2 -keyint_min 2 -vframes %s %s' % (ffmpeg, self.fileOld, rate, frame, clip_video_abspath)
-                    video_su = subprocess.Popen(command, shell=True)
-                    video_su.wait()
+                # if task:
+                #     clip_video_dirpath = server_name + file_path + '/mov' + self.sep + file_name
+                #     if not os.path.exists(clip_video_dirpath):
+                #         os.makedirs(clip_video_dirpath)
+                #     clip_video_abspath = clip_video_dirpath + self.sep + file_name + '.mov'
+                #     clip_video_callbackpath = file_path + '/mov' + self.sep + file_name + self.sep + file_name + '.mov'
+                #     ffmpeg = config.ffmpeg
+                #     command = '%s -loop 1 -i %s -r %s -loglevel -8 -y -g 2 -keyint_min 2 -vframes %s %s' % (ffmpeg, self.fileOld, rate, frame, clip_video_abspath)
+                #     video_su = subprocess.Popen(command, shell=True)
+                #     video_su.wait()
             file_copy_path = server_name + filePath + self.sep + file_name  # /Volumes/All/FUY/Stuff/dmt/mov/filename
             file_abspath = file_copy_path + self.sep + fileNow
             print file_copy_path
@@ -62,6 +62,17 @@ class UploadFile:
                 shutil.copy(self.fileOld, file_abspath)
             except Exception as e:
                 print(e)
+            if task:
+                clip_video_dirpath = server_name + file_path + '/mov' + self.sep + file_name
+                if not os.path.exists(clip_video_dirpath):
+                    os.makedirs(clip_video_dirpath)
+                clip_video_abspath = clip_video_dirpath + self.sep + file_name + '.mov'
+                clip_video_callbackpath = file_path + '/mov' + self.sep + file_name + self.sep + file_name + '.mov'
+                ffmpeg = config.ffmpeg
+                command = '%s -loop 1 -i %s -r %s -loglevel -8 -y -g 2 -keyint_min 2 -vframes %s %s' % (
+                ffmpeg, file_abspath, rate, frame, clip_video_abspath)
+                video_su = subprocess.Popen(command, shell=True)
+                video_su.wait()
             if os.path.exists(file_abspath):
                 if fileType == "mov" or fileType == "avi" or fileType == "mp4":
                     createThumbnail.run(file_abspath)
