@@ -150,6 +150,7 @@ def handle(conn):
 		elif data_split[-1] =="Reference":
 			file_path, file_name, sql_data, UpTask = data_split
 			UploadFile().upload_reference(server_ref, file_path, file_name, sql_data)
+			conn.send('ref')
 
 		elif data_split[-1] == 'ShotTask' or data_split[-1] == 'AssetTask':  # 提交发布弹框
 			# "HAC" "01" "001" "rig" "liangcy" "fileName" "ShotTask"

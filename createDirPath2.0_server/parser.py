@@ -81,7 +81,7 @@ def _init_():
 		clientLink(dailiesData)
 	elif args[0] == "Del":  # "Del" "{公司_项目_主键id: 时间戳,  公司_项目_主键id: 时间戳}"
 		TronDistribute().Deldir(args[1])
-	elif args[0] == "Reference":    # "Reference" "HAC" "shots"  "192.168.1.85|x:/DHG/References/inner/fileName|373"
+	elif args[0] == "Reference":    # "Reference" "HAC" "shots"  "IP|文件夹路径|文件名|sql_data"
 		TronProject().CreateRef(args[1].upper(), args[2])
 		referencesData = args[3] + "|Reference"
 		clientLink(referencesData)

@@ -117,6 +117,7 @@ def handle(conn):
 		elif data_split[-1] =="Reference":
 			file_path, file_name, sql_data, UpTask = data_split
 			UploadFile().upload_reference(server_ref, file_path, file_name, sql_data)
+			conn.send('ref')
 
 		elif data_split[-1] == 'clip1':  # 转码
 			xml_path, path, project_id, field_id, xml_id, command_id, UpTask = data_split

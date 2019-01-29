@@ -29,7 +29,7 @@ def clientLink(data):
         if senStr:
             s.sendall(senStr)
             logging.info('already send info' + '\n')
-            task_set = {'clip1','add_xml','clip2','download','Dailies1','lgt_dai'}
+            task_set = {'clip1','add_xml','clip2','download','Dailies1','lgt_dai','Reference'}
             if task in task_set:
                 data = s.recv(1024)
                 if data:
@@ -58,6 +58,10 @@ def clientLink(data):
                             os.chmod(dai_file_path2, 0755)
                         os.chmod(daiPath, 0555)
                         os.chmod(daiPath2, 0555)
+                    elif task == 'Reference':
+                        server_ref = config.Reference
+                        ref_path = server_ref + args[1]
+                        os.chmod(ref_path, 0555)
                     elif task == 'download':
                         s.close()
                         return data

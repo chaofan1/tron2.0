@@ -76,13 +76,11 @@ class TronProject:
     def CreateRef(self, proName, type_,):
         refPath = os.path.join(self.refName, proName)    # /Library/References/FUY
         if os.path.exists(refPath):
-            if os.path.exists(refPath):
-                if type_ == "shots" or type_ == "assets":
-                    refPath = os.path.join(refPath, type_)
-                    if not os.path.exists(refPath):
-                        TronFolder().CreateFolder(refPath, "0777", "")
-                    else:
-                        os.chmod(refPath, 0777)
+            if type_ == "shots" or type_ == "assets":
+                refPath = os.path.join(refPath, type_)
+                if not os.path.exists(refPath):
+                    TronFolder().CreateFolder(refPath, "0555", "")
+                os.chmod(refPath, 0777)
 
     def CreateDai(self, filePath, filename):
         daiPath = self.serverName + filePath + '/img'   # /Tron/FUY/001/001/stuff/cmp/img
