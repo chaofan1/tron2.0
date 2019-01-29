@@ -30,17 +30,20 @@ def clientLink(data):
         if senStr:
             s.sendall(senStr)
             logging.info('already send info' + '\n')
-            if task == 'clip1' or task == 'add_xml' or task == 'clip2' or task == 'download':
+            task_set = {'clip1','add_xml','clip2','download','Dailies1'}
+            if task in task_set:
                 data = s.recv(1024)
                 if data:
+                    logging.info('recv data is: ' + data)
                     if task == 'clip2':
                         video_dir = os.path.dirname(args[1])
                         path = serverName + '/' + video_dir
                         os.chmod(path, 0555)
                         logging.info(path + ' already chmod 555' + '\n')
+                    elif task == 'Dailies1':
+                        pass
                     elif task == 'download':
                         s.close()
-                        print data
                         return data
                     else:
                         xml_path = args[1]

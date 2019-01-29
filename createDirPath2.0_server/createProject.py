@@ -103,9 +103,11 @@ class TronProject:
         daiPath2 = self.serverName + filePath + '/mov'
         print daiPath
         if not os.path.exists(daiPath):
-            TronFolder().CreateFolder(daiPath, "0777", "")
+            TronFolder().CreateFolder(daiPath, "0555", "")
         if not os.path.exists(daiPath2):
-            TronFolder().CreateFolder(daiPath2, "0777", "")
+            TronFolder().CreateFolder(daiPath2, "0555", "")
+        os.chmod(daiPath, 0777)
+        os.chmod(daiPath2, 0777)
 
     def CreateSeq(self, proName, seqName):
         dirPath = self.serverName + os.sep + proName  # /Tron/FUY

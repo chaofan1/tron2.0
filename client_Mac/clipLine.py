@@ -177,7 +177,7 @@ def putter(task_queue, xml_path, project_id, field_id, data, path, task):
                         pathurl = pathurl.replace('file://', '')
                     pathurl = unquote(pathurl)
 
-                    if postfix == 'dpx':
+                    if postfix == 'dpx' or postfix == 'exr':
                         shot_pathurl = os.path.dirname(pathurl)
                         if not os.path.exists(shot_pathurl):
                             print shot_pathurl, '文件不存在'
@@ -277,19 +277,18 @@ def putter(task_queue, xml_path, project_id, field_id, data, path, task):
                                 shot_image_new = img_path_new_all.replace(server_all,'uploads/Projects')
                                 update_sql = "update oa_shot set shot_number='%s',shot_name='%s',shot_video_path='%s',shot_image='%s' where project_id=%s and field_id=%s and shot_number='%s'"\
                                              %(shot_number_new,shot_number_new,shot_video_path_new,shot_image_new,project_id,field_id,shot_number_old)
-                                print update_sql
                                 try:
                                     cursor.execute(update_sql)
                                     conn.commit()
-                                    print 'update sql success'
+                                    print 'add_xml update sql success'
                                 except:
                                     conn.rollback()
-                                    print 'update sql fail'
+                                    print 'add_xml update sql fail'
                             cursor.close()
                             conn.close()
                         task_queue.put(info)
                     elif task == 'clip1':
-                        print info
+                        # print info
                         task_queue.put(info)
                     number += 1
     return task_queue.qsize()
