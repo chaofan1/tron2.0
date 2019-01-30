@@ -91,9 +91,9 @@ class TronProject:
             TronFolder().CreateFolder(daiPath2, "0555", "")
         dai_file_path = daiPath + '/' + filename
         dai_file_path2 = daiPath2 + '/' + filename
-        if not os.path.exists(daiPath):
+        if not os.path.exists(dai_file_path):
             TronFolder().CreateFolder(dai_file_path, "0777", "")
-        if not os.path.exists(daiPath2):
+        if not os.path.exists(dai_file_path2):
             TronFolder().CreateFolder(dai_file_path2, "0777", "")
 
     def CreateSeq(self, proName, seqName):
