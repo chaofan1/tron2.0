@@ -53,9 +53,9 @@ def clientLink(data):
                             os.chmod(daiPath2, 0777)
                             os.rmdir(dai_file_path2)
                         if os.path.exists(dai_file_path):
-                            os.chmod(dai_file_path, 0555)
+                            os.chmod(dai_file_path, 0755)
                         if os.path.exists(dai_file_path2):
-                            os.chmod(dai_file_path2, 0555)
+                            os.chmod(dai_file_path2, 0755)
                         os.chmod(daiPath, 0555)
                         os.chmod(daiPath2, 0555)
                     elif task == 'Reference':
