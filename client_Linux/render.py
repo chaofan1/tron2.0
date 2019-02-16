@@ -4,8 +4,8 @@ import sys
 import os
 import subprocess
 from PyQt4 import QtGui
-from PyQt4.QtCore import *
 from remind import Remind
+import config
 reload(sys)
 sys.setdefaultencoding('utf-8')
 
@@ -30,13 +30,14 @@ class Render:
     def __init__(self, file_name, file_path):
         self.file_name = file_name
         self.file_path = file_path
-        self.ray_py_file = '/Public/test/RVDeadline/start.py'
+        self.ray_py_file = config.start_py
+        self.csv_path = config.render_csv_path
 
     def dataTree(self):
         file_size = os.path.getsize(self.file_name)
         file_mtime = os.path.getmtime(self.file_name)
         pro_name = self.file_path.split('/')[1]
-        csv_path = os.path.join('/Public/tronPipelineScript/tron2.0/render_csv', '%s.csv' % pro_name)
+        csv_path = os.path.join(self.csv_path, '%s.csv' % pro_name)
         with open(csv_path, 'a+') as f:
             con_write = self.file_path, file_size, file_mtime
             con_read = set(f.readlines())

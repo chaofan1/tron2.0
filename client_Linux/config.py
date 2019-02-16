@@ -9,6 +9,8 @@ Reference = "/Library/References"
 OutCompany = "/All/%s/Vender/outgoing/%s"
 
 ffmpeg = '/Public/tronPipelineScript/tron2.0/ffmpeg/linux/ffmpeg'
+render_csv_path = '/Public/tronPipelineScript/tron2.0/render_csv'
+start_py = '/Public/test/RVDeadline/start.py'
 
 user_name = 'root'
 db_name = 'new_tron'
