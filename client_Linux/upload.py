@@ -32,6 +32,7 @@ class UploadFile:
         self.select_one('')
         if self.fileOld:
             print self.fileOld
+            ffmpeg = config.ffmpeg
             fileType = str(self.fileOld.split(".")[-1]).lower()
             fileNow = file_name + "." + fileType
             clip_video_callbackpath = ''
@@ -49,7 +50,12 @@ class UploadFile:
                 if not os.path.exists(file_copy_path):
                     os.mkdir(file_copy_path)
                     print 'mkdir'
-                shutil.copy(self.fileOld, file_abspath)
+                if fileType == "mov" or fileType == "avi" or fileType == "mp4":
+                    command = '%s -i %s -loglevel -8 -c:v libx264 -y -g 2 -keyint_min 2 %s' % (ffmpeg, self.fileOld, file_abspath)
+                    video_su = subprocess.Popen(command, shell=True)
+                    video_su.wait()
+                else:
+                    shutil.copy(self.fileOld, file_abspath)
             except Exception as e:
                 print(e)
             if task:
@@ -58,7 +64,7 @@ class UploadFile:
                     os.makedirs(clip_video_dirpath)
                 clip_video_abspath = clip_video_dirpath + self.sep + file_name + '.mov'
                 clip_video_callbackpath = file_path + '/mov' + self.sep + file_name + self.sep + file_name + '.mov'
-                ffmpeg = config.ffmpeg
+                # ffmpeg = config.ffmpeg
                 command = '%s -loop 1 -i %s -r %s -loglevel -8 -y -g 2 -keyint_min 2 -vframes %s %s' % (
                 ffmpeg, file_abspath, rate, frame, clip_video_abspath)
                 video_su = subprocess.Popen(command, shell=True)
@@ -85,12 +91,18 @@ class UploadFile:
     def upload_reference(self, server_name, file_path, file_name, sql_data):
         self.select_one('')
         if self.fileOld:
+            ffmpeg = config.ffmpeg
             fileType = str(self.fileOld.split(".")[-1]).lower()
             if fileType == "jpg" or fileType == "jpeg" or fileType == "png" or fileType == "tiff" or fileType == "tga":
                 fileType = "jpg"
             file_copy_path = server_name + file_path + self.sep + file_name + "." + fileType
             try:
-                shutil.copy(self.fileOld, file_copy_path)
+                if fileType == "mov" or fileType == "avi" or fileType == "mp4":
+                    command = '%s -i %s -loglevel -8 -c:v libx264 -y -g 2 -keyint_min 2 %s' % (ffmpeg, self.fileOld, file_copy_path)
+                    video_su = subprocess.Popen(command, shell=True)
+                    video_su.wait()
+                else:
+                    shutil.copy(self.fileOld, file_copy_path)
                 print file_copy_path
             except Exception as e:
                 print e
