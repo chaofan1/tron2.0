@@ -22,7 +22,7 @@ def myServer():
 		exit()
 	HOST = socket.gethostbyname(socket.gethostname())
 	print 'localIP:', HOST
-	PORT = 29401
+	PORT = config.port
 	s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 	s.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
 	s.bind((HOST, PORT))
@@ -55,18 +55,26 @@ def handle(conn):
 		server_outcompany = config.OutCompany
 
 		if data_split[-1] == "open_dai":
-			file_path, Uptask = data_split
-			if os.path.exists(server_all+file_path):
-				os.popen('open %s' % (server_all + file_path)).close()
-			elif os.path.exists(server_dai+file_path):
-				os.popen('open %s' % (server_dai + file_path)).close()
+			try:
+				file_path, Uptask = data_split
+			except:
+				print '参数错误:',data_split
+			else:
+				if os.path.exists(server_all+file_path):
+					os.popen('open %s' % (server_all + file_path)).close()
+				elif os.path.exists(server_dai+file_path):
+					os.popen('open %s' % (server_dai + file_path)).close()
 
 		elif data_split[-1] == "Folder":
-			file_path, Uptask = data_split
-			if os.path.exists(server_all+file_path):
-				os.popen('open %s' % (server_all + file_path)).close()
-			elif os.path.exists(server_dai+file_path):
-				os.popen('open %s' % (server_dai + file_path)).close()
+			try:
+				file_path, Uptask = data_split
+			except:
+				print '参数错误:', data_split
+			else:
+				if os.path.exists(server_all+file_path):
+					os.popen('open %s' % (server_all + file_path)).close()
+				elif os.path.exists(server_dai+file_path):
+					os.popen('open %s' % (server_dai + file_path)).close()
 		# elif data_split[-1] == "open_ref":
 		# 	file_path, Uptask = data_split
 		# 	os.popen('open %s' % (server_ref + file_path)).close()
@@ -76,29 +84,43 @@ def handle(conn):
 		# 	os.popen('open %s' % (server_post + file_path)).close()
 
 		elif data_split[-1] == "YunFolder":
-			file_path, create_time, Uptask = data_split
-			projectName = file_path.split('_')[1]
-			print create_time
-			create_time = time.strftime("%Y%m%d", time.localtime(eval(create_time)))
-			path = server_outcompany % (projectName, create_time) + file_path
-			print path
 			try:
-				if os.path.exists(path):
-					os.popen('open %s' % path).close()
-				else:
-					print 'the directory not exit'
-			except Exception as e:
-				print e
+				file_path, create_time, Uptask = data_split
+			except:
+				print '参数错误:', data_split
+			else:
+				projectName = file_path.split('_')[1]
+				print create_time
+				create_time = time.strftime("%Y%m%d", time.localtime(eval(create_time)))
+				path = server_outcompany % (projectName, create_time) + file_path
+				print path
+				try:
+					if os.path.exists(path):
+						os.popen('open %s' % path).close()
+					else:
+						print 'the directory not exit'
+				except Exception as e:
+					print e
 
 		elif data_split[-1] == "Dailies1":   # /FUY/001/001/stuff/cmp|file_name|command_id|Dailies1
-			file_path, file_name, command_id, UpTask = data_split
-			UploadFile().upload_dailies(server_all, file_path, file_name, command_id, '', '', '')
-			conn.send('dailies')
+			try:
+				file_path, file_name, command_id, UpTask = data_split
+			except:
+				print '参数错误:', data_split
+			else:
+				UploadFile().upload_dailies(server_all, file_path, file_name, command_id, '', '', '')
+			finally:
+				conn.send('dailies')
 
 		elif data_split[-1] == "lgt_dai":
-			file_path, file_name, command_id, rate, frame, UpTask = data_split
-			UploadFile().upload_dailies(server_all, file_path, file_name, command_id, rate, frame, UpTask)
-			conn.send('lgt_dai')
+			try:
+				file_path, file_name, command_id, rate, frame, UpTask = data_split
+			except:
+				print '参数错误:', data_split
+			else:
+				UploadFile().upload_dailies(server_all, file_path, file_name, command_id, rate, frame, UpTask)
+			finally:
+				conn.send('lgt_dai')
 
 		elif data_split[-1] == "download":  # huanyu_Fuy_1|download
 			print 'Do not choose local disk'
@@ -115,60 +137,95 @@ def handle(conn):
 			conn.send(downloadPath)
 
 		elif data_split[-1] =="Reference":
-			file_path, file_name, sql_data, UpTask = data_split
-			UploadFile().upload_reference(server_ref, file_path, file_name, sql_data)
-			conn.send('ref')
+			try:
+				file_path, file_name, sql_data, UpTask = data_split
+			except:
+				print '参数错误:', data_split
+			else:
+				UploadFile().upload_reference(server_ref, file_path, file_name, sql_data)
+			finally:
+				conn.send('ref')
 
 		elif data_split[-1] == 'clip1':  # 转码
-			xml_path, path, project_id, field_id, xml_id, command_id, UpTask = data_split
-			xml_path = server_all + sep + xml_path
-			video_path = server_all + sep + path
-			start_clip(xml_path, video_path, project_id, field_id, xml_id, UpTask)
-			to_php(1, 0, project_id, field_id, xml_id, UpTask)
-			conn.send(path)
-			print('clip1 end')
-			CallBack().common_callback(command_id)
+			try:
+				xml_path, path, project_id, field_id, xml_id, command_id, UpTask = data_split
+			except:
+				print '参数错误:', data_split
+			else:
+				xml_path = server_all + sep + xml_path
+				video_path = server_all + sep + path
+				start_clip(xml_path, video_path, project_id, field_id, xml_id, UpTask)
+				to_php(1, 0, project_id, field_id, xml_id, UpTask)
+				conn.send(path)
+				print('clip1 end')
+				CallBack().common_callback(command_id)
 
 		elif data_split[-1] == 'add_xml':
-			xml_path, path, project_id, field_id, xml_id, command_id, UpTask = data_split
-			xml_path = server_all + sep + xml_path
-			video_path = server_all + sep + path
-			start_clip(xml_path, video_path, project_id, field_id, xml_id, UpTask)
-			conn.send(path)
-			to_php(1, 0, project_id, field_id, xml_id, UpTask)
-			CallBack().common_callback(command_id)
-			print('add_xml end')
+			try:
+				xml_path, path, project_id, field_id, xml_id, command_id, UpTask = data_split
+			except:
+				print '参数错误:', data_split
+			else:
+				xml_path = server_all + sep + xml_path
+				video_path = server_all + sep + path
+				start_clip(xml_path, video_path, project_id, field_id, xml_id, UpTask)
+				conn.send(path)
+				to_php(1, 0, project_id, field_id, xml_id, UpTask)
+				CallBack().common_callback(command_id)
+				print('add_xml end')
 
 		elif data_split[-1] == 'clip2':   # 回插
-			video_path, img_path, frame, command_id, UpTask = data_split
-			video_path = server_all + sep + video_path
-			img_path = server_all + sep + img_path
-			insert(video_path, img_path, frame)
-			conn.send('path')
-			CallBack().common_callback(command_id)
-			print('clip2 end')
+			try:
+				video_path, img_path, frame, command_id, UpTask = data_split
+			except:
+				print '参数错误:', data_split
+			else:
+				video_path = server_all + sep + video_path
+				img_path = server_all + sep + img_path
+				insert(video_path, img_path, frame)
+				CallBack().common_callback(command_id)
+				print('clip2 end')
+			finally:
+				conn.send('path')
 
 		elif data_split[-1] == 'clip3':   # 打包
-			pro_scene, command_id, UpTask = data_split
-			pro_path = server_post+'/'+pro_scene
-			pack_path = server_post + '/' + pro_scene + '/Clip_Pack'
-			Pack().pack(pro_path, pack_path)
-			os.popen('open %s' % pack_path).close()
-			CallBack().common_callback(command_id)
-			print('clip3 end')
+			try:
+				pro_scene, command_id, UpTask = data_split
+			except:
+				print '参数错误:', data_split
+			else:
+				pro_path = server_all+pro_scene
+				pack_path = server_post + pro_scene + '/Clip_Pack'
+				Pack().pack(pro_path, pack_path)
+				os.popen('open %s' % pack_path).close()
+				CallBack().common_callback(command_id)
+				print('clip3 end')
 
 		elif data_split[-1] == 'ShotTask' or data_split[-1] == 'AssetTask':  # 提交发布弹框
 			# "HAC" "01" "001" "rig" "liangcy" "fileName" "ShotTask"
 			if data_split[-1] == 'ShotTask':
-				projectName, seqName, shotName, type_, userName, fileName, UpTask = data_split
-				file_path = projectName + sep + seqName + sep + shotName + sep + 'Stuff' + sep + type_ + sep + 'publish' + sep + fileName
+				try:
+					projectName, seqName, shotName, type_, userName, fileName, UpTask = data_split
+					file_path = projectName + sep + seqName + sep + shotName + sep + 'Stuff' + sep + type_ + sep + 'publish' + sep + fileName
+				except:
+					print '参数错误:', data_split
+				else:
+					if type_ == "lgt" or type_ == "cmp":
+						os.popen('open %s' % (server_post + sep + file_path)).close()
+					else:
+						os.popen('open %s' % (server_all + sep + file_path)).close()
 			else:
-				projectName, type_, userName, fileName, UpTask = data_split
-				file_path = projectName + sep + 'Stuff' + sep + type_ + sep + 'publish' + sep + fileName
-			if type_ == "lgt" or type_ == "cmp":
-				os.popen('open %s' % (server_post + sep + file_path)).close()
-			else:
-				os.popen('open %s' % (server_all + sep + file_path)).close()
+				try:
+					projectName, type_, userName, fileName, UpTask = data_split
+					file_path = projectName + sep + 'Stuff' + sep + type_ + sep + 'publish' + sep + fileName
+				except:
+					print '参数错误:', data_split
+				else:
+					if type_ == "lgt" or type_ == "cmp":
+						os.popen('open %s' % (server_post + sep + file_path)).close()
+					else:
+						os.popen('open %s' % (server_all + sep + file_path)).close()
+
 	conn.close()
 
 

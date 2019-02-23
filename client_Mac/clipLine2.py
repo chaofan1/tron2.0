@@ -36,32 +36,44 @@ class Pack(object):
         self.ration2 = 'geo'
 
     def pack(self, pro_scene, out_path):
-        shot_li = os.listdir(pro_scene)
-        if shot_li:
-            shot_li = [i for i in shot_li if not i.startswith('.') and i.isdigit()]
-            queue_len = len(shot_li)  # 任务总量
-            for ind, shot in enumerate(shot_li):
-                pub = os.path.join(pro_scene, shot, self.ration1)    # /Post/FUY/001/001/Stuff/cmp/publish
-                producer_paths = os.listdir(pub)
-                if producer_paths:
-                    producer_paths = [i for i in producer_paths if not i.startswith('.')]
-                    for producer_path in producer_paths:
-                        path = os.path.join(pub, producer_path, self.ration2)  # /Post/FUY/001/001/Stuff/cmp/publish/geo
-                        files = os.listdir(path)
-                        if files:
-                            files = [i for i in files if not i.startswith('.')]
-                            for file_ in files:
-                                mov_path = os.path.join(path, file_)  # /Post/FUY/001/001/Stuff/cmp/publish/geo/...mov
-                                if file_.endswith('mov'):
-                                    shutil.copy(mov_path, out_path)
-                                    print mov_path + '  >>  ' + out_path
-                                elif os.path.isdir(mov_path):
-                                    out_copy_path = out_path+'/'+file_
-                                    shutil.copytree(mov_path, out_copy_path)
-                                    print mov_path + '  >>  ' + out_copy_path
+        if os.path.exists(pro_scene):
+            shot_li = os.listdir(pro_scene)
+            if shot_li:
+                shot_li = [i for i in shot_li if not i.startswith('.') and i.isdigit()]
+                queue_len = len(shot_li)  # 任务总量
+                if shot_li:
+                    for ind, shot in enumerate(shot_li):
+                        pub = os.path.join(pro_scene, shot, self.ration1)    # /Post/FUY/001/001/Stuff/cmp/publish
+                        if os.path.exists(pub):
+                            producer_paths = os.listdir(pub)
+                            if producer_paths:
+                                producer_paths = [i for i in producer_paths if not i.startswith('.')]
+                                for producer_path in producer_paths:
+                                    path = os.path.join(pub, producer_path, self.ration2)  # /Post/FUY/001/001/Stuff/cmp/publish/geo
+                                    if os.path.exists(path):
+                                        files = os.listdir(path)
+                                        if files:
+                                            files = [i for i in files if not i.startswith('.')]
+                                            for file_ in files:
+                                                mov_path = os.path.join(path, file_)  # /Post/FUY/001/001/Stuff/cmp/publish/geo/...mov
+                                                if file_.endswith('mov'):
+                                                    shutil.copy(mov_path, out_path)
+                                                    print mov_path + '  >>  ' + out_path
+                                                elif os.path.isdir(mov_path):
+                                                    out_copy_path = out_path+'/'+file_
+                                                    shutil.copytree(mov_path, out_copy_path)
+                                                    print mov_path + '  >>  ' + out_copy_path
+                                        else:
+                                            print(path, "为空")
+                                    else:
+                                        print path,' not exists'
+                            else:
+                                print(pub, "为空")
+                            qsize = queue_len - ind - 1  # 当前剩余任务数
+                            to_php(queue_len, qsize, '', '', '', self.task)
                         else:
-                            print(path, "为空")
+                            print pub,' not exists'
                 else:
-                    print(pub, "为空")
-                qsize = queue_len - ind - 1  # 当前剩余任务数
-                to_php(queue_len, qsize, '', '', '', self.task)
+                    print pro_scene,'中没有镜头'
+        else:
+            print pro_scene,' not exists'

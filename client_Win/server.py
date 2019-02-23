@@ -24,7 +24,7 @@ def myServer():
 		print '这是Windows平台，请使用相应脚本！'
 		exit()
 	HOST = socket.gethostbyname(socket.gethostname())
-	PORT = 29401
+	PORT = config.port
 	s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 	s.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
 	s.bind((HOST, PORT))
@@ -58,45 +58,65 @@ def handle(conn):
 		server_outcompany = config.OutCompany
 
 		if data_split[-1] == "open_dai":
-			file_path, Uptask = data_split
-			file_path = file_path.replace("/", "\\")
-			if os.path.exists(server_all+file_path):
-				os.popen('explorer.exe %s' % (server_all + file_path)).close()
-			elif os.path.exists(server_dai+file_path):
-				os.popen('explorer.exe %s' % (server_dai + file_path)).close()
+			try:
+				file_path, Uptask = data_split
+			except:
+				print '参数错误:',data_split
+			else:
+				file_path = file_path.replace("/", "\\")
+				if os.path.exists(server_all+file_path):
+					os.popen('explorer.exe %s' % (server_all + file_path)).close()
+				elif os.path.exists(server_dai+file_path):
+					os.popen('explorer.exe %s' % (server_dai + file_path)).close()
 
 		elif data_split[-1] == "Folder":
-			file_path, Uptask = data_split
-			file_path = file_path.replace("/", "\\")
-			if os.path.exists(server_all+file_path):
-				os.popen('explorer.exe %s' % (server_all + file_path)).close()
-			elif os.path.exists(server_dai+file_path):
-				os.popen('explorer.exe %s' % (server_dai + file_path)).close()
+			try:
+				file_path, Uptask = data_split
+			except:
+				print '参数错误:', data_split
+			else:
+				file_path = file_path.replace("/", "\\")
+				if os.path.exists(server_all+file_path):
+					os.popen('explorer.exe %s' % (server_all + file_path)).close()
+				elif os.path.exists(server_dai+file_path):
+					os.popen('explorer.exe %s' % (server_dai + file_path)).close()
 
 		elif data_split[-1] == "YunFolder":
-			file_path, create_time, Uptask = data_split
-			file_path = file_path.replace("/", "\\")
-			projectName = file_path.split('_')[1]
-			create_time = time.strftime("%Y%m%d",time.localtime(eval(create_time)))
-			path = server_outcompany %(projectName,create_time)+ file_path
-			print path
 			try:
-				if os.path.exists(path):
-					os.popen('explorer.exe %s' % path).close()
-				else:
-					print 'the directory not exit'
-			except Exception as e:
-				print e
+				file_path, create_time, Uptask = data_split
+			except:
+				print '参数错误:', data_split
+			else:
+				file_path = file_path.replace("/", "\\")
+				projectName = file_path.split('_')[1]
+				create_time = time.strftime("%Y%m%d",time.localtime(eval(create_time)))
+				path = server_outcompany %(projectName,create_time)+ file_path
+				print path
+				try:
+					if os.path.exists(path):
+						os.popen('explorer.exe %s' % path).close()
+					else:
+						print 'the directory not exit'
+				except Exception as e:
+					print e
 
 		elif data_split[-1] == "Dailies1":   # /FUY/001/001/stuff/cmp|file_name|command_id|Dailies1
-			file_path, file_name, command_id, UpTask = data_split
-			UploadFile().upload_dailies(server_all, file_path, file_name, command_id, '', '', '')
-			conn.send('dailies')
+			try:
+				file_path, file_name, command_id, UpTask = data_split
+			except:
+				print '参数错误:', data_split
+			else:
+				UploadFile().upload_dailies(server_all, file_path, file_name, command_id, '', '', '')
+				conn.send('dailies')
 
 		elif data_split[-1] == "lgt_dai":
-			file_path, file_name, command_id, rate, frame, UpTask = data_split
-			UploadFile().upload_dailies(server_all, file_path, file_name, command_id, rate, frame, UpTask)
-			conn.send('lgt_dai')
+			try:
+				file_path, file_name, command_id, rate, frame, UpTask = data_split
+			except:
+				print '参数错误:', data_split
+			else:
+				UploadFile().upload_dailies(server_all, file_path, file_name, command_id, rate, frame, UpTask)
+				conn.send('lgt_dai')
 
 		elif data_split[-1] == "download":   # huanyu_Fuy_1|download
 			print 'Do not choose local disk'
@@ -135,40 +155,58 @@ def handle(conn):
 			conn.send(downloadPath)
 
 		elif data_split[-1] == "Dailies2":
-			file_path, file_name, command_id, UpTask = data_split
-			fileNow = file_name + ".mov"
-			# 重构file_path: /FUY/stuff/dmt
-			file_path = file_path + '/mov'
-			outputPath = "D:/TronDailies/%s" % file_name
-			server_name = server_all
-			fileD = server_name + "/" + file_path + "/" + file_name
-			fileAll = fileD + "/" + fileNow
-			if os.path.isdir(outputPath):
-				shutil.rmtree(outputPath)
-			os.popen("python //192.168.100.99/Public/tronPipelineScript/IlluminaConverter_v002/IlluminaConverter_v002.py %s" % fileNow).read()
-			print outputPath
-			if os.path.isdir(outputPath):
-				shutil.copytree(outputPath, fileD)
-				if os.path.exists(fileAll):
-					createThumbnail.run(fileNow, fileD)
-					CallBack().dai_callback(command_id, file_path + "/" + file_name, fileNow, UpTask, "")
+			try:
+				file_path, file_name, command_id, UpTask = data_split
+			except:
+				print '参数错误:', data_split
+			else:
+				fileNow = file_name + ".mov"
+				# 重构file_path: /FUY/stuff/dmt
+				file_path = file_path + '/mov'
+				outputPath = "D:/TronDailies/%s" % file_name
+				server_name = server_all
+				fileD = server_name + "/" + file_path + "/" + file_name
+				fileAll = fileD + "/" + fileNow
+				if os.path.isdir(outputPath):
+					shutil.rmtree(outputPath)
+				os.popen("python //192.168.100.99/Public/tronPipelineScript/IlluminaConverter_v002/IlluminaConverter_v002.py %s" % fileNow).read()
+				print outputPath
+				if os.path.isdir(outputPath):
+					shutil.copytree(outputPath, fileD)
+					if os.path.exists(fileAll):
+						createThumbnail.run(fileNow, fileD)
+						CallBack().dai_callback(command_id, file_path + "/" + file_name, fileNow, UpTask, "")
+			finally:
+				conn.send('dailies2')
 
 		elif data_split[-1] =="Reference":
-			file_path, file_name, sql_data, UpTask = data_split
-			UploadFile().upload_reference(server_ref, file_path, file_name, sql_data)
-			conn.send('ref')
+			try:
+				file_path, file_name, sql_data, UpTask = data_split
+			except:
+				print '参数错误:', data_split
+			else:
+				UploadFile().upload_reference(server_ref, file_path, file_name, sql_data)
+				conn.send('ref')
 
 		elif data_split[-1] == 'ShotTask' or data_split[-1] == 'AssetTask':   # 提交发布弹框
 			# "HAC" "01" "001" "rig" "liangcy" "fileName" "ShotTask"
 			if data_split[-1] == 'ShotTask':
-				projectName,seqName,shotName,type_,userName,fileName,UpTask = data_split
-				file_path = projectName + sep + seqName + sep + shotName + sep + 'Stuff' + sep + type_ + sep + 'publish' + sep + fileName
+				try:
+					projectName,seqName,shotName,type_,userName,fileName,UpTask = data_split
+				except:
+					print '参数错误:', data_split
+				else:
+					file_path = projectName + sep + seqName + sep + shotName + sep + 'Stuff' + sep + type_ + sep + 'publish' + sep + fileName
 			# fileList = UploadFile().select_files()
 			# for file in fileList:
 			# 	shutil.copy(file, file_path)
 			else:
-				projectName, type_, userName, fileName, UpTask = data_split
-				file_path = projectName + sep + 'Stuff' + sep + type_ + sep + 'publish' + sep + fileName
+				try:
+					projectName, type_, userName, fileName, UpTask = data_split
+				except:
+					print '参数错误:', data_split
+				else:
+					file_path = projectName + sep + 'Stuff' + sep + type_ + sep + 'publish' + sep + fileName
 			if type_ == "lgt" or type_ == "cmp":
 				os.popen('explorer.exe %s' % (server_post + sep + file_path)).close()
 				print (server_post + file_path)

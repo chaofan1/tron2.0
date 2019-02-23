@@ -46,6 +46,7 @@ def _init_():
 		os.chmod(post_path, 0777)
 		if os.path.exists(pack_path):
 			shutil.rmtree(pack_path)
+			os.mkdir(pack_path, 0755)
 		else:
 			os.mkdir(pack_path, 0755)
 		clipData = args[1]+'|clip3'
@@ -73,7 +74,7 @@ def _init_():
 		TronProject().CreateDai(args[1], dai_filename)
 		dailiesData = args[2]+"|lgt_dai"
 		clientLink(dailiesData)
-	elif args[0] == 'YunFolder':  # "YunFolder" "ip" "filepath|时间戳"
+	elif args[0] == 'YunFolder':  # "YunFolder" "ip" "filepath|时间戳"  "YunFolder" "192.168.1.33" "/DSN_TXT_8/|1550839953"
 		clientLink(args[1] + '|' + args[2] + '|YunFolder')
 	elif args[0] == "Dailies2":  # "Dailies2" "/FUY/001/001/Stuff/cmp/" "IP|/FUY/001/001/Stuff/cmp|filename|command_id"
 		TronProject().CreateDai(args[1])

@@ -19,3 +19,5 @@ ip = '192.168.100.247'
 passwd = 'king9188YJQ@'
 dai_url = 'http://192.168.100.247/callback/dailies'
 common_url = 'http://192.168.100.247/python/renewScriptStatus'
+
+port = 29401

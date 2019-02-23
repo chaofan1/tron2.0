@@ -19,7 +19,7 @@ def clientLink(data):
     serverName = config.All
 
     HOST = args[0]
-    PORT = 29401
+    PORT = config.port
     s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
     try:
         s.connect((HOST, PORT))
@@ -29,7 +29,7 @@ def clientLink(data):
         if senStr:
             s.sendall(senStr)
             logging.info('already send info' + '\n')
-            task_set = {'clip1','add_xml','clip2','download','Dailies1','lgt_dai','Reference'}
+            task_set = {'clip1','add_xml','clip2','download','Dailies1','Dailies2','lgt_dai','Reference'}
             if task in task_set:
                 data = s.recv(1024)
                 if data:
@@ -39,7 +39,7 @@ def clientLink(data):
                         path = serverName + '/' + video_dir
                         os.chmod(path, 0555)
                         logging.info(path + ' already chmod 555' + '\n')
-                    elif task == 'Dailies1' or task == 'lgt_dai':
+                    elif task == 'Dailies1' or task == 'lgt_dai' or task == 'Dailies2':
                         filePath = args[1]
                         filename = args[2]
                         daiPath = serverName + filePath + '/img'  # /Tron/FUY/001/001/stuff/cmp/img

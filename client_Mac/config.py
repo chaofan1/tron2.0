@@ -19,3 +19,5 @@ passwd = 'king9188YJQ@'
 to_php_url = 'http://192.168.100.247/clips/set_progress'
 dai_url = 'http://192.168.100.247/callback/dailies'
 common_url = 'http://192.168.100.247/python/renewScriptStatus'
+
+port = 29401
