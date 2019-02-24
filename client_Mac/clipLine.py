@@ -245,12 +245,13 @@ def putter(task_queue, xml_path, project_id, field_id, data, path, task):
                     info['rate'] = rate
 
                     # 追加xml,根据镜头帧长和帧数范围判断视频是否经过修改,若涉及中间插入,文件夹依次加1,镜头号发生变化,数据库要相应更新
-                    filter_data = (int(float(clip_frame_length)), frame_range)
+                    filter_data = (int(float(clip_frame_length)), material_number)
                     if task == 'add_xml' and filter_data not in data:
                         if os.path.exists(dirname) and os.listdir(dirname):
-                            file_li = sorted([i for i in os.listdir(path) if not i.startswith('.')])
+                            file_li = sorted([i for i in os.listdir(path) if i.isdigit()])
                             ind = file_li.index(shot_number)
                             rename_li = file_li[ind:]   # 要重命名的以镜头号为文件夹名的列表
+                            print rename_li
                             # 循环之前连接数据库
                             conn = pymysql.connect(ip, user_name, passwd, db_name, charset='utf8', use_unicode=True)
                             cursor = conn.cursor()
@@ -267,23 +268,23 @@ def putter(task_queue, xml_path, project_id, field_id, data, path, task):
                                 os.rename(dirname_old, dirname_new)  # 为文件夹重命名
 
                                 # 文件夹依次加1以后,要更新的字段:镜头编号shot_number、镜头缩略图地址shot_image、视频路径shot_video_path
-                                video_name = [i for i in video_img_li if not i.endswith('jpg')][0]
-                                img_name = video_name.split('.')[0] + '.jpg'
-                                video_path_new_all = os.path.join(dirname_new, video_name)  # 新的视频路径
-                                img_path_new_all = os.path.join(dirname_new, img_name)     # 新的缩略图路径
-                                # shot_video_path_new = re.search(r'.*(/Volumes/All.*)', video_path_new_all).group(1)
-                                # shot_image_new = re.search(r'.*(/Volumes/All.*)', img_path_new_all).group(1)
-                                shot_video_path_new = video_path_new_all.replace(server_all,'uploads/Projects')
-                                shot_image_new = img_path_new_all.replace(server_all,'uploads/Projects')
-                                update_sql = "update oa_shot set shot_number='%s',shot_name='%s',shot_video_path='%s',shot_image='%s' where project_id=%s and field_id=%s and shot_number='%s'"\
-                                             %(shot_number_new,shot_number_new,shot_video_path_new,shot_image_new,project_id,field_id,shot_number_old)
-                                try:
-                                    cursor.execute(update_sql)
-                                    conn.commit()
-                                    print 'add_xml update sql success'
-                                except:
-                                    conn.rollback()
-                                    print 'add_xml update sql fail'
+                                video_name = [i for i in video_img_li if i.endswith('mov')]
+                                if video_name:
+                                    video_name = video_name[0]
+                                    img_name = '.'.join(video_name.split('.')[:-1]) + '.jpg'
+                                    video_path_new_all = os.path.join(dirname_new, video_name)  # 新的视频路径
+                                    img_path_new_all = os.path.join(dirname_new, img_name)     # 新的缩略图路径
+                                    shot_video_path_new = video_path_new_all.replace(server_all,'uploads/Projects')
+                                    shot_image_new = img_path_new_all.replace(server_all,'uploads/Projects')
+                                    update_sql = "update oa_shot set shot_number='%s',shot_name='%s',shot_video_path='%s',shot_image='%s' where project_id=%s and field_id=%s and shot_number='%s'"\
+                                                 %(shot_number_new,shot_number_new,shot_video_path_new,shot_image_new,project_id,field_id,shot_number_old)
+                                    try:
+                                        cursor.execute(update_sql)
+                                        conn.commit()
+                                        print 'add_xml update sql success'
+                                    except:
+                                        conn.rollback()
+                                        print 'add_xml update sql fail'
                             cursor.close()
                             conn.close()
                         task_queue.put(info)
@@ -302,7 +303,7 @@ def start_clip(xml_path, path, project_id, field_id, xml_id, task):
     queue = Manager().Queue()
     data = set()
     if task == 'add_xml':
-        select_sql = "select clip_frame_length,frame_range from %s where project_id=%s and field_id=%s" % (table_name, project_id,field_id)
+        select_sql = "select clip_frame_length,material_number from %s where project_id=%s and field_id=%s" % (table_name, project_id,field_id)
         data = handle_db(select_sql)
     queue_len = putter(queue, xml_path, project_id, field_id, data, path, task)
     if queue_len:
