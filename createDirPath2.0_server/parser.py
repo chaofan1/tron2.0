@@ -5,6 +5,7 @@ import shutil,time
 import logging
 import sys, os, re
 from createProject import TronProject
+from createFolder import TronFolder
 from client import clientLink
 from server_callback import CallBack
 from distribution import TronDistribute,transit
@@ -100,7 +101,11 @@ def _init_():
 		CallBack().callback(args[3])
 	elif args[0] == "Shot":   # "Shot" "HAC" "001" "001" "command_id"
 		TronProject().CreateScene(args[1].upper(), args[2], args[3])
-		TronProject().CreateShot(args[1].upper(), args[2], args[3], args[4], args[5], args[6])
+		# TronProject().CreateShot(args[1].upper(), args[2], args[3], args[4], args[5], args[6])
+		proPath = config.All + '/' + args[1].upper()
+		TronFolder().CreateStuff(proPath, args[2], args[3], 'prd', '', '')
+		folderPath = proPath + '/' + args[2] + '/' + args[3] + '/Work'
+		TronFolder().CreateFolder(folderPath, "0555", "prdleader")
 		CallBack().callback(args[4])
 	elif args[0] == "Pack":  # "Pack" "Json路径" "时间戳" "打包id" "command_id"
 		res = TronDistribute().argParse(args[1], args[2])
@@ -123,7 +128,7 @@ def _init_():
 		args = args[6] + '|' + args[1] + '|' + args[2] + '|' + args[3] + '|' + args[4] + "|AssetTask"
 		clientLink(args)
 	elif args[0] == "ShotTask":   # "ShotTask" "HAC" "001" "001" "rig" "liangcy" "fileName" "command_id" "ip"
-		# TronProject().CreateShot(args[1].upper(), args[2], args[3], args[4], args[5], args[6])
+		TronProject().CreateShot(args[1].upper(), args[2], args[3], args[4], args[5], args[6])
 		args = args[8] + '|' + args[1] + '|' + args[2] + '|' + args[3] + '|' + args[4] + '|' + args[5] + '|' + args[6]
 		ShotTaskData = args + "|ShotTask"
 		clientLink(ShotTaskData)
