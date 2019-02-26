@@ -125,6 +125,7 @@ class TronFolder:
         workPath = dirPath + 'Work'
         if not os.path.exists(workPath):
             self.CreateFolder(workPath, "0555", "")
+        if not os.path.exists(workPath + self.sep + 'note'):
             self.CreateFolder((workPath + self.sep + 'note'), "0777", "")
             self.CreateFolder((workPath + self.sep + 'taskGroup'), "0555", "baicz")
             self.CreateFolder((workPath + self.sep + 'taskGroup' + self.sep + 'art'), "0775", "majia")
