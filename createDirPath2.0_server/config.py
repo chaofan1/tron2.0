@@ -6,3 +6,6 @@ Post = "/Post"
 Reference = "/Library/References"
 
 port = 29401
+
+server_ip = "192.168.100.247"
+server_port = 19950

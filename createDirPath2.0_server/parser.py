@@ -3,14 +3,16 @@
 
 import shutil,time
 import logging
-import sys, os, re
+import sys, os
 from createProject import TronProject
 from createFolder import TronFolder
-from client import clientLink
 from server_callback import CallBack
+# from client import clientLink
 from distribution import TronDistribute,transit
 from aliyun import AliyunOss
 import config
+from transit_info import handle_client
+
 
 logging.basicConfig(filename=config.log_path_server + time.strftime("%Y%m%d") + '.log', level=logging.INFO,
 					format="%(asctime)s - %(levelname)s - %(message)s")
@@ -22,25 +24,25 @@ def _init_():
 	server_tron = config.All
 	server_post = config.Post
 	if args[0] == "open_dai":
-		clientLink(args[1]+'|open_dai')
+		handle_client(args[1]+'|open_dai')
 	elif args[0] == "Folder":
-		clientLink(args[1]+'|Folder')
+		handle_client(args[1]+'|Folder')
 	elif args[0] == "Ready_render" or args[0] == "Local_render" or args[0] == "Cloud_render":
-		clientLink(args[1])
+		handle_client(args[1])
 	elif args[0] == "clip1":
 		# 修改相应场次的权限
 		path = args[1].split('|')[2]
 		all_path = server_tron + '/' + path
 		os.chmod(all_path, 0777)
 		clipData = args[1]+'|clip1'
-		clientLink(clipData)
+		handle_client(clipData)
 	elif args[0] == "clip2":
 		path = args[1].split('|')[1]
 		video_dir = os.path.dirname(path)
 		all_path = server_tron + '/' + video_dir
 		os.chmod(all_path, 0777)
 		clipData = args[1]+'|clip2'
-		clientLink(clipData)
+		handle_client(clipData)
 	elif args[0] == "clip3":
 		post_path = server_post + args[1].split('|')[1]
 		pack_path = post_path + '/Clip_Pack'
@@ -51,7 +53,7 @@ def _init_():
 		else:
 			os.mkdir(pack_path, 0755)
 		clipData = args[1]+'|clip3'
-		clientLink(clipData)
+		handle_client(clipData)
 	elif args[0] == "add_xml":
 		# 修改相应场以及场下镜头的权限
 		path = args[1].split('|')[2]
@@ -61,7 +63,7 @@ def _init_():
 		for i in ch_li:
 			os.chmod(all_path+i, 0777)
 		clipData = args[1]+'|add_xml'
-		clientLink(clipData)
+		handle_client(clipData)
 	elif args[0] == "Project":
 		TronProject().CreatePro(args[1].upper())  # createProject.CreatePro("HAC")
 		CallBack().callback(args[2])
@@ -69,20 +71,20 @@ def _init_():
 		dai_filename = args[2].split("|")[2]
 		TronProject().CreateDai(args[1], dai_filename)
 		dailiesData = args[2]+"|Dailies1"
-		clientLink(dailiesData)
+		handle_client(dailiesData)
 	elif args[0] == "lgt_dai":   # "lgt_dai" "/FUY/001/001/Stuff/cmp/" "IP|/FUY/001/001/Stuff/cmp|filename|command_id|rate|帧长"
 		dai_filename = args[2].split("|")[2]
 		TronProject().CreateDai(args[1], dai_filename)
 		dailiesData = args[2]+"|lgt_dai"
-		clientLink(dailiesData)
+		handle_client(dailiesData)
 	elif args[0] == 'YunFolder':  # "YunFolder" "ip" "filepath|时间戳"  "YunFolder" "192.168.1.33" "/DSN_TXT_8/|1550839953"
-		clientLink(args[1] + '|' + args[2] + '|YunFolder')
+		handle_client(args[1] + '|' + args[2] + '|YunFolder')
 	elif args[0] == "Del":  # "Del" "{公司_项目_主键id: 时间戳,  公司_项目_主键id: 时间戳}"
 		TronDistribute().Deldir(args[1])
 	elif args[0] == "Reference":    # "Reference" "HAC" "shots"  "IP|文件夹路径|文件名|sql_data"
 		TronProject().CreateRef(args[1].upper(), args[2])
 		referencesData = args[3] + "|Reference"
-		clientLink(referencesData)
+		handle_client(referencesData)
 	elif args[0] == "download":  # 'download' 'tron_TXT_7|路径' 'id' 'user_id'
 		key, arg2 = args[1].split('|')
 		res = AliyunOss('', key, '', '', '', '').download(arg2)
@@ -90,7 +92,7 @@ def _init_():
 			CallBack().callback_download(args[2], args[3])
 	elif args[0] == "download_out":  # 'download_out' '[tron_TXT_7, tron_TXT_6]' 'ids' 'user_id' 'ip'
 		clipData = args[4] + '|' + args[1] + '|download'
-		downloadPath = clientLink(clipData)
+		downloadPath = handle_client(clipData)
 		logging.info('download_out path: ' + downloadPath)
 		if os.path.exists(downloadPath):
 			for fileName in eval(args[1]):
@@ -126,12 +128,12 @@ def _init_():
 		TronProject().CreateAsset(args[1].upper(), args[2], args[3], args[4])
 		CallBack().callback(args[5])
 		args = args[6] + '|' + args[1] + '|' + args[2] + '|' + args[3] + '|' + args[4] + "|AssetTask"
-		clientLink(args)
+		handle_client(args)
 	elif args[0] == "ShotTask":   # "ShotTask" "HAC" "001" "001" "rig" "liangcy" "fileName" "command_id" "ip"
 		TronProject().CreateShot(args[1].upper(), args[2], args[3], args[4], args[5], args[6])
 		args = args[8] + '|' + args[1] + '|' + args[2] + '|' + args[3] + '|' + args[4] + '|' + args[5] + '|' + args[6]
 		ShotTaskData = args + "|ShotTask"
-		clientLink(ShotTaskData)
+		handle_client(ShotTaskData)
 
 
 if __name__ == '__main__':
