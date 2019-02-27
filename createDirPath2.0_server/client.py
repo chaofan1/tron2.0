@@ -23,21 +23,27 @@ def clientLink(data):
     except:
         with open(config.log_path_client, 'a') as f:
             fcntl.flock(f.fileno(), fcntl.LOCK_EX)
-            f.write(HOST + ' can not connect')
+            f.write(HOST + ' can not connect' + '\n')
     else:
         if senStr:
+            with open(config.log_path_client, 'a') as f:
+                fcntl.flock(f.fileno(), fcntl.LOCK_EX)
+                f.write(data+'\n')
             s.sendall(senStr)
             with open(config.log_path_client, 'a') as f:
                 fcntl.flock(f.fileno(), fcntl.LOCK_EX)
-                f.write('already send info' + '\n')
+                f.write(' already send' + '\n')
             task_set = {'clip1','add_xml','clip2','download','Dailies1','Dailies2','lgt_dai','Reference'}
             if task in task_set:
                 data = s.recv(1024)
                 s.close()
+                with open(config.log_path_client, 'a') as f:
+                    fcntl.flock(f.fileno(), fcntl.LOCK_EX)
+                    f.write('client close' + '\n')
                 if data:
                     with open(config.log_path_client, 'a') as f:
                         fcntl.flock(f.fileno(), fcntl.LOCK_EX)
-                        f.write('recv data is: ' + data)
+                        f.write('recv data is: ' + data + '\n')
                     if task == 'clip2':
                         video_dir = os.path.dirname(args[1])
                         path = serverName + '/' + video_dir
@@ -85,10 +91,10 @@ def clientLink(data):
                             with open(config.log_path_client, 'a') as f:
                                 fcntl.flock(f.fileno(), fcntl.LOCK_EX)
                                 f.write(ser_recv_path + ' already chmod 555' + '\n')
-        s.close()
-        with open(config.log_path_client, 'a') as f:
-            fcntl.flock(f.fileno(), fcntl.LOCK_EX)
-            f.write('client close' + '\n')
+        # s.close()
+        # with open(config.log_path_client, 'a') as f:
+        #     fcntl.flock(f.fileno(), fcntl.LOCK_EX)
+        #     f.write('client close' + '\n')
 
 
 if __name__ == '__main__':
