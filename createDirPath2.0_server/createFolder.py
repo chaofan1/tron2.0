@@ -4,11 +4,8 @@
 #创建文件夹
 
 
-import os,pwd,time
-import config
-import logging
-logging.basicConfig(filename=config.log_path_server + time.strftime("%Y%m%d") + '.log', level=logging.INFO,
-					format="%(asctime)s - %(levelname)s - %(message)s")
+import os,pwd
+
 
 class TronFolder:
 
@@ -16,7 +13,6 @@ class TronFolder:
         self.sep = os.sep
 
     def CreateFolder(self, folderPath, pmt, user):
-        logging.info(user)
         if folderPath:
             if not os.path.exists(folderPath):
                 parent_Dir = os.path.dirname(folderPath)
@@ -33,11 +29,9 @@ class TronFolder:
                         userAll = []
                         for userDn in pwd.getpwall():
                             userAll.append(userDn[0])
-                        logging.info(userAll)
                         if user in userAll:
                             userID = pwd.getpwnam(user).pw_uid
                             groupID = pwd.getpwnam(user).pw_gid
-                            logging.info(userID,groupID)
                     os.chown(folderPath, userID, groupID)
                     if (int(pmt)) == 555:
                         os.chmod(folderPath, 0555)
