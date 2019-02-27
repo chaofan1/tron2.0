@@ -20,7 +20,6 @@ class MyTCPHandler(SocketServer.BaseRequestHandler):
 		while True:
 			data = self.request.recv(1024)
 			if not data:
-				# print "client %s is dead!" % self.client_address[0]
 				break
 			client.clientLink(data)
 

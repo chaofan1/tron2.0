@@ -85,6 +85,10 @@ class TronProject:
     def CreateDai(self, filePath, filename):
         daiPath = self.serverName + filePath + '/img'   # /Tron/FUY/001/001/stuff/cmp/img
         daiPath2 = self.serverName + filePath + '/mov'
+        user_split = filename.split('_')
+        user = ''
+        if len(user_split)>2:
+            user = user_split[2]
         if not os.path.exists(daiPath):
             TronFolder().CreateFolder(daiPath, "0555", "")
         if not os.path.exists(daiPath2):
@@ -92,9 +96,9 @@ class TronProject:
         dai_file_path = daiPath + '/' + filename
         dai_file_path2 = daiPath2 + '/' + filename
         if not os.path.exists(dai_file_path):
-            TronFolder().CreateFolder(dai_file_path, "0777", "")
+            TronFolder().CreateFolder(dai_file_path, "0777", user)
         if not os.path.exists(dai_file_path2):
-            TronFolder().CreateFolder(dai_file_path2, "0777", "")
+            TronFolder().CreateFolder(dai_file_path2, "0777", user)
 
     def CreateSeq(self, proName, seqName):
         dirPath = self.serverName + os.sep + proName  # /Tron/FUY
