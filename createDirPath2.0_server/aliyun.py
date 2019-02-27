@@ -2,21 +2,16 @@
 #coding=utf-8
 import os
 import oss2
-import time
 import smtplib
-import logging
+import config
 from oss2 import SizedFileAdapter, determine_part_size
 from oss2.models import PartInfo
 from aliyunsdkcore import client
-from config import log_path_server
 # from aliyunsdkram.request.v20150501 import CreateUserRequest,CreateAccessKeyRequest,ListUsersRequest,AttachPolicyToUserRequest,CreatePolicyRequest
 
 
 class AliyunOss():
     def __init__(self,filePath,dirname, cpname, email, user_name, remark):
-        logging.basicConfig(filename=log_path_server + time.strftime("%Y%m%d") + '.log', level=logging.INFO,
-                            format="%(asctime)s - %(levelname)s - %(message)s")
-
         # 管理验证
         self.clt = client.AcsClient('LTAIwpOv4aA4PQUS', '4cDyqy3lXuiSRtqR9xjUYmMdikEFxG', 'cn-hangzhou')
         # oss验证
@@ -37,14 +32,14 @@ class AliyunOss():
                 for root, dirs, files in os.walk(self.filePath):
                     for file in files:
                         L.append(os.path.join(root, file))
-                logging.info('get uploadFiles ok')
+                config.logging.info('get uploadFiles ok')
                 return L
             else:
-                logging.error('filepath:'+self.filePath + ' not exist')
+                config.logging.error('filepath:'+self.filePath + ' not exist')
                 return False
         except Exception as e:
-            logging.info('get uploadFiles error')
-            logging.error(e)
+            config.logging.info('get uploadFiles error')
+            config.logging.error(e)
             return False
 
     def uploadFile(self):
@@ -77,11 +72,11 @@ class AliyunOss():
 
                     # 完成分片上传。
                     self.bucket.complete_multipart_upload(key, upload_id, parts)
-                logging.info('upload file to yun ok')
+                config.logging.info('upload file to yun ok')
                 self.sendMail()
             except Exception as e:
-                logging.info('upload file to yun error')
-                logging.error(e)
+                config.logging.info('upload file to yun error')
+                config.logging.error(e)
 
 
     def sendMail(self):
@@ -109,12 +104,12 @@ class AliyunOss():
                 # s.sendmail(from_mail, to_mail+cc_mail, msg)
                 s.sendmail(from_mail, mailAdd, msg)
                 s.quit()
-                logging.info(u'发送邮件成功' + self.cpname + '|' + mailAdd)
+                config.logging.info(u'发送邮件成功' + self.cpname + '|' + mailAdd)
             except Exception as e:
-                logging.info('发送邮件失败')
-                logging.error(e)
+                config.logging.info('发送邮件失败')
+                config.logging.error(e)
         else:
-            logging.info('邮箱为空')
+            config.logging.info('邮箱为空')
 
     def download(self, path):
         try:
@@ -129,8 +124,8 @@ class AliyunOss():
                 self.bucket.get_object_to_file(ObjectName, path+os.sep+ObjectName)
             return True
         except Exception as e:
-            logging.info("download fail" + self.dirname)
-            logging.error(e)
+            config.logging.info("download fail" + self.dirname)
+            config.logging.error(e)
             print('下载失败，请检查网络')
             return False
 

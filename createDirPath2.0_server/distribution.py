@@ -3,13 +3,12 @@ import os
 import time
 import json
 import shutil
-import logging
 import threadpool
 import sys
+import config
 reload(sys)
 sys.setdefaultencoding('utf8')
 from aliyun import AliyunOss
-from config import log_path_server, outputpath
 
 
 class Finish(SyntaxWarning):
@@ -20,15 +19,13 @@ class TronDistribute:
     def __init__(self):
         self.pool = threadpool.ThreadPool(8)  # 创建线程池
         # 日志位置
-        logging.basicConfig(filename=log_path_server + time.strftime("%Y%m%d") + '.log', level=logging.INFO,
-                            format="%(asctime)s - %(levelname)s - %(message)s")
 
     # 解析php传来的json文件，filePath为json路径
     def argParse(self, filePath, timeStamp):
         self.filePath = filePath
         self.progectName, self.userid, self.timeStamp = os.path.splitext(os.path.basename(filePath))[0].split('_')
         create_time = time.strftime("%Y%m%d", time.localtime(eval(timeStamp)))
-        self.outputPath = outputpath % (self.progectName, create_time)  # 存放外包公司目录的位置
+        self.outputPath = config.outputpath % (self.progectName, create_time)  # 存放外包公司目录的位置
         print self.outputPath
         try:
             with open(self.filePath, 'r') as f:
@@ -76,13 +73,13 @@ class TronDistribute:
                     if not os.path.exists(referencesDir):
                         os.makedirs(referencesDir)
                     Paths.append(((referencesDir, referencesList), None))
-            logging.info('打开文件，解析参数成功' + self.filePath )
+            config.logging.info('打开文件，解析参数成功' + self.filePath )
             # 将列表放到线程池，去copy文件
             self.putThread('copy', Paths)
             return True
         except Exception as e:
-            logging.info('打开文件,解析参数出错')
-            logging.error(e)
+            config.logging.info('打开文件,解析参数出错')
+            config.logging.error(e)
             return False
 
     def putThread(self, task, publicArg=None):
@@ -163,11 +160,11 @@ class TronDistribute:
                     shutil.copytree(arg2, arg + os.sep + basename)
                 else:
                     shutil.copyfile(arg2, arg + os.sep + basename)
-            logging.info('拷贝文件成功' + str(arg2))
+            config.logging.info('拷贝文件成功' + str(arg2))
             return 0, None
         except Exception as e:
-            logging.info('拷贝出错')
-            logging.error(e)
+            config.logging.info('拷贝出错')
+            config.logging.error(e)
             return 1, e
 
     # def packFile(self):
@@ -199,10 +196,10 @@ class TronDistribute:
             try:
                 create_time = time.strftime("%Y%m%d", time.localtime(eval(timeStamp)))
                 cpname, proname, user_id = dirname.split('_')
-                shutil.rmtree(outputpath % (proname, create_time) + os.sep + dirname)
+                shutil.rmtree(config.outputpath % (proname, create_time) + os.sep + dirname)
             except Exception as e:
-                logging.info('删除文件出错')
-                logging.error(e)
+                config.logging.info('删除文件出错')
+                config.logging.error(e)
 
     def result(self, req, res):
         res1, res2 = res
@@ -211,7 +208,7 @@ class TronDistribute:
 
 
 def transit(Path, dirName=''):
-    logging.info('transit:' + Path)
+    config.logging.info('transit:' + Path)
     sep = os.sep
     try:
         if '.json' in Path:
@@ -226,15 +223,15 @@ def transit(Path, dirName=''):
                 remark = onefile['remark']
                 create_time = time.strftime("%Y%m%d", time.localtime(eval(onefile['create_time'])))
                 file_name = onefile['file_name']
-                tranfilePath = outputpath % (project_name, create_time) + sep + file_name
+                tranfilePath = config.outputpath % (project_name, create_time) + sep + file_name
                 AliyunOss(tranfilePath, file_name, company_name, email, user_name, remark).uploadFile()
             #os.remove(Path)  # 测试或上线打开，删除json文件
         else:
             AliyunOss(Path, dirName, '', '', '', '').uploadFile()
         return True
     except Exception as e:
-        logging.info("fail to transit")
-        logging.error(e)
+        config.logging.info("fail to transit")
+        config.logging.error(e)
         return False
 
 

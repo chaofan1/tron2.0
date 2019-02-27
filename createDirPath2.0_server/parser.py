@@ -2,7 +2,6 @@
 # -*- coding: utf-8 -*-
 
 import shutil,time
-import logging
 import sys, os
 from createProject import TronProject
 from createFolder import TronFolder
@@ -14,13 +13,9 @@ import config
 from transit_info import handle_client
 
 
-logging.basicConfig(filename=config.log_path_server + time.strftime("%Y%m%d") + '.log', level=logging.INFO,
-					format="%(asctime)s - %(levelname)s - %(message)s")
-
-
 def _init_():
 	args = sys.argv[1:]
-	logging.info(args)
+	config.logging.info(args)
 	server_tron = config.All
 	server_post = config.Post
 	if args[0] == "open_dai":

@@ -2,18 +2,14 @@
 # -*- coding: utf-8 -*-
 # 将服务器执行成功的命令告诉数据库
 
-import time
 import urllib
 import urllib2
 import socket
-import logging
-from config import log_path_server
+import config
 
 
 class CallBack:
     def __init__(self):
-        logging.basicConfig(filename=log_path_server + time.strftime("%Y%m%d") + '.log', level=logging.INFO,
-                            format="%(asctime)s - %(levelname)s - %(message)s")
         self.url = ''
         self.query_args = {}
         self.ip = socket.gethostbyname(socket.gethostname())
@@ -45,35 +41,35 @@ class CallBack:
 
     def request_post(self):
         encoded_args = urllib.urlencode(self.query_args)
-        logging.info('URL:' + self.url, self.query_args)
+        config.logging.info('URL:' + self.url, self.query_args)
         try:
             response = urllib2.urlopen(self.url, encoded_args)
         except urllib2.HTTPError, e:
             print e.code
-            logging.info(e.code)
+            config.logging.info(e.code)
         except urllib2.URLError, e:
             print e.reason
-            logging.info(e.reason)
+            config.logging.info(e.reason)
         else:
             print response.read()
-            logging.info(response.read())
+            config.logging.info(response.read())
 
     def request_get(self):
         word = urllib.urlencode(self.query_args)
         newurl = self.url + "?" + word
-        logging.info('URL:' + newurl)
+        config.logging.info('URL:' + newurl)
         request = urllib2.Request(newurl)
         try:
             response = urllib2.urlopen(request)
         except urllib2.HTTPError, e:
             print e.code
-            logging.info(e.code)
+            config.logging.info(e.code)
         except urllib2.URLError, e:
             print e.reason
-            logging.info(e.reason)
+            config.logging.info(e.reason)
         else:
             print response.read()
-            logging.info(response.read())
+            config.logging.info(response.read())
 
 
 if __name__ == '__main__':
