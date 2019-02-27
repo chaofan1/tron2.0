@@ -6,6 +6,7 @@
 import socket
 import os
 import config
+import fcntl
 
 
 def clientLink(data):
@@ -20,21 +21,29 @@ def clientLink(data):
     try:
         s.connect((HOST, PORT))
     except:
-        config.logging.info(HOST + ' can not connect')
+        with open(config.log_path_client, 'a') as f:
+            fcntl.flock(f.fileno(), fcntl.LOCK_EX)
+            f.write(HOST + ' can not connect')
     else:
         if senStr:
             s.sendall(senStr)
-            config.logging.info('already send info' + '\n')
+            with open(config.log_path_client, 'a') as f:
+                fcntl.flock(f.fileno(), fcntl.LOCK_EX)
+                f.write('already send info' + '\n')
             task_set = {'clip1','add_xml','clip2','download','Dailies1','Dailies2','lgt_dai','Reference'}
             if task in task_set:
                 data = s.recv(1024)
                 if data:
-                    config.logging.info('recv data is: ' + data)
+                    with open(config.log_path_client, 'a') as f:
+                        fcntl.flock(f.fileno(), fcntl.LOCK_EX)
+                        f.write('recv data is: ' + data)
                     if task == 'clip2':
                         video_dir = os.path.dirname(args[1])
                         path = serverName + '/' + video_dir
                         os.chmod(path, 0555)
-                        config.logging.info(path + ' already chmod 555' + '\n')
+                        with open(config.log_path_client, 'a') as f:
+                            fcntl.flock(f.fileno(), fcntl.LOCK_EX)
+                            f.write(path + ' already chmod 555' + '\n')
                     elif task == 'Dailies1' or task == 'lgt_dai' or task == 'Dailies2':
                         filePath = args[1]
                         filename = args[2]
@@ -72,9 +81,13 @@ def clientLink(data):
                             os.chmod(ser_recv_path, 0555)
                             xml_path = serverName+'/'+xml_path
                             os.remove(xml_path)
-                            config.logging.info(ser_recv_path + ' already chmod 555' + '\n')
+                            with open(config.log_path_client, 'a') as f:
+                                fcntl.flock(f.fileno(), fcntl.LOCK_EX)
+                                f.write(ser_recv_path + ' already chmod 555' + '\n')
         s.close()
-        config.logging.info('client close' + '\n')
+        with open(config.log_path_client, 'a') as f:
+            fcntl.flock(f.fileno(), fcntl.LOCK_EX)
+            f.write('client close' + '\n')
 
 
 if __name__ == '__main__':
