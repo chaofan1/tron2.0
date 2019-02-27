@@ -8,9 +8,9 @@ import os,time
 import config
 import logging
 logger2 = logging.getLogger('Clientlogger')
-fh = logging.FileHandler('./log/test.log')
-formatter = logging.basicConfig(filename=config.log_path_server + time.strftime("%Y%m%d") + '.log', level=logging.INFO,
-					format="%(asctime)s - %(levelname)s - %(message)s")
+logger2.setLevel(logging.info)
+fh = logging.FileHandler(config.log_path_server + time.strftime("%Y%m%d") + '.log')
+formatter = logging.Formatter("%(asctime)s - %(levelname)s - %(message)s")
 fh.setFormatter(formatter)
 logger2.addHandler(fh)
 
