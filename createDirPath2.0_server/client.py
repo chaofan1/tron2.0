@@ -4,15 +4,9 @@
 # 192.168.1.85|x:/ZML/Dailies/20161129|zml01001_prd_liangcy_HVD_v0150|194|Dailies2
 
 import socket
-import os,time
+import os
 import config
-import logging
-logger2 = logging.getLogger('Clientlogger')
-logger2.setLevel(logging.info)
-fh = logging.FileHandler(config.log_path_server + time.strftime("%Y%m%d") + '.log')
-formatter = logging.Formatter("%(asctime)s - %(levelname)s - %(message)s")
-fh.setFormatter(formatter)
-logger2.addHandler(fh)
+
 
 def clientLink(data):
     args = data.split("|")
@@ -26,11 +20,11 @@ def clientLink(data):
     try:
         s.connect((HOST, PORT))
     except:
-        logger2.info(HOST + ' can not connect')
+        config.logging.info(HOST + ' can not connect')
     else:
         if senStr:
             s.sendall(senStr)
-            logger2.info('already send info' + '\n')
+            config.logging.info('already send info' + '\n')
             task_set = {'clip1','add_xml','clip2','download','Dailies1','Dailies2','lgt_dai','Reference'}
             if task in task_set:
                 data = s.recv(1024)
@@ -40,7 +34,7 @@ def clientLink(data):
                         video_dir = os.path.dirname(args[1])
                         path = serverName + '/' + video_dir
                         os.chmod(path, 0555)
-                        logger2.info(path + ' already chmod 555' + '\n')
+                        config.logging.info(path + ' already chmod 555' + '\n')
                     elif task == 'Dailies1' or task == 'lgt_dai' or task == 'Dailies2':
                         filePath = args[1]
                         filename = args[2]
@@ -78,9 +72,9 @@ def clientLink(data):
                             os.chmod(ser_recv_path, 0555)
                             xml_path = serverName+'/'+xml_path
                             os.remove(xml_path)
-                            logger2.info(ser_recv_path + ' already chmod 555' + '\n')
+                            config.logging.info(ser_recv_path + ' already chmod 555' + '\n')
         s.close()
-        logger2.info('client close' + '\n')
+        config.logging.info('client close' + '\n')
 
 
 if __name__ == '__main__':
