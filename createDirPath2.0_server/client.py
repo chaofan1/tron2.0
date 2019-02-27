@@ -33,6 +33,7 @@ def clientLink(data):
             task_set = {'clip1','add_xml','clip2','download','Dailies1','Dailies2','lgt_dai','Reference'}
             if task in task_set:
                 data = s.recv(1024)
+                s.close()
                 if data:
                     with open(config.log_path_client, 'a') as f:
                         fcntl.flock(f.fileno(), fcntl.LOCK_EX)
@@ -68,7 +69,7 @@ def clientLink(data):
                         ref_path = server_ref + args[1]
                         os.chmod(ref_path, 0555)
                     elif task == 'download':
-                        s.close()
+                        # s.close()
                         return data
                     else:
                         xml_path = args[1]
