@@ -6,10 +6,12 @@ import shutil
 import threadpool
 import sys
 import config
+import logging
 reload(sys)
 sys.setdefaultencoding('utf8')
 from aliyun import AliyunOss
-
+logging.basicConfig(filename=config.log_path_server + time.strftime("%Y%m%d") + '.log', level=logging.INFO,
+					format="%(asctime)s - %(levelname)s - %(message)s")
 
 class Finish(SyntaxWarning):
     pass
@@ -73,13 +75,13 @@ class TronDistribute:
                     if not os.path.exists(referencesDir):
                         os.makedirs(referencesDir)
                     Paths.append(((referencesDir, referencesList), None))
-            config.logging.info('打开文件，解析参数成功' + self.filePath )
+            logging.info('打开文件，解析参数成功' + self.filePath )
             # 将列表放到线程池，去copy文件
             self.putThread('copy', Paths)
             return True
         except Exception as e:
-            config.logging.info('打开文件,解析参数出错')
-            config.logging.error(e)
+            logging.info('打开文件,解析参数出错')
+            logging.error(e)
             return False
 
     def putThread(self, task, publicArg=None):
@@ -160,11 +162,11 @@ class TronDistribute:
                     shutil.copytree(arg2, arg + os.sep + basename)
                 else:
                     shutil.copyfile(arg2, arg + os.sep + basename)
-            config.logging.info('拷贝文件成功' + str(arg2))
+            logging.info('拷贝文件成功' + str(arg2))
             return 0, None
         except Exception as e:
-            config.logging.info('拷贝出错')
-            config.logging.error(e)
+            logging.info('拷贝出错')
+            logging.error(e)
             return 1, e
 
     # def packFile(self):
@@ -198,8 +200,8 @@ class TronDistribute:
                 cpname, proname, user_id = dirname.split('_')
                 shutil.rmtree(config.outputpath % (proname, create_time) + os.sep + dirname)
             except Exception as e:
-                config.logging.info('删除文件出错')
-                config.logging.error(e)
+                logging.info('删除文件出错')
+                logging.error(e)
 
     def result(self, req, res):
         res1, res2 = res
@@ -208,7 +210,7 @@ class TronDistribute:
 
 
 def transit(Path, dirName=''):
-    config.logging.info('transit:' + Path)
+    logging.info('transit:' + Path)
     sep = os.sep
     try:
         if '.json' in Path:
@@ -230,8 +232,8 @@ def transit(Path, dirName=''):
             AliyunOss(Path, dirName, '', '', '', '').uploadFile()
         return True
     except Exception as e:
-        config.logging.info("fail to transit")
-        config.logging.error(e)
+        logging.info("fail to transit")
+        logging.error(e)
         return False
 
 

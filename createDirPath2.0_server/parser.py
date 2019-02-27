@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 
 import shutil,time
-import sys, os
+import sys, os, logging
 from createProject import TronProject
 from createFolder import TronFolder
 from server_callback import CallBack
@@ -11,11 +11,12 @@ from distribution import TronDistribute,transit
 from aliyun import AliyunOss
 import config
 from transit_info import handle_client
-
+logging.basicConfig(filename=config.log_path_server + time.strftime("%Y%m%d") + '.log', level=logging.INFO,
+					format="%(asctime)s - %(levelname)s - %(message)s")
 
 def _init_():
 	args = sys.argv[1:]
-	config.logging.info(args)
+	logging.info(args)
 	server_tron = config.All
 	server_post = config.Post
 	if args[0] == "open_dai":
@@ -88,7 +89,7 @@ def _init_():
 	elif args[0] == "download_out":  # 'download_out' '[tron_TXT_7, tron_TXT_6]' 'ids' 'user_id' 'ip'
 		clipData = args[4] + '|' + args[1] + '|download'
 		downloadPath = handle_client(clipData)
-		config.logging.info('download_out path: ' + downloadPath)
+		logging.info('download_out path: ' + downloadPath)
 		if os.path.exists(downloadPath):
 			for fileName in eval(args[1]):
 				AliyunOss('', fileName, '', '', '', '').download(downloadPath)
