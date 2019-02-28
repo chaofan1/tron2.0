@@ -7,9 +7,11 @@ import socket
 import os
 import config
 import fcntl
+import time
 
 
 def clientLink(data):
+    log_path_client = config.log_path_client + time.strftime("%Y%m%d") + '.txt'
     args = data.split("|")
     task = args[-1]
     senStr = '|'.join(args[1:])
@@ -21,34 +23,34 @@ def clientLink(data):
     try:
         s.connect((HOST, PORT))
     except:
-        with open(config.log_path_client, 'a') as f:
+        with open(log_path_client, 'a') as f:
             fcntl.flock(f.fileno(), fcntl.LOCK_EX)
-            f.write(HOST + ' can not connect' + '\n')
+            f.write(HOST+':'+PORT+' can not connect'+'\n')
     else:
         if senStr:
-            with open(config.log_path_client, 'a') as f:
+            with open(log_path_client, 'a') as f:
                 fcntl.flock(f.fileno(), fcntl.LOCK_EX)
                 f.write(data+'\n')
             s.sendall(senStr)
-            with open(config.log_path_client, 'a') as f:
+            with open(log_path_client, 'a') as f:
                 fcntl.flock(f.fileno(), fcntl.LOCK_EX)
                 f.write(' already send' + '\n')
             task_set = {'clip1','add_xml','clip2','download','Dailies1','Dailies2','lgt_dai','Reference'}
             if task in task_set:
                 data = s.recv(1024)
                 s.close()
-                with open(config.log_path_client, 'a') as f:
+                with open(log_path_client, 'a') as f:
                     fcntl.flock(f.fileno(), fcntl.LOCK_EX)
                     f.write('client close' + '\n')
                 if data:
-                    with open(config.log_path_client, 'a') as f:
+                    with open(log_path_client, 'a') as f:
                         fcntl.flock(f.fileno(), fcntl.LOCK_EX)
                         f.write('recv data is: ' + data + '\n')
                     if task == 'clip2':
                         video_dir = os.path.dirname(args[1])
                         path = serverName + '/' + video_dir
                         os.chmod(path, 0555)
-                        with open(config.log_path_client, 'a') as f:
+                        with open(log_path_client, 'a') as f:
                             fcntl.flock(f.fileno(), fcntl.LOCK_EX)
                             f.write(path + ' already chmod 555' + '\n')
                     elif task == 'Dailies1' or task == 'lgt_dai' or task == 'Dailies2':
@@ -88,7 +90,7 @@ def clientLink(data):
                             os.chmod(ser_recv_path, 0555)
                             xml_path = serverName+'/'+xml_path
                             os.remove(xml_path)
-                            with open(config.log_path_client, 'a') as f:
+                            with open(log_path_client, 'a') as f:
                                 fcntl.flock(f.fileno(), fcntl.LOCK_EX)
                                 f.write(ser_recv_path + ' already chmod 555' + '\n')
         # s.close()

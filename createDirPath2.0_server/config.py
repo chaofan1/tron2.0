@@ -1,6 +1,5 @@
-import time
 log_path_server = '/Public/tronPipelineScript/tron2.0/log/'
-log_path_client = '/Public/tronPipelineScript/tron2.0/log/client_'+ time.strftime("%Y%m%d") + '.log'
+log_path_client = '/Public/tronPipelineScript/tron2.0/log/client_'
 
 outputpath = '/Tron/%s/Vender/outgoing/%s'
 

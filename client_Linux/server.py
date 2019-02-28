@@ -27,6 +27,7 @@ def myServer():
 	s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 	s.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
 	s.bind((HOST, PORT))
+	print 'localIP:', HOST,":",PORT
 	print "waiting for connection ......"
 	s.listen(5)
 	while 1:
@@ -38,9 +39,10 @@ def myServer():
 		# windows的socket无法用多进程，因为无法被序列化；
 		# 多线程与协程：虽然可以实现socket的并发，但QT库的UI界面只能在主线程运行，无法并发，想要并发只能用内部的QThread；
 		# 所以Mac与windows无法实现socket的并发
-		p = Process(target=handle, args=(conn,))
-		p.start()
-		conn.close()
+		# p = Process(target=handle, args=(conn,))
+		# p.start()
+		# conn.close()
+		handle(conn)
 
 
 def handle(conn):
