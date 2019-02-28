@@ -65,12 +65,13 @@ class UploadFile:
                 if not os.path.exists(file_copy_path):
                     os.mkdir(file_copy_path)
                     print 'mkdir'
-                if fileType == "mov" or fileType == "avi" or fileType == "mp4":
-                    command = '%s -i %s -loglevel -8 -c:v libx264 -y -g 2 -keyint_min 2 %s' % (ffmpeg, self.fileOld, file_abspath)
-                    video_su = subprocess.Popen(command, shell=True)
-                    video_su.wait()
-                else:
-                    shutil.copy(self.fileOld, file_abspath)
+                # if fileType == "mov" or fileType == "avi" or fileType == "mp4":
+                #     command = '%s -i %s -loglevel -8 -c:v libx264 -y -g 2 -keyint_min 2 %s' % (ffmpeg, self.fileOld, file_abspath)
+                #     video_su = subprocess.Popen(command, shell=True)
+                #     video_su.wait()
+                # else:
+                shutil.copy(self.fileOld, file_abspath)
+                print self.fileOld + '>>>>' + file_copy_path
             except Exception as e:
                 print(e)
             if task:
@@ -111,13 +112,13 @@ class UploadFile:
                 fileType = "jpg"
             file_copy_path = server_name + file_path + self.sep + file_name + "." + fileType
             try:
-                if fileType == "mov" or fileType == "avi" or fileType == "mp4":
-                    command = '%s -i %s -loglevel -8 -c:v libx264 -y -g 2 -keyint_min 2 %s' % (ffmpeg, self.fileOld, file_copy_path)
-                    video_su = subprocess.Popen(command, shell=True)
-                    video_su.wait()
-                else:
-                    shutil.copy(self.fileOld, file_copy_path)
-                print file_copy_path
+                # if fileType == "mov" or fileType == "avi" or fileType == "mp4":
+                #     command = '%s -i %s -loglevel -8 -c:v libx264 -y -g 2 -keyint_min 2 %s' % (ffmpeg, self.fileOld, file_copy_path)
+                #     video_su = subprocess.Popen(command, shell=True)
+                #     video_su.wait()
+                # else:
+                shutil.copy(self.fileOld, file_copy_path)
+                print self.fileOld + '>>>>' + file_copy_path
             except Exception as e:
                 print e
             fileNow = file_name + "." + fileType

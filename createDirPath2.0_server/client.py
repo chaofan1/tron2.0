@@ -77,9 +77,8 @@ def clientLink(data):
                         ref_path = server_ref + args[1]
                         os.chmod(ref_path, 0555)
                     elif task == 'download':
-                        # s.close()
                         return data
-                    else:
+                    elif task == 'clip1' or task == 'add_xml':
                         xml_path = args[1]
                         recv_path = data.replace('\\', '/')
                         ser_recv_path = serverName+'/'+recv_path  # clip /Tron/FUY/001
@@ -93,10 +92,6 @@ def clientLink(data):
                             with open(log_path_client, 'a') as f:
                                 fcntl.flock(f.fileno(), fcntl.LOCK_EX)
                                 f.write(ser_recv_path + ' already chmod 555' + '\n')
-        # s.close()
-        # with open(config.log_path_client, 'a') as f:
-        #     fcntl.flock(f.fileno(), fcntl.LOCK_EX)
-        #     f.write('client close' + '\n')
 
 
 if __name__ == '__main__':

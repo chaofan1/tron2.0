@@ -136,6 +136,7 @@ def getter(task_queue, queue_len, xml_id, task):
             # print 'command',transcode_command
         else:
             transcode_command = '%s -i %s -loglevel -8 -c:v libx264 -y -g 2 -keyint_min 2 %s' % (ffmpeg, pathurl, video_path)
+        print '文件正在转码，请勿关闭终端！'
         video_su = subprocess.Popen(transcode_command, shell=True)
         video_su.wait()
         if user_file_path:
@@ -152,6 +153,8 @@ def getter(task_queue, queue_len, xml_id, task):
 
         # 002、写入数据库
         shot_number = info['shot_number']
+        video_sql_path = dirname + '/Stuff/prd/plates/mov/tron_plates'
+        img_sql_path = ''
         write_sql(info,video_path,img_path,shot_number)
 
 
