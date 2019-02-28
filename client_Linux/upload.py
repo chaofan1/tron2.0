@@ -59,7 +59,7 @@ class UploadFile:
                 print self.fileOld + '>>>>' + file_copy_path
             except Exception as e:
                 print(e)
-            if task:
+            if task and frame:
                 if fileType == "jpg" or fileType == "jpeg" or fileType == "png" or fileType == "tiff" or fileType == "tga":
                     clip_video_dirpath = server_name + file_path + '/mov' + self.sep + file_name
                     if not os.path.exists(clip_video_dirpath):
