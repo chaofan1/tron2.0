@@ -50,7 +50,7 @@ class TronFolder:
                 if parentMode == "555":
                     os.chmod(parent_Dir, 0555)
 
-    def CreateStuff(self, proPath, seqName, shotName, task, fileName, user):
+    def CreateStuff(self, proPath, seqName, shotName, task, fileName, user):  # proPath:/Tron/FUY
         #taskGroup = 'ani', 'prd', 'cmp', 'art', 'dmt', 'efx', 'lgt', 'mmv', 'mod', 'rig', 'tex', 'prv'
         dirPath = ""
         if len(proPath):
