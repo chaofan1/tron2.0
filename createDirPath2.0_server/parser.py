@@ -97,13 +97,13 @@ def _init_():
 	elif args[0] == "Seq":  # createProject.CreateSeq(proName, seqName)
 		TronProject().CreateSeq(args[1].upper(), args[2])
 		CallBack().callback(args[3])
-	elif args[0] == "Shot":   # "Shot" "HAC" "001" "001" "command_id"
+	elif args[0] == "Shot":   # "Shot" "HAC" "001" "001" "user_name" "command_id"
 		TronProject().CreateScene(args[1].upper(), args[2], args[3])
 		# TronProject().CreateShot(args[1].upper(), args[2], args[3], args[4], args[5], args[6])
 		proPath = config.All + '/' + args[1].upper()
-		TronFolder().CreateStuff(proPath, args[2], args[3], 'prd', '', '')
+		TronFolder().CreateStuff(proPath, args[2], args[3], 'prd', '', args[4])
 		folderPath = proPath + '/' + args[2] + '/' + args[3] + '/Work'
-		TronFolder().CreateFolder(folderPath, "0555", "prdleader")
+		TronFolder().CreateFolder(folderPath, "0555", "")
 		CallBack().callback(args[4])
 	elif args[0] == "Pack":  # "Pack" "Json路径" "时间戳" "打包id" "command_id"
 		res = TronDistribute().argParse(args[1], args[2])
