@@ -41,6 +41,14 @@ class CallBack:
         self.query_args = {'ids': ids, 'user_id': user_id}
         self.request_get()
 
+    def clip_to_php(self, queue_len, qsize, project_id, field_id, xml_id):
+        self.url = 'http://%s/clips/set_progress' % self.ip
+        all_task = float(queue_len)
+        done = float(queue_len - qsize)
+        percentage = int((done / all_task) * 100)
+        self.query_args = {'percentage': percentage, 'project_id': project_id, 'field_id': field_id, 'xml_id': xml_id}
+        self.request_post()
+
     def request_post(self):
         encoded_args = urllib.urlencode(self.query_args)
         logging.info('URL:' + self.url, self.query_args)

@@ -97,6 +97,7 @@ def getter(task_queue, queue_len, xml_id, task):
         print(e)
     else:
         # 传递百分比给php
+        print '文件正在转码，请勿关闭终端！'
         project_id = info.get('project_id')  # 所属项目ID
         field_id = info.get('field_id')  # 场号ID
         if qsize > 0:
@@ -136,7 +137,6 @@ def getter(task_queue, queue_len, xml_id, task):
             # print 'command',transcode_command
         else:
             transcode_command = '%s -i %s -loglevel -8 -c:v libx264 -y -g 2 -keyint_min 2 %s' % (ffmpeg, pathurl, video_path)
-        print '文件正在转码，请勿关闭终端！'
         video_su = subprocess.Popen(transcode_command, shell=True)
         video_su.wait()
         if user_file_path:
@@ -153,9 +153,9 @@ def getter(task_queue, queue_len, xml_id, task):
 
         # 002、写入数据库
         shot_number = info['shot_number']
-        video_sql_path = dirname + '/Stuff/prd/plates/mov/tron_plates'
-        img_sql_path = ''
-        write_sql(info,video_path,img_path,shot_number)
+        video_sql_path = dirname + '/Stuff/prd/plates/mov/tron_plates/' + video_name
+        img_sql_path = dirname + '/Stuff/prd/plates/mov/tron_plates/' + img_name
+        write_sql(info,video_sql_path,img_sql_path,shot_number)
 
 
 def putter(task_queue, xml_path, project_id, field_id, data, path, task):
@@ -267,7 +267,7 @@ def putter(task_queue, xml_path, project_id, field_id, data, path, task):
                                     continue
                                 dirname_new = os.path.join(path, shot_number_new)  # /Volumes/All/TXT/019/009
                                 dirname_old = os.path.join(path, shot_number_old)
-                                video_img_li = os.listdir(dirname_old)
+                                video_img_li = os.listdir(dirname_old+'/Stuff/prd/plates/mov/tron_plates/')
                                 os.rename(dirname_old, dirname_new)  # 为文件夹重命名
 
                                 # 文件夹依次加1以后,要更新的字段:镜头编号shot_number、镜头缩略图地址shot_image、视频路径shot_video_path
@@ -275,8 +275,10 @@ def putter(task_queue, xml_path, project_id, field_id, data, path, task):
                                 if video_name:
                                     video_name = video_name[0]
                                     img_name = '.'.join(video_name.split('.')[:-1]) + '.jpg'
-                                    video_path_new_all = os.path.join(dirname_new, video_name)  # 新的视频路径
-                                    img_path_new_all = os.path.join(dirname_new, img_name)     # 新的缩略图路径
+                                    # video_path_new_all = os.path.join(dirname_new, video_name)  # 新的视频路径
+                                    # img_path_new_all = os.path.join(dirname_new, img_name)     # 新的缩略图路径
+                                    video_path_new_all = dirname_new + '/Stuff/prd/plates/mov/tron_plates/' + video_name  # 新的视频路径
+                                    img_path_new_all = dirname_new + '/Stuff/prd/plates/mov/tron_plates/' + img_name  # 新的缩略图路径
                                     shot_video_path_new = video_path_new_all.replace(server_all,'uploads/Projects')
                                     shot_image_new = img_path_new_all.replace(server_all,'uploads/Projects')
                                     update_sql = "update oa_shot set shot_number='%s',shot_name='%s',shot_video_path='%s',shot_image='%s' where project_id=%s and field_id=%s and shot_number='%s'"\

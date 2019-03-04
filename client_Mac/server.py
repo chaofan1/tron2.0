@@ -20,12 +20,16 @@ def myServer():
 	if platform.system() != 'Darwin':
 		print '这是Mac平台，请使用相应脚本!'
 		exit()
-	HOST = socket.gethostbyname(socket.gethostname())
-	print 'localIP:', HOST
+	try:
+		HOST = socket.gethostbyname(socket.gethostname())
+	except:
+		print '无法获取本机IP，请联系IT'
+		exit()
 	PORT = config.port
 	s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 	s.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
 	s.bind((HOST, PORT))
+	print 'localIP:', HOST,":",PORT
 	print "waiting for connection ......"
 	s.listen(5)
 	while 1:
@@ -155,7 +159,7 @@ def handle(conn):
 				xml_path = server_all + sep + xml_path
 				video_path = server_all + sep + path
 				start_clip(xml_path, video_path, project_id, field_id, xml_id, UpTask)
-				to_php(1, 0, project_id, field_id, xml_id, UpTask)
+				# to_php(1, 0, project_id, field_id, xml_id, UpTask)
 				conn.send(path)
 				print('clip1 end')
 				CallBack().common_callback(command_id)
@@ -170,7 +174,7 @@ def handle(conn):
 				video_path = server_all + sep + path
 				start_clip(xml_path, video_path, project_id, field_id, xml_id, UpTask)
 				conn.send(path)
-				to_php(1, 0, project_id, field_id, xml_id, UpTask)
+				# to_php(1, 0, project_id, field_id, xml_id, UpTask)
 				CallBack().common_callback(command_id)
 				print('add_xml end')
 

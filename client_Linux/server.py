@@ -21,7 +21,11 @@ def myServer():
 	if platform.system() != 'Linux':
 		print '这是Linux平台，请使用相应脚本!'
 		exit()
-	localIP = socket.gethostbyname(socket.gethostname())
+	try:
+		localIP = socket.gethostbyname(socket.gethostname())
+	except:
+		print '无法获取本机IP，请联系IT'
+		exit()
 	HOST = localIP
 	PORT = config.port
 	s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
