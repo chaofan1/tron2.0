@@ -180,7 +180,7 @@ def handle(conn):
 					shutil.copy(file_old, fileAll)
 					if os.path.exists(fileAll):
 						CreateThumbnail().run(fileAll)
-						CallBack().dai_callback(command_id, file_path + "/" + file_name, fileNow, UpTask, "")
+						CallBack().dai_callback(command_id, file_path + "/" + file_name, fileNow, fileAll)
 			finally:
 				conn.send('dailies2')
 
