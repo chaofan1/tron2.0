@@ -10,7 +10,7 @@ import time
 import shutil
 import platform
 import socket
-import createThumbnail
+from createThumbnail import CreateThumbnail
 from httpUrl import CallBack
 from upload import UploadFile
 import config
@@ -176,9 +176,10 @@ def handle(conn):
 				os.popen("python //192.168.100.99/Public/tronPipelineScript/IlluminaConverter_v002/IlluminaConverter_v002.py %s" % fileNow).read()
 				print outputPath
 				if os.path.isdir(outputPath):
-					shutil.copytree(outputPath, fileD)
+					file_old = outputPath + '/' + fileNow
+					shutil.copy(file_old, fileAll)
 					if os.path.exists(fileAll):
-						createThumbnail.run(fileNow, fileD)
+						CreateThumbnail().run(fileAll)
 						CallBack().dai_callback(command_id, file_path + "/" + file_name, fileNow, UpTask, "")
 			finally:
 				conn.send('dailies2')
