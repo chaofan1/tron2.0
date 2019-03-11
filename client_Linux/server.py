@@ -6,7 +6,6 @@ import time
 import shutil
 import platform
 import socket
-from multiprocessing import Process
 import createThumbnail
 from render import Render, Select
 from httpUrl import CallBack
@@ -182,10 +181,11 @@ def handle(conn):
 				# os.popen("python /Volumes/library/tron/IlluminaConverter_v002/IlluminaConverter_v002.py %s" % fileNow).read()
 				print outputPath
 				if os.path.isdir(outputPath):
-					shutil.copytree(outputPath, fileD)
+					file_old = outputPath + '/' + fileNow
+					shutil.copy(file_old, fileAll)
 					if os.path.exists(fileAll):
-						createThumbnail.run(fileNow, fileD)
-						CallBack().dai_callback(command_id, file_path + "/" + file_name, fileNow, UpTask, "")
+						createThumbnail.run(fileAll)
+						CallBack().dai_callback(command_id, file_path + "/" + file_name, fileNow, fileAll)
 			finally:
 				conn.send('Dailies2')
 

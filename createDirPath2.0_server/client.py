@@ -25,7 +25,7 @@ def clientLink(data):
     try:
         s.connect((HOST, PORT))
     except:
-        write_log(log_path_client, HOST+':'+PORT+' can not connect'+'\n')
+        write_log(log_path_client, str(HOST)+':'+str(PORT)+' can not connect'+'\n')
     else:
         if senStr:
             write_log(log_path_client, data+'\n')
