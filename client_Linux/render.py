@@ -33,7 +33,7 @@ class Render:
         self.ray_py_file = config.start_py
         self.csv_path = config.render_csv_path
 
-    def dataTree(self):
+    def submit_info(self):
         file_size = os.path.getsize(self.file_name)
         file_mtime = os.path.getmtime(self.file_name)
         pro_name = self.file_path.split('/')[1]
@@ -48,7 +48,7 @@ class Render:
                 Remind().remind_ask()
 
     def submit(self, Uptask):
-        self.dataTree()
+        self.submit_info()
         up_name = self.file_name.split('/')[-1]
         file_number = self.file_path.split('_')[0][-9:]
         if Uptask == 'Ready_render1' or Uptask == 'Ready_render2':
