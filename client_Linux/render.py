@@ -39,7 +39,7 @@ class Render:
         pro_name = self.file_path.split('/')[1]
         csv_path = os.path.join(self.csv_path, '%s.csv' % pro_name)
         with open(csv_path, 'a+') as f:
-            con_write = self.file_path, file_size, file_mtime
+            con_write = self.file_name, file_size, file_mtime
             con_read = set(f.readlines())
             con_write = str(con_write) + '\n'
             if con_write not in con_read:
