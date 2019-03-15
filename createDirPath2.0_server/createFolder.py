@@ -141,24 +141,25 @@ class TronFolder:
             self.CreateFolder((workPath + self.sep + 'taskGroup' + self.sep + 'tex'), "0775", "hanyi")
         if len(user) != 0:
             userWork = workPath+self.sep+user
-            workChild = ""
+            # workChild = ""
             if not os.path.exists(userWork):
                 self.CreateFolder(userWork, "0755", user)
-                if len(task) != 0:
-                    if task == 'mod' or task == 'rig' or task == 'ani':
-                        workChild = "ma", "other"
-                    elif task == 'art' or task == 'dmt':
-                        workChild = 'ps', 'other'
-                    elif task == 'mmv':
-                        workChild = 'nk', 'ma', 'other'
-                    elif task == 'efx' or task == 'lgt':
-                        workChild = 'hip', 'ma', 'other'
-                    elif task == 'cmp':
-                        workChild = 'nk', 'other'
-                    elif task == 'tex':
-                        workChild = 'ma', 'ps', 'other'
-                    elif task == 'prd':
-                        workChild = 'fcp', 'nk', 'other'
+                workChild = 'fcp', 'nk', 'hip', 'ma', 'ps', 'other'
+                # if len(task) != 0:
+                #     if task == 'mod' or task == 'rig' or task == 'ani':
+                #         workChild = "ma", "other"
+                #     elif task == 'art' or task == 'dmt':
+                #         workChild = 'ps', 'other'
+                #     elif task == 'mmv':
+                #         workChild = 'nk', 'ma', 'other'
+                #     elif task == 'efx' or task == 'lgt':
+                #         workChild = 'hip', 'ma', 'other'
+                #     elif task == 'cmp':
+                #         workChild = 'nk', 'other'
+                #     elif task == 'tex':
+                #         workChild = 'ma', 'ps', 'other'
+                #     elif task == 'prd':
+                #         workChild = 'fcp', 'nk', 'other'
                 hfsChild = "cache", "hip", "otl", "pic", "sim"
                 for i in workChild:
                     childPath = userWork + self.sep + i
