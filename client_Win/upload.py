@@ -25,6 +25,7 @@ class UploadFile:
         self.fileOld = ''
         self.app = QApplication(sys.argv)
         self.mainWindow = QMainWindow()
+        self.mainWindow.setWindowFlags(Qt.WindowStaysOnTopHint)
 
     def select_file(self):
         (fileOld, ext) = QFileDialog.getOpenFileNameAndFilter(self.mainWindow,
@@ -170,16 +171,20 @@ class UploadFile:
         user_name = config.user_name
         passwd = config.passwd
         db_name = config.db_name
-        sql_data = eval(sql_data)
 
-        # oa_references中的字段
+        sql_data = eval(sql_data)
         file_name = sql_data.get('file_name') + '.' + fileType
+        resource_type = int(sql_data.get('resource_type'))
+        project_id = int(sql_data.get('project_id'))
+        field_id = int(sql_data.get('field_id'))
+        resource_id = int(sql_data.get('resource_id'))
         tache_info = sql_data.get('tache_info')
         path = sql_data.get('path')
         directory = sql_data.get('directory')
         user_id = int(sql_data.get('user_id'))
         create_year = int(sql_data.get('create_year'))
         create_time = int(sql_data.get('create_time'))
+
         submit_status = 2
 
         try:
@@ -188,23 +193,16 @@ class UploadFile:
             print('connect fail')
         else:
             cursor = conn.cursor()
-            insert_sql = "insert ignore into oa_references(file_name,tache_info,path,directory,user_id,create_year,create_time,thumbnail,submit_status, file_type) " \
-                         "VALUES(%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)"
-            cursor.execute(insert_sql, (file_name, tache_info, path, directory, user_id, create_year, create_time,thumbnail, submit_status, file_type))
-
-            # oa_references_access中的字段
-            references_id = cursor.lastrowid
-            resource_type = int(sql_data.get('resource_type'))
-            project_id = int(sql_data.get('project_id'))
-            field_id = int(sql_data.get('field_id'))
-            resource_id_tup = eval(sql_data.get('resource_id'))
-            for resource_id in resource_id_tup:
-                insert_sql_access = "insert ignore into oa_references_access(references_id,resource_type,project_id,field_id,resource_id) VALUES(%s,%s,%s,%s,%s)"
-                cursor.execute(insert_sql_access, (references_id,resource_type,project_id,field_id,resource_id))
-
+            insert_sql = "insert ignore into oa_references(file_name,resource_type,project_id,field_id,resource_id," \
+                         "tache_info,path,directory,user_id,create_year,create_time,thumbnail,submit_status, file_type) " \
+                         "VALUES(%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)"
+            cursor.execute(insert_sql, (file_name, resource_type, project_id, field_id, resource_id,
+                                        tache_info, path, directory, user_id, create_year, create_time,
+                                        thumbnail, submit_status, file_type))
             conn.commit()
             cursor.close()
             conn.close()
+            print 'succes sql'
 
 
 if __name__ == '__main__':

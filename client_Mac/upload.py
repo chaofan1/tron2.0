@@ -23,6 +23,7 @@ class UploadFile:
         self.plat = platform.system()
         self.app = QApplication(sys.argv)
         self.mainWindow = QMainWindow()
+        self.mainWindow.setWindowFlags(Qt.WindowStaysOnTopHint)
         self.inPathFile = ''
         self.fileOld = ''
 

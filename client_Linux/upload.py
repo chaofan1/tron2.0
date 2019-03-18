@@ -9,6 +9,7 @@ import sys
 import cv2
 import pymysql
 from PyQt4 import QtGui
+from PyQt4.QtCore import *
 import createThumbnail
 from httpUrl import CallBack
 import config
@@ -22,6 +23,7 @@ class UploadFile:
         self.plat = platform.system()
         self.app = QtGui.QApplication(sys.argv)
         self.mainWindow = QtGui.QMainWindow()
+        self.mainWindow.setWindowFlags(Qt.WindowStaysOnTopHint)
         self.inPathFile = ''
         self.fileOld = ''
 

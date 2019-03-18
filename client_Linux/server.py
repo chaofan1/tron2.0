@@ -6,6 +6,7 @@ import time
 import shutil
 import platform
 import socket
+from multiprocessing import Process
 import createThumbnail
 from render import Render, Select
 from httpUrl import CallBack
@@ -42,10 +43,10 @@ def myServer():
 		# windows的socket无法用多进程，因为无法被序列化；
 		# 多线程与协程：虽然可以实现socket的并发，但QT库的UI界面只能在主线程运行，无法并发，想要并发只能用内部的QThread；
 		# 所以Mac与windows无法实现socket的并发
-		# p = Process(target=handle, args=(conn,))
-		# p.start()
-		# conn.close()
-		handle(conn)
+		p = Process(target=handle, args=(conn,))
+		p.start()
+		conn.close()
+		# handle(conn)
 
 
 def handle(conn):
@@ -119,7 +120,6 @@ def handle(conn):
 				file_name = Select().select_one(inPathFile)
 				if os.path.exists(file_name):
 					Render(file_name, file_path).submit(Uptask)
-				CallBack().common_callback(command_id)
 
 		elif data_split[-1] == "Ready_render2" or data_split[-1] == "Local_render2" or data_split[-1] == "Cloud_render2":
 			try:
@@ -131,7 +131,6 @@ def handle(conn):
 				file_name = Select().select_dir(inPathFile)
 				if os.path.exists(file_name):
 					Render(file_name, file_path).submit(Uptask)
-				CallBack().common_callback(command_id)
 
 		elif data_split[-1] == "Dailies1":   # /FUY/001/001/stuff/cmp|file_name|command_id|Dailies1
 			try:

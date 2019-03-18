@@ -4,6 +4,7 @@ import sys
 import os
 import subprocess
 from PyQt4 import QtGui
+from PyQt4.QtCore import *
 from remind import Remind
 import config
 reload(sys)
@@ -14,10 +15,11 @@ class Select:
     def __init__(self):
         self.app = QtGui.QApplication(sys.argv)
         self.mainWindow = QtGui.QMainWindow()
+        self.mainWindow.setWindowFlags(Qt.WindowStaysOnTopHint)
 
     def select_one(self, inPathFile):
         file_path = QtGui.QFileDialog.getOpenFileName(self.mainWindow, 'open file', inPathFile).toUtf8()
-        return file_path
+        return str(file_path)
         sys.exit(self.app.exec_())
 
     def select_dir(self, inPathFile):
@@ -69,11 +71,13 @@ class Render:
                 print line
                 if 'successfully' in line:
                     Remind().remind_success(file_number)
-                else:
-                    Remind().remind_fail(line, file_number)
+                # else:
+                #     Remind().remind_fail(line, file_number)
             if line == '' and popen_cmd.poll() != None:
                 break
 
-# cmd = 'export PATH=/Public/Support/Thinkbox/Deadline8/bin:$PATH && deadlinecommand -SubmitCommandLineJob -executable "/usr/bin/python" -arguments "%s -r -q <QUOTE>%s<QUOTE>" -chunksize 1 -priority 100 -name "%s" -prop MachineLimit=5' % (
-# cmd = 'export PATH=/Public/Support/Thinkbox/Deadline8/bin:$PATH && deadlinecommand -SubmitCommandLineJob -executable "/usr/bin/python" -arguments "%s -r <QUOTE>%s<QUOTE>" -chunksize 1 -priority 100 -name "%s" -prop MachineLimit=5' % (
-# cmd = 'export PATH=/Public/Support/Thinkbox/Deadline8/bin:$PATH && deadlinecommand -SubmitCommandLineJob -executable "/usr/bin/python" -arguments "%s -a -u -s <QUOTE>%s<QUOTE>" -chunksize 1 -pool upload_submit_pool -group upload_submit_group -priority 100 -name "%s" -prop MachineLimit=5' % (
+# 'export PATH=/Public/Support/Thinkbox/Deadline8/bin:$PATH && deadlinecommand -SubmitCommandLineJob -executable "/usr/bin/python" -arguments "%s -r -q <QUOTE>%s<QUOTE>" -chunksize 1 -priority 100 -name "%s" -prop MachineLimit=5' % (
+# 'export PATH=/Public/Support/Thinkbox/Deadline8/bin:$PATH && deadlinecommand -SubmitCommandLineJob -executable "/usr/bin/python" -arguments "%s -r <QUOTE>%s<QUOTE>" -chunksize 1 -priority 100 -name "%s" -prop MachineLimit=5' % (
+# 'export PATH=/Public/Support/Thinkbox/Deadline8/bin:$PATH && deadlinecommand -SubmitCommandLineJob -executable "/usr/bin/python" -arguments "%s -a -u -s <QUOTE>%s<QUOTE>" -chunksize 1 -pool upload_submit_pool -group upload_submit_group -priority 100 -name "%s" -prop MachineLimit=5' % (
+
+# 'export PATH=/Public/Support/Thinkbox/Deadline8/bin:$PATH && deadlinecommand -SubmitCommandLineJob -executable "/usr/bin/python" -arguments "%s -r -q <QUOTE>%s<QUOTE>" -chunksize 1 -priority 100 -name "%s" -prop MachineLimit=5'
