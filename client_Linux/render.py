@@ -15,7 +15,6 @@ class Select:
     def __init__(self):
         self.app = QtGui.QApplication(sys.argv)
         self.mainWindow = QtGui.QMainWindow()
-        self.mainWindow.setWindowFlags(Qt.WindowStaysOnTopHint)
 
     def select_one(self, inPathFile):
         file_path = QtGui.QFileDialog.getOpenFileName(self.mainWindow, 'open file', inPathFile).toUtf8()

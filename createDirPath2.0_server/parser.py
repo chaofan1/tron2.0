@@ -170,13 +170,13 @@ def _init_():
 
     elif args[0] == "AssetTask":    # "AssetTask" "HAC" "rig" "liangcy" "fileName" "command_id"
         TronProject().CreateAsset(args[1].upper(), args[2], args[3], args[4])
-        CallBack().callback(args[5])
+        # CallBack().callback(args[5])
         # args = args[6] + '|' + args[1] + '|' + args[2] + '|' + args[3] + '|' + args[4] + "|AssetTask"
         # handle_client(args)
 
     elif args[0] == "ShotTask":   # "ShotTask" "HAC" "001" "001" "rig" "liangcy" "fileName" "command_id"
         TronProject().CreateShot(args[1].upper(), args[2], args[3], args[4], args[5], args[6])
-        CallBack().callback(args[7])
+        # CallBack().callback(args[7])
         # args = args[8] + '|' + args[1] + '|' + args[2] + '|' + args[3] + '|' + args[4] + '|' + args[5] + '|' + args[6]
         # ShotTaskData = args + "|ShotTask"
         # handle_client(ShotTaskData)
