@@ -76,7 +76,7 @@ class TronProject:
     def CreateRef(self, proName, type_,):
         refPath = os.path.join(self.refName, proName)    # /Library/References/FUY
         if os.path.exists(refPath):
-            if type_ == "shots" or type_ == "assets":
+            if type_ == "shots" or type_ == "assets" or type_ == "common":
                 refPath = os.path.join(refPath, type_)
                 if not os.path.exists(refPath):
                     TronFolder().CreateFolder(refPath, "0555", "")
